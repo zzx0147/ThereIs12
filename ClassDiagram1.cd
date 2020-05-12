@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CsvLoader">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\CsvLoader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataManager">
+    <Position X="0.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAEAAAgQAAEAACAQAAABAAAAEAAAEQAAg=</HashCode>
+      <FileName>Assets\Script\DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameManager">
+    <Position X="3.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>FAYiBIIAQCEAACAAAAAAAAAQAhAgAAIICBAAQAIDQAA=</HashCode>
+      <FileName>Assets\Script\GameManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="m_plantLibraryManager" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="m_Plants" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="LibraryPlantCell">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAMAgAAAAABAAAAAAAAAAAgAAAAAAAEABAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\LibraryPlantCell.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="m_state" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Plant">
+    <Position X="7.75" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAEAAAAAAAAAAAAAAAAAAAACACAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\Plant.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="m_Gm" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PlantLibraryManager">
+    <Position X="7.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAABAAAIAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Assets\Script\PlantLibraryManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="m_LibraryPlantCell" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Enum Name="LibraryState">
+    <Position X="12" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAgAAAAAAAAAAAAAQAAAAAAAAAAEAA=</HashCode>
+      <FileName>Assets\Script\DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>
