@@ -87,7 +87,7 @@ public class DataManager
 
     public static LibraryState GetPlantLibraryState(int speciesId)
     {
-        Debug.Log((LibraryState)System.Enum.Parse(typeof(LibraryState), PlayerPrefs.GetString("Species_" + speciesId, "UNKNOWN")));
+        //Debug.Log((LibraryState)System.Enum.Parse(typeof(LibraryState), PlayerPrefs.GetString("Species_" + speciesId, "UNKNOWN")));
         return (LibraryState)System.Enum.Parse(typeof(LibraryState), PlayerPrefs.GetString("Species_" + speciesId, "UNKNOWN"));
     }
 

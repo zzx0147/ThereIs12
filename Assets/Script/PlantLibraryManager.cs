@@ -13,7 +13,6 @@ public class PlantLibraryManager : MonoBehaviour
     {
         for (int i = 0; i < m_PlantSprites.Length; ++i)
         {
-            Debug.Log("init" + i);
             m_LibraryPlantCell[i].SetSprites(m_PlantSprites[i]);
             m_LibraryPlantCell[i].m_PlantNameString = "Test";
             m_LibraryPlantCell[i].m_SpeciesId = i;

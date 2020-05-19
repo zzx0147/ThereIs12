@@ -27,7 +27,7 @@ public class LibraryPlantCell : MonoBehaviour
             {
                 m_state = value;
                 DataManager.SetPlantLibraryState(m_speciesId, m_state);
-                Debug.Log(m_speciesId + ": " + m_state);
+                //Debug.Log(m_speciesId + ": " + m_state);
                 switch (m_state)
                 {
                     case LibraryState.UNKNOWN:
