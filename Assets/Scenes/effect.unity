@@ -363,5 +363,115 @@ PrefabInstance:
       propertyPath: m_Name
       value: FX_NomarlTouch
       objectReference: {fileID: 0}
+    - target: {fileID: 3890429964828774484, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429964828774484, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429964828774484, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429964828774484, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429964828774484, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429964828774484, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startSize.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429964828774484, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startSizeY.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429964828774484, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startSizeZ.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429964828774487, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: m_VelocityScale
+      value: -1.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173844, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: m_VelocityScale
+      value: -3.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173844, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: m_CameraVelocityScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173845, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173845, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173845, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173845, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173845, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startSize.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173845, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startSizeY.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173845, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startSizeZ.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173845, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173847, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5810857
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173847, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5810857
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890429965468173847, guid: f079055915060a747a87b5386d98fc6e,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5810857
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f079055915060a747a87b5386d98fc6e, type: 3}
