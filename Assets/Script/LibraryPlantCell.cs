@@ -17,6 +17,8 @@ public class LibraryPlantCell : MonoBehaviour
     private Text m_PlantName = null;
     [SerializeField]
     private Button m_Button = null;
+    [SerializeField]
+    private PlantLibraryManager m_plantLibraryManager = null;
 
     public LibraryState m_State
     {
@@ -65,5 +67,11 @@ public class LibraryPlantCell : MonoBehaviour
     public void SetStateByInt(int newState)
     {
         m_State = (LibraryState)newState;
+    }
+
+    public void OnClicked()
+    {
+        SetStateByInt(2);
+        m_plantLibraryManager.ShowPlantInfo(m_speciesId);
     }
 }

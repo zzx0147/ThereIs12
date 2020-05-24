@@ -31,6 +31,8 @@ public class CsvLoader
         {
             string[] TempStringArray = LoadedCsv[i].Split(Seperator, StringSplitOptions.None);
 
+            MergeQuatationElements(ref TempStringArray);
+
             for (int j = 0; j < TempStringArray.Length; ++j)
             {
                 LoadedCsvBy2DementionArray[i, j] = TempStringArray[j];
@@ -38,5 +40,28 @@ public class CsvLoader
 
         }
         return LoadedCsvBy2DementionArray;
+    }
+
+    private static void MergeQuatationElements(ref string[] sArr)//중간에 
+    {
+        for (int i = 0; i < sArr.Length; ++i)
+        {
+            if (sArr[i].Length > 0 && sArr[i][0] == '\"' && sArr[i][sArr[i].Length - 1] != '\"')
+            {
+                int j = i;
+                do
+                {
+                    ++j;
+                    sArr[i] += sArr[j];
+                } while (sArr[j][sArr[j].Length - 1] != '\"');
+                ++j;
+                int k;
+                for (k = i + 1; j < sArr.Length; ++j, ++k)
+                {
+                    sArr[k] = sArr[j];
+                }
+                Array.Resize(ref sArr, k);
+            }
+        }
     }
 }

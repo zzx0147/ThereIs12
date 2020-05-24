@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7398456578502656330}
   - component: {fileID: 9051787337407876456}
   - component: {fileID: 6222974573500521198}
-  - component: {fileID: 761957433384181367}
+  - component: {fileID: 7024377316040753113}
   m_Layer: 5
   m_Name: TimeItemCell
   m_TagString: Untagged
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &761957433384181367
+--- !u!114 &7024377316040753113
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 526000372494673400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: fd45906985259d740b437a3818831609, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -120,6 +120,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  m_OtherButton: []
+  m_ChangeDeltaOnPressed: {x: 0, y: 0}
 --- !u!1 &915926538848350422
 GameObject:
   m_ObjectHideFlags: 0

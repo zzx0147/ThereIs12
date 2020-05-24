@@ -17,21 +17,19 @@ public class CameraSlider : MonoBehaviour
 
     public void MoveCameraPoint(int pointNum)
     {
-        if(m_NowPlayedCoroutine != null)
+        if (m_NowPlayedCoroutine != null)
         {
             StopCoroutine(m_NowPlayedCoroutine);
         }
+        Debug.Log("Camera move");
         m_NowPlayedCoroutine = StartCoroutine(MoveCameraPointCoroutine(pointNum));
     }
 
     IEnumerator MoveCameraPointCoroutine(int pointNum)
     {
-        Vector3 start = transform.position;
-        float temp = 0.0f;
-        while((temp - 1.0f) < Mathf.Epsilon)
+        while ((Vector3.Distance(transform.position, m_CameraPosition[pointNum].position) > Mathf.Epsilon))
         {
-            transform.position = Vector3.Lerp(start, m_CameraPosition[pointNum].position, temp);
-            temp += Time.deltaTime;
+            transform.position = Vector3.Lerp(transform.position, m_CameraPosition[pointNum].position, Time.unscaledDeltaTime * 4);
             yield return null;
         }
         m_NowPlayedCoroutine = null;

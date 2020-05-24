@@ -5,7 +5,7 @@ using UnityEngine;
 public class PositionCopyer : MonoBehaviour
 {
     [SerializeField]
-    private RectTransform m_TargetPanel;
+    private RectTransform m_TargetPanel = null;
 
     private RectTransform m_RectTransform;
 

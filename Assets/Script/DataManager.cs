@@ -4,13 +4,13 @@ using UnityEngine;
 
 public enum LibraryState
 {
-    UNKNOWN,
-    DISCOVERED,
-    IDENTIFIED,
-    UNDEFINED
+    UNKNOWN,//아직 발견하지 않음
+    DISCOVERED,//발견됨(최초 발견해서 아직 도감을 보지 않음)
+    IDENTIFIED,//확인됨(도감을 확인함)
+    UNDEFINED//정의되지 않음
 }
 
-public class DataManager
+public class DataManager//데이터의 세이브와 로드를 담당
 {
     public static int GetMoney()
     {
@@ -20,6 +20,17 @@ public class DataManager
     public static void SetMoney(int num)
     {
         PlayerPrefs.SetInt("Money", num);
+        PlayerPrefs.Save();
+    }
+
+    public static int GetLampGrade()
+    {
+        return PlayerPrefs.GetInt("LampGrade", 1);
+    }
+
+    public static void SetLampGrade(int num)
+    {
+        PlayerPrefs.SetInt("LampGrade", num);
         PlayerPrefs.Save();
     }
 
@@ -34,6 +45,17 @@ public class DataManager
         PlayerPrefs.Save();
     }
 
+    public static int GetNumberOfAvailablePlant()
+    {
+        int num = PlayerPrefs.GetInt("NumberOfAbailablePlant", 15);
+        return num;
+    }
+
+    public static void SetNumberOfAvailablePlant(int num)
+    {
+        PlayerPrefs.SetInt("NumberOfAbailablePlant", num);
+        PlayerPrefs.Save();
+    }
 
     public static ulong GetReferenceTime()
     {
@@ -53,6 +75,11 @@ public class DataManager
 
     public static void SetRemainingTime(int remaining)
     {
+        if (remaining < 0)
+        {
+            remaining = 0;
+        }
+
         PlayerPrefs.SetInt("RemainingTime", remaining);
         PlayerPrefs.Save();
     }
@@ -74,14 +101,28 @@ public class DataManager
         return ulong.Parse(s);
     }
 
-    public static int GetPlantData(int objId)
+    public static PlantDataStruct GetPlantData(int objId)
     {
-        return PlayerPrefs.GetInt("Plant_" + objId, -1);
+        PlantDataStruct temp;
+        temp.SpeciesId = PlayerPrefs.GetInt("Plant_SpeciesId_" + objId, -1);
+        temp.state = (PlantState)PlayerPrefs.GetInt("Plant_State_" + objId, (int)PlantState.NONE);
+        temp.RemainingTime = PlayerPrefs.GetInt("Plant_RemainingTime_" + objId, 0);
+        temp.ReferenceTime = ulong.Parse(PlayerPrefs.GetString("Plant_ReferenceTime_" + objId, (0).ToString()));
+        return temp;
     }
 
-    public static void SetPlantData(int objId, int speciesId)
+    public static void SetPlantData(int objId, int speciesId, PlantState state, int remainingTime, ulong referanceTime)
     {
-        PlayerPrefs.SetInt("Plant_" + objId, speciesId);
+        if(state == PlantState.SPROUT && speciesId == -1)
+        {
+            Debug.LogError("sprout wiht no adult type");
+        }
+
+        Debug.Log(objId + " : " + speciesId + " : " + state + " : " + remainingTime);
+        PlayerPrefs.SetInt("Plant_SpeciesId_" + objId, speciesId);
+        PlayerPrefs.SetInt("Plant_State_" + objId, (int)state);
+        PlayerPrefs.SetInt("Plant_RemainingTime_" + objId, remainingTime);
+        PlayerPrefs.SetString("Plant_ReferenceTime_" + objId, referanceTime.ToString());
         PlayerPrefs.Save();
     }
 
@@ -94,6 +135,17 @@ public class DataManager
     public static void SetPlantLibraryState(int speciesId, LibraryState state)
     {
         PlayerPrefs.SetString("Species_" + speciesId, state.ToString());
+        PlayerPrefs.Save();
+    }
+
+    public static int GetFeverCount()
+    {
+        return PlayerPrefs.GetInt("FeverCount", 0);
+    }
+
+    public static void SetFeverCount(int num)
+    {
+        PlayerPrefs.SetInt("FeverCount",num);
         PlayerPrefs.Save();
     }
 }

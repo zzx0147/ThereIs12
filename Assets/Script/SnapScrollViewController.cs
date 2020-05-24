@@ -30,11 +30,11 @@ public class SnapScrollViewController : MonoBehaviour, IEndDragHandler, IBeginDr
     {
         float targetPosX = 99999;
         Vector3 nowPos = contentRef.anchoredPosition;
-        
+
         foreach (var v in snapPoint)
         {
             float temp = midXPos - v.localPosition.x;
-            if(Mathf.Abs(nowPos.x - temp) < Mathf.Abs(nowPos.x - targetPosX))
+            if (Mathf.Abs(nowPos.x - temp) < Mathf.Abs(nowPos.x - targetPosX))
             {
                 targetPosX = temp;
             }
