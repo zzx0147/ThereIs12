@@ -8,8 +8,6 @@ using UnityEditor;
 public class RadioButtonEditor : ButtonEditor
 {
     SerializedProperty m_OtherRadioButton;
-    SerializedProperty m_SpriteOnPressed;
-    SerializedProperty m_SpriteOnReleased;
     SerializedProperty m_ChangeDeltaOnPressed;
 
     protected override void OnEnable()
