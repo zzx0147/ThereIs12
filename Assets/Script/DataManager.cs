@@ -25,12 +25,67 @@ public class DataManager//데이터의 세이브와 로드를 담당
 
     public static int GetLampGrade()
     {
-        return PlayerPrefs.GetInt("LampGrade", 1);
+        return PlayerPrefs.GetInt("LampGrade", 0);
     }
 
     public static void SetLampGrade(int num)
     {
         PlayerPrefs.SetInt("LampGrade", num);
+        PlayerPrefs.Save();
+    }
+
+    public static int GetMaxLampGrade()
+    {
+        return PlayerPrefs.GetInt("MaxLampGrade", 0);
+    }
+
+    public static void SetMaxLampGrade(int num)
+    {
+        PlayerPrefs.SetInt("MaxLampGrade", num);
+        PlayerPrefs.Save();
+    }
+
+    public static int GetSprinklerGrade()
+    {
+        return PlayerPrefs.GetInt("SprinklerGrade", 0);
+    }
+
+    public static void SetSprinklerGrade(int num)
+    {
+        PlayerPrefs.SetInt("SprinklerGrade", num);
+        PlayerPrefs.Save();
+    }
+
+    public static int GetMaxSprinklerGrade()
+    {
+        return PlayerPrefs.GetInt("MaxSprinklerGrade", 0);
+    }
+
+    public static void SetMaxSprinklerGrade(int num)
+    {
+        PlayerPrefs.SetInt("MaxSprinklerGrade", num);
+        PlayerPrefs.Save();
+    }
+
+    public static int GetNutrientsGrade()
+    {
+        return PlayerPrefs.GetInt("NutrientsGrade", 0);
+    }
+
+    public static void SetNutrientsGrade(int num)
+    {
+        PlayerPrefs.SetInt("NutrientsGrade", num);
+        PlayerPrefs.Save();
+    }
+
+    public static int GetMaxNutrientsGrade()
+    {
+        return PlayerPrefs.GetInt("MaxNutrientsGrade", 0);
+    }
+
+    public static void SetMaxNutrientsGrade(int num)
+    {
+        PlayerPrefs.SetInt("MaxNutrientsGrade", num);
         PlayerPrefs.Save();
     }
 
@@ -118,7 +173,7 @@ public class DataManager//데이터의 세이브와 로드를 담당
             Debug.LogError("sprout wiht no adult type");
         }
 
-        Debug.Log(objId + " : " + speciesId + " : " + state + " : " + remainingTime);
+        //Debug.Log(objId + " : " + speciesId + " : " + state + " : " + remainingTime);
         PlayerPrefs.SetInt("Plant_SpeciesId_" + objId, speciesId);
         PlayerPrefs.SetInt("Plant_State_" + objId, (int)state);
         PlayerPrefs.SetInt("Plant_RemainingTime_" + objId, remainingTime);
@@ -146,6 +201,43 @@ public class DataManager//데이터의 세이브와 로드를 담당
     public static void SetFeverCount(int num)
     {
         PlayerPrefs.SetInt("FeverCount",num);
+        PlayerPrefs.Save();
+    }
+
+    public static bool GetHaveItem(ItemCategory category,int num)
+    {
+        if(num == 0)
+        {
+            return true;
+        }
+
+        int temp = PlayerPrefs.GetInt("Item_" + category.ToString() + "_" + num, 0);
+
+        return (temp == 0) ? (false) : (true);
+    }
+
+    public static void SetHaveItem(ItemCategory category,int num, bool haveAlready)
+    {
+        PlayerPrefs.SetInt("Item_" + category.ToString() + "_" + num,(haveAlready)?(1):(0));
+        PlayerPrefs.Save();
+    }
+
+    public static bool GetIsItemBuyable(ItemCategory category, int num)
+    {
+        if(num == 0)
+        {
+            return true;
+        }
+
+        int temp = PlayerPrefs.GetInt("Item_" + category.ToString() + "_" + num + "_Buyable",0);
+
+
+        return (temp == 0) ? (false) : (true);
+    }
+
+    public static void SetIsItemBuyable(ItemCategory category, int num, bool isBuyable)
+    {
+        PlayerPrefs.SetInt("Item_" + category.ToString() + "_" + num + "_Buyable", (isBuyable)?(1):(0));
         PlayerPrefs.Save();
     }
 }

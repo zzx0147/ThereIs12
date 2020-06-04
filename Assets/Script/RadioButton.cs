@@ -23,7 +23,7 @@ public class RadioButton : Button
             v.OnOtherButtonClick();
         }
 
-        Debug.Log("called");
+        //Debug.Log("called");
     }
 
     public override void OnSubmit(BaseEventData eventData)

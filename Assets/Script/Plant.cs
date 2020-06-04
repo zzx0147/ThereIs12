@@ -19,8 +19,7 @@ public enum PlantState
     ADULT//성체, 식물이 다 자라서 수확할 수 있는 상태
 }
 
-[System.Serializable]
-public class OnHarvestEvent : UnityEvent<int>
+class OnHarvestEvent : UnityEvent<int>
 {
 }
 

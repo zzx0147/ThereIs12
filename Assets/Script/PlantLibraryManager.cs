@@ -44,11 +44,34 @@ public class PlantLibraryManager : MonoBehaviour
         }
     }
 
-    public void DiscoverPlant(int SpeciesId)
+    public void OnGainPlant(int SpeciesId)
     {
         if (m_LibraryPlantCell[SpeciesId].m_State == LibraryState.UNKNOWN)
         {
             m_LibraryPlantCell[SpeciesId].m_State = LibraryState.DISCOVERED;
+            switch(SpeciesId)
+            {
+                case 10:
+                    DataManager.SetIsItemBuyable(ItemCategory.LAMP, 1, true);
+                    DataManager.SetIsItemBuyable(ItemCategory.NUTRIENTS, 1, true);
+                    DataManager.SetIsItemBuyable(ItemCategory.SPRINKLER, 1, true);
+                    break;
+                case 20:
+                    DataManager.SetIsItemBuyable(ItemCategory.LAMP, 2, true);
+                    DataManager.SetIsItemBuyable(ItemCategory.NUTRIENTS, 2, true);
+                    DataManager.SetIsItemBuyable(ItemCategory.SPRINKLER, 2, true);
+                    break;
+                case 30:
+                    DataManager.SetIsItemBuyable(ItemCategory.LAMP, 3, true);
+                    DataManager.SetIsItemBuyable(ItemCategory.NUTRIENTS, 3, true);
+                    DataManager.SetIsItemBuyable(ItemCategory.SPRINKLER, 3, true);
+                    break;
+                case 40:
+                    DataManager.SetIsItemBuyable(ItemCategory.LAMP, 4, true);
+                    DataManager.SetIsItemBuyable(ItemCategory.NUTRIENTS, 4, true);
+                    DataManager.SetIsItemBuyable(ItemCategory.SPRINKLER, 4, true);
+                    break;
+            }
         }
     }
 

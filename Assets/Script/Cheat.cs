@@ -6,6 +6,6 @@ public class Cheat : MonoBehaviour
 {
     public void SetSpeed()
     {
-        Time.timeScale = 50.0f;
+        Time.timeScale = 100.0f;
     }
 }

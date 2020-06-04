@@ -6,16 +6,18 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     #region Variable
+    [SerializeField] private float m_DogPlantRespawnProbability = 50.0f;//개풀 스폰 확률
+    [SerializeField] private int m_FeverCountMax;
+
     private int m_NumberOfAvailablePlant;
-    private int m_LampGrade;
-    private int m_EquipmentGrade;
-    private int m_TonicGrade;
-    private int m_SpringklerGrade;
+    private int m_lampGrade;
+    private int m_MaxLampGrade;
+    private int m_nutrientsGrade;
+    private int m_MaxNutrientsGrade;
+    private int m_sprinklerGrade;
+    private int m_MaxSprinklerGrade;
     private int m_Money;
     private int m_FeverCount;
-
-    [SerializeField]
-    private int m_FeverCountMax;
 
     private float[] m_PlantRespawnTimeMin = { 70.0f, 70.0f * 0.8f, 70.0f * 0.6f, 70.0f * 0.4f, 70.0f * 0.2f, };
     private float[] m_PlantRespawnTimeMax = { 70.0f + 20.0f, (70.0f + 20.0f) * 0.8f, (70.0f + 20.0f) * 0.6f, (70.0f + 20.0f) * 0.4f, (70.0f + 20.0f) * 0.2f, };
@@ -26,56 +28,49 @@ public class GameManager : MonoBehaviour
     private string[,] m_PlantCsv;
     private string[,] m_PlantProbabilityCsv;
 
-    private bool m_IsTimeLeft = false;
+    private bool m_isTimeLeft = false;
     private bool m_LastSpawnSproutIsFailed = false;
     private bool m_isFeverOn = false;
+
+
     #endregion
 
     #region ReferanceVariable
     private Coroutine m_ChangeGamePanelCoroutine = null;
     private Coroutine m_FeverTimeCoroutine = null;
-
-    [SerializeField]
-    private RectTransform m_Content = null;//m_GamePanels를 자식으로 하는 Content 패널
-
-    [SerializeField]
-    private PlantLibraryManager m_plantLibraryManager = null;//도감 매니저 레퍼런스
-
-    [SerializeField]
-    private float m_DogPlantRespawnProbability = 50.0f;//개풀 스폰 확률
-
-    [SerializeField]
-    private Image m_FeverTimeGaugeBar = null;//피버 시간 게이지 바
-    [SerializeField]
-    private Image m_FeverTimeGaugeBarBack = null;//피버 시간 게이지 바 배경
-
-    [SerializeField]
-    private Plant[] m_Plants = null;//식물이 터치되었을 때 게임 매니저로 터치되었다는 걸 알려주는 클래스 식물 이미지와 동일한 오브젝트의 컴포넌트
-
-    [SerializeField]
-    private RectTransform m_MainPanel = null;
-
     private Sprite[] m_PlantSprites = new Sprite[51];//각 식물의 스프라이트 배열
-
     private Sprite m_SproutSprite = null;
 
-    [SerializeField]
-    private Text m_MoneyText = null;//돈을 표기하는 텍스트(연구점수)
+    [SerializeField] private Sprite[] m_LampSprites = null;
+    [SerializeField] private Sprite[] m_SprinklerSprites = null;
+    [SerializeField] private Sprite[] m_NutrientsSprites = null;
 
-    [SerializeField]
-    private Text m_FeverCountText = null;
+    [SerializeField] private PlantLibraryManager m_plantLibraryManager = null;//도감 매니저 레퍼런스
 
-    [SerializeField]
-    private Text m_TimerText = null;
+    [SerializeField] private RectTransform m_MainPanel = null;
+    [SerializeField] private RectTransform m_Content = null;//m_GamePanels를 자식으로 하는 Content 패널
+
+    [SerializeField] private Image m_FeverTimeGaugeBar = null;//피버 시간 게이지 바
+    [SerializeField] private Image m_FeverTimeGaugeBarBack = null;//피버 시간 게이지 바 배경
+    [SerializeField] private Image m_LampImage = null;//램프 이미지
+    [SerializeField] private Image m_SprinklerImage = null;//스프링클러 이미지
+    [SerializeField] private Image m_NutrientsImage = null;//영양제 이미지
+
+    [SerializeField] private Plant[] m_Plants = null;//식물이 터치되었을 때 게임 매니저로 터치되었다는 걸 알려주는 클래스 식물 이미지와 동일한 오브젝트의 컴포넌트
+
+    [SerializeField] private Text m_MoneyText = null;//돈을 표기하는 텍스트(연구점수)
+    [SerializeField] private Text m_FeverCountText = null;//피버 타임까지 필요한 식물 수확 수 표기 텍스트
+    [SerializeField] private Text m_TimerText = null;//식물 성장 시간을 표시하는 타이머
     #endregion
 
-    private bool IsTimeLeft
+    #region Property
+    private bool m_IsTimeLeft
     {
-        get => m_IsTimeLeft;
+        get => m_isTimeLeft;
         set
         {
-            m_IsTimeLeft = value;
-            if (m_IsTimeLeft)
+            m_isTimeLeft = value;
+            if (m_isTimeLeft)
             {
                 Time.timeScale = 1.0f;
             }
@@ -86,30 +81,92 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public int m_LampGrade
+    {
+        get => m_lampGrade;
+        set
+        {
+            m_lampGrade = value;
+            DataManager.SetLampGrade(m_lampGrade);
+            if (m_lampGrade > m_MaxLampGrade)
+            {
+                m_MaxLampGrade = m_lampGrade;
+                DataManager.SetMaxLampGrade(m_MaxLampGrade);
+            }
+            m_LampImage.sprite = m_LampSprites[m_lampGrade];
+            m_LampImage.SetNativeSize();
+        }
+    }
+    public int m_NutrientsGrade
+    {
+        get => m_nutrientsGrade;
+        set
+        {
+            m_nutrientsGrade = value;
+            DataManager.SetNutrientsGrade(m_nutrientsGrade);
+            if (m_nutrientsGrade > m_MaxNutrientsGrade)
+            {
+                m_MaxNutrientsGrade = m_nutrientsGrade;
+                DataManager.SetMaxNutrientsGrade(m_MaxNutrientsGrade);
+            }
+
+            m_NutrientsImage.sprite = m_NutrientsSprites[m_nutrientsGrade];
+            m_NutrientsImage.SetNativeSize();
+        }
+    }
+    public int m_SprinklerGrade
+    {
+        get => m_sprinklerGrade;
+        set
+        {
+            m_sprinklerGrade = value;
+            DataManager.SetSprinklerGrade(m_sprinklerGrade);
+            if (m_sprinklerGrade > m_MaxSprinklerGrade)
+            {
+                m_MaxSprinklerGrade = m_sprinklerGrade;
+                DataManager.SetMaxSprinklerGrade(m_MaxSprinklerGrade);
+            }
+            m_SprinklerImage.sprite = m_SprinklerSprites[m_sprinklerGrade];
+            m_SprinklerImage.SetNativeSize();
+        }
+    }
+
+    #endregion
     private void Awake()
     {
-        m_PlantProbabilityCsv = CsvLoader.LoadCsvBy2DimensionArray("Csv/PlantVariableTable");
+
+        #region CsvLoading
+        m_PlantProbabilityCsv = CsvLoader.LoadCsvBy2DimensionArray("Csv/PlantVariableTable");//식물 확률 Csv를 읽어옴
         m_PlantCsv = CsvLoader.LoadCsvBy2DimensionArray("Csv/PlantMasterTable");//Csv의 데이터를 읽어옴
         m_SproutSprite = Resources.Load<Sprite>("Plant/IL_172");
         for (int i = 0; i < m_PlantSprites.Length; ++i)
         {
             m_PlantSprites[i] = Resources.Load<Sprite>("Plant/" + m_PlantCsv[i + 1, 2]);
         }
+        #endregion
+
+        #region InitVariable and Screen
+
+        m_FeverCount = DataManager.GetFeverCount();
+        m_FeverCountText.text = m_FeverCount + "/" + m_FeverCountMax;
+        m_Money = DataManager.GetMoney();//돈 저장갑 불러오기
+        AddMoney(0);//돈 Text 업데이트
+        m_LampGrade = DataManager.GetLampGrade();//램프 등급 불러오기
+        m_MaxLampGrade = DataManager.GetMaxLampGrade();//최대 램프 등급 불러오기
+        m_SprinklerGrade = DataManager.GetSprinklerGrade();//스프링클러 등급 불러오기
+        m_MaxSprinklerGrade = DataManager.GetMaxSprinklerGrade();//최대 스프링클러 등급 불러오기
+        m_NutrientsGrade = DataManager.GetNutrientsGrade();//영양제 등급 불러오기
+        m_MaxNutrientsGrade = DataManager.GetMaxNutrientsGrade();//최대 영양제 등급 불러오기
+        m_MaxTime = DataManager.GetMaxTimeOfLastUsedTimeItem();//마지막으로 사용한 시간 아이템의 최대 시간량
+        m_PlantRespawnProbability = new float[51/*m_PlantSprites.Length*/];//식물별 등장 확률 배열
+        #endregion
+
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        m_FeverCount = DataManager.GetFeverCount();
-        m_FeverCountText.text = m_FeverCount + "/" + m_FeverCountMax;
-        Time.timeScale = 1.0f;//시간 배속
-        m_Money = DataManager.GetMoney();//돈 저장갑 불러오기
-        AddMoney(0);//돈 Text 업데이트
-        m_LampGrade = DataManager.GetLampGrade();//램프 등급 불러오기
-        m_EquipmentGrade = DataManager.GetEquipmentGrade();
-        m_MaxTime = DataManager.GetMaxTimeOfLastUsedTimeItem();//마지막으로 사용한 시간 아이템의 최대 시간량
-        m_PlantRespawnProbability = new float[51/*m_PlantSprites.Length*/];//식물별 등장 확률 배열
-
+        #region Time Compute
         ulong refTime = DataManager.GetReferenceTime();//RemainingTime의 기준 시점
         ulong now = DataManager.GetNow();//현재 시간
         float pastRemainingTime = m_RemainingTime = DataManager.GetRemainingTime();//마지막으로 저장된 시간 아이템의 남은 시간
@@ -128,13 +185,13 @@ public class GameManager : MonoBehaviour
 
         if (m_RemainingTime > 0)
         {
-            IsTimeLeft = true;
+            m_IsTimeLeft = true;
         }
         else
         {
-            IsTimeLeft = false;
-            m_FeverTimeGaugeBar.fillAmount = 0.0f;
+            m_IsTimeLeft = false;
         }
+        #endregion
 
         #region Probability Compute
 
@@ -150,8 +207,7 @@ public class GameManager : MonoBehaviour
 
         #endregion
 
-
-
+        #region spawn plant between off
         bool haveSprout = false;
         for (int i = 0; i < m_Plants.Length; ++i)
         {
@@ -173,7 +229,7 @@ public class GameManager : MonoBehaviour
                     ulong lastSproutGrowingTime = 0;
                     m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_PlantSprites[temp.SpeciesId], PlantState.ADULT);
                     lastSproutGrowingTime = temp.ReferenceTime + (ulong)temp.RemainingTime;
-                    RespawnPlantBetweenTurnOff((IsTimeLeft) ? now - lastSproutGrowingTime : pastRemainingTime);
+                    RespawnPlantBetweenTurnOff((m_IsTimeLeft) ? now - lastSproutGrowingTime : pastRemainingTime);
                     SpawnSprout();
                     haveSprout = true;
                 }
@@ -192,12 +248,14 @@ public class GameManager : MonoBehaviour
         {
             SpawnSprout();
         }
+
+        #endregion
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (IsTimeLeft)
+        if (m_IsTimeLeft)
         {
             m_RemainingTime -= Time.deltaTime;
 
@@ -206,8 +264,7 @@ public class GameManager : MonoBehaviour
             if (m_RemainingTime < 0.0f)
             {
                 m_TimerText.text = "0:0";
-                IsTimeLeft = false;
-                Time.timeScale = 0.0f;
+                m_IsTimeLeft = false;
             }
         }
     }
@@ -216,7 +273,7 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            float randTime = Random.Range(m_PlantRespawnTimeMin[m_LampGrade], m_PlantRespawnTimeMax[m_LampGrade]);
+            float randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMax[m_MaxLampGrade]);
             if ((time - randTime) >= 0)
             {
                 time -= randTime;
@@ -244,7 +301,7 @@ public class GameManager : MonoBehaviour
         {
             float randFloat = Random.Range(0.0f, 100.0f);//
             float probabilityMin = 0.0f;
-            for (int i = 0; i < m_EquipmentGrade * 10 + 1; ++i)//현재 장비 등급이 허용하는 범위 내의 식물을 순회하며 확률에 걸렸는지 체크
+            for (int i = 0; i < (m_MaxNutrientsGrade + 1) * 10 + 1; ++i)//현재 장비 등급이 허용하는 범위 내의 식물을 순회하며 확률에 걸렸는지 체크
             {
                 if (probabilityMin <= randFloat && m_PlantRespawnProbability[i] + probabilityMin > randFloat)//확률 범위 안에 randFloat가 들어올 경우
                 {
@@ -285,11 +342,22 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    public void AddMoney(int price)
+    public bool AddMoney(int price)
     {
+        if (m_Money + price < 0)
+        {
+            return false;
+        }
+
         m_Money += price;
         m_MoneyText.text = m_Money.ToString();
         DataManager.SetMoney(m_Money);
+        return true;
+    }
+
+    public void MoneyCheat()
+    {
+        AddMoney(999999);
     }
 
     public void BuyTimeItem(int time, int price)
@@ -298,8 +366,7 @@ public class GameManager : MonoBehaviour
         {
             m_MaxTime = time;
             m_RemainingTime = time;
-            IsTimeLeft = true;
-            m_FeverTimeGaugeBar.fillAmount = 1;
+            m_IsTimeLeft = true;
             DataManager.RecordReferenceTime();
             DataManager.SetRemainingTime((int)m_RemainingTime);
             DataManager.SetMaxTimeOfLastUsedTimeItem((int)m_RemainingTime);
@@ -340,7 +407,7 @@ public class GameManager : MonoBehaviour
     public void GainPlant(int speciesId)
     {
         AddMoney(int.Parse(m_PlantCsv[speciesId + 1, 6]));
-        m_plantLibraryManager.DiscoverPlant(speciesId);
+        m_plantLibraryManager.OnGainPlant(speciesId);
 
         if (!m_isFeverOn)
         {
@@ -366,7 +433,7 @@ public class GameManager : MonoBehaviour
     public void SpawnSprout()
     {
 
-        float randTime = Random.Range(m_PlantRespawnTimeMin[m_LampGrade], m_PlantRespawnTimeMax[m_LampGrade]);
+        float randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMax[m_MaxLampGrade]);
         int selecObj = SelectOnePlantObjRandomly();
 
         if (selecObj == -1)
@@ -401,7 +468,7 @@ public class GameManager : MonoBehaviour
         {
             float randFloat = Random.Range(0.0f, 100.0f);//
             float probabilityMin = 0.0f;
-            for (int i = 0; i < m_EquipmentGrade * 10 + 1; ++i)//현재 장비 등급이 허용하는 범위 내의 식물을 순회하며 확률에 걸렸는지 체크
+            for (int i = 0; i < (m_MaxNutrientsGrade + 1) * 10 + 1; ++i)//현재 장비 등급이 허용하는 범위 내의 식물을 순회하며 확률에 걸렸는지 체크
             {
                 if (probabilityMin <= randFloat && m_PlantRespawnProbability[i] + probabilityMin > randFloat)//확률 범위 안에 randFloat가 들어올 경우
                 {
@@ -458,7 +525,7 @@ public class GameManager : MonoBehaviour
                 {
                     GainPlant(m_Plants[i].m_PlantSpeciesId);
                 }
-                m_Plants[i].Initialize(i,-1,m_SproutSprite,null,PlantState.NONE);
+                m_Plants[i].Initialize(i, -1, m_SproutSprite, null, PlantState.NONE);
             }
 
             m_FeverTimeCoroutine = StartCoroutine(FeverTimeCoroutine());
