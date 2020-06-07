@@ -99,7 +99,9 @@ public class StoreManager : MonoBehaviour
             }
             //사용중인 장비가 아닌 경우
             m_QuestionPanel.SetActive(true);
-            m_QuestionText.text = m_ItemCsv[(int)category * 5 + id + 1, 13];
+            m_QuestionText.text =m_ItemCsv[(int)category * 5 + id + 1, 13];
+            Debug.Log(System.Text.RegularExpressions.Regex.Unescape(m_ItemCsv[(int)category * 5 + id + 1, 13]));
+            Debug.Log("장비의 외형을 변경합니다.\n(성능은 바뀌지 않습니다.");
             m_QuestionYesButton.onClick.RemoveAllListeners();
             m_QuestionYesButton.onClick.AddListener(ChangeEquipment);
             m_QuestionYesButton.onClick.AddListener(delegate { m_QuestionPanel.SetActive(false);});
@@ -127,7 +129,7 @@ public class StoreManager : MonoBehaviour
     {
         m_QuestionPanel.SetActive(false);
 
-        if (m_GameManager.AddMoney(int.Parse(m_ItemCsv[(int)m_RecentSelectedItemCategory * 5 + m_RecentSelectedItemId + 1, 8])))
+        if (m_GameManager.AddMoney(-int.Parse(m_ItemCsv[(int)m_RecentSelectedItemCategory * 5 + m_RecentSelectedItemId + 1, 8])))
         {
             m_NotifyPanel.SetActive(true);
             m_NotifyText.text = m_ItemCsv[(int)m_RecentSelectedItemCategory * 5 + m_RecentSelectedItemId + 1, 10];

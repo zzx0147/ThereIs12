@@ -7,7 +7,12 @@ public class GameManager : MonoBehaviour
 {
     #region Variable
     [SerializeField] private float m_DogPlantRespawnProbability = 50.0f;//개풀 스폰 확률
-    [SerializeField] private int m_FeverCountMax;
+    [SerializeField] private int m_FeverCountMax;//피버까지 필요한 식물 수확 갯수
+
+    [SerializeField] private float[] m_PlantRespawnTimeMin = { 70, 60, 50, 40, 30 }; //식물 리스폰 속도 최소치
+    [SerializeField] private float[] m_PlantRespawnTimeWeight = { 20, 19, 18, 17, 16 };//식물 리스폰 속도 가중치 (최소치 + 가중치 = 최대치)
+    [SerializeField] private float[] m_GreenPlantRespawnTimeMin = { 180, 300, 600, 1000, 1800 };//녹초 리스폰 속도 최소치
+    [SerializeField] private float[] m_GreenPlantRespawnTimeWeight = { 120, 150, 200, 400, 600 };//녹초 리스폰 속도 가중치
 
     private int m_NumberOfAvailablePlant;
     private int m_lampGrade;
@@ -19,8 +24,6 @@ public class GameManager : MonoBehaviour
     private int m_Money;
     private int m_FeverCount;
 
-    private float[] m_PlantRespawnTimeMin = { 70.0f, 70.0f * 0.8f, 70.0f * 0.6f, 70.0f * 0.4f, 70.0f * 0.2f, };
-    private float[] m_PlantRespawnTimeMax = { 70.0f + 20.0f, (70.0f + 20.0f) * 0.8f, (70.0f + 20.0f) * 0.6f, (70.0f + 20.0f) * 0.4f, (70.0f + 20.0f) * 0.2f, };
     private float[] m_PlantRespawnProbability;
     private float m_MaxTime;
     private float m_RemainingTime = 0;
@@ -31,13 +34,12 @@ public class GameManager : MonoBehaviour
     private bool m_isTimeLeft = false;
     private bool m_LastSpawnSproutIsFailed = false;
     private bool m_isFeverOn = false;
-
-
     #endregion
 
     #region ReferanceVariable
     private Coroutine m_ChangeGamePanelCoroutine = null;
     private Coroutine m_FeverTimeCoroutine = null;
+    private Coroutine m_SpawnGreenPlantCoroutine = null;
     private Sprite[] m_PlantSprites = new Sprite[51];//각 식물의 스프라이트 배열
     private Sprite m_SproutSprite = null;
 
@@ -190,6 +192,7 @@ public class GameManager : MonoBehaviour
         else
         {
             m_IsTimeLeft = false;
+            StartSpawnGreenPlant();
         }
         #endregion
 
@@ -220,7 +223,6 @@ public class GameManager : MonoBehaviour
             if (temp.state != PlantState.SPROUT)
             {
                 m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, (temp.SpeciesId == -1) ? (null) : (m_PlantSprites[temp.SpeciesId]), temp.state);
-
             }
             else
             {
@@ -265,6 +267,7 @@ public class GameManager : MonoBehaviour
             {
                 m_TimerText.text = "0:0";
                 m_IsTimeLeft = false;
+                StartSpawnGreenPlant();
             }
         }
     }
@@ -273,11 +276,12 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            float randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMax[m_MaxLampGrade]);
+            float randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMin[m_MaxLampGrade] + m_PlantRespawnTimeWeight[m_MaxLampGrade]);
             if ((time - randTime) >= 0)
             {
-                time -= randTime;
                 SpawnRandomAdultPlant();
+                time -= randTime;
+                
             }
             else
             {
@@ -287,12 +291,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SpawnRandomAdultPlant()
+    private bool SpawnRandomAdultPlant()
     {
-        int[] EmptyPlantObjectsIndexes = GetEmptyImageNumbers();
+        int[] EmptyPlantObjectsIndexes = GetEmptyPlantImageNumbers();
         if (EmptyPlantObjectsIndexes.Length < 1)
         {
-            return;
+            return false;
         }
 
         int targetPlant = Random.Range(0, EmptyPlantObjectsIndexes.Length);
@@ -312,16 +316,32 @@ public class GameManager : MonoBehaviour
                 probabilityMin += m_PlantRespawnProbability[i];
             }
         }
-    whileEnd:;
+        whileEnd:
+        return true;
     }
 
-    private int[] GetEmptyImageNumbers()
+    private int[] GetEmptyPlantImageNumbers()
     {
         List<int> temp = new List<int>();
 
         for (int i = 0; i < m_NumberOfAvailablePlant; ++i)
         {
             if (m_Plants[i].m_State == PlantState.NONE)
+            {
+                temp.Add(i);
+            }
+        }
+
+        return temp.ToArray();
+    }
+    
+    private int[] GetNotEmptyPlantImageNumbers()
+    {
+        List<int> temp = new List<int>();
+
+        for (int i = 0; i < m_NumberOfAvailablePlant; ++i)
+        {
+            if (m_Plants[i].m_State == PlantState.ADULT && m_Plants[i].m_PlantSpeciesId != 1)//개풀이 아니면서 성체인 경우
             {
                 temp.Add(i);
             }
@@ -367,6 +387,7 @@ public class GameManager : MonoBehaviour
             m_MaxTime = time;
             m_RemainingTime = time;
             m_IsTimeLeft = true;
+            StopSpawnGreenPlantCoroutine();
             DataManager.RecordReferenceTime();
             DataManager.SetRemainingTime((int)m_RemainingTime);
             DataManager.SetMaxTimeOfLastUsedTimeItem((int)m_RemainingTime);
@@ -433,7 +454,7 @@ public class GameManager : MonoBehaviour
     public void SpawnSprout()
     {
 
-        float randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMax[m_MaxLampGrade]);
+        float randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMin[m_MaxLampGrade] + m_PlantRespawnTimeWeight[m_MaxLampGrade]);
         int selecObj = SelectOnePlantObjRandomly();
 
         if (selecObj == -1)
@@ -451,7 +472,7 @@ public class GameManager : MonoBehaviour
 
     private int SelectOnePlantObjRandomly()
     {
-        int[] EmptyPlantObjectsIndexes = GetEmptyImageNumbers();
+        int[] EmptyPlantObjectsIndexes = GetEmptyPlantImageNumbers();
         if (EmptyPlantObjectsIndexes.Length <= 0)
         {
             return -1;
@@ -576,5 +597,60 @@ public class GameManager : MonoBehaviour
         m_FeverTimeGaugeBar.gameObject.SetActive(false);
         m_FeverTimeGaugeBarBack.gameObject.SetActive(false);
         SpawnSprout();
+    }
+
+    private void StartSpawnGreenPlant()
+    {
+        if(m_SpawnGreenPlantCoroutine == null)
+        {
+            m_SpawnGreenPlantCoroutine = StartCoroutine(SpawnGreenPlant());
+        }
+        else
+        {
+            Debug.LogError("Already SpawnGreenPlant is in Operating");
+        }
+    }
+
+    private IEnumerator SpawnGreenPlant()
+    {
+        while(true)
+        {
+            yield return new WaitForSecondsRealtime(Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade],m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]));
+            SpawnRandomGreenPlant();
+        }
+    }
+    
+    private void StopSpawnGreenPlantCoroutine()
+    {
+        if(m_SpawnGreenPlantCoroutine != null)
+        {
+            StopCoroutine(m_SpawnGreenPlantCoroutine);
+            m_SpawnGreenPlantCoroutine = null;
+        }
+    }
+
+    private void SpawnRandomGreenPlant()
+    {
+        int[] arr = GetNotEmptyPlantImageNumbers();
+        int sel = Random.Range(0, arr.Length);
+        m_Plants[arr[sel]].Initialize(arr[sel],1,m_SproutSprite,m_PlantSprites[1],PlantState.ADULT);
+    }
+
+    private void RespawnGreenPlantBetweenTurnOff(float time)
+    {
+        while (true)
+        {
+            float randTime = Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade], m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]);
+            if(time - randTime >= 0)
+            {
+                time -= randTime;
+                SpawnGreenPlant();
+
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }

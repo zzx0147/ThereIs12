@@ -547,6 +547,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa2f34772c3747c468e546352e17693a, type: 3}
+--- !u!114 &125915749 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7240158583638143867, guid: 1754f2af5abb5184893874c5d98efd0f,
+    type: 3}
+  m_PrefabInstance: {fileID: 967987194}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 718a974c90f6a804aa7be3a5dea51707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &129387363 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5450379373159733636, guid: 8dc653543465bed4fa55da4db24a0743,
@@ -3872,6 +3884,17 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 125915749}
+        m_MethodName: RandomChangeCharacter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

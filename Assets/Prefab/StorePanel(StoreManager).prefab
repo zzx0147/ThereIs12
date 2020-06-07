@@ -417,6 +417,7 @@ GameObject:
   - component: {fileID: 5296801833790537773}
   - component: {fileID: 1549790185116669033}
   - component: {fileID: 987995243649614211}
+  - component: {fileID: 7240158583638143867}
   m_Layer: 5
   m_Name: CharacterPanel
   m_TagString: Untagged
@@ -481,6 +482,30 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7240158583638143867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102208008525068248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 718a974c90f6a804aa7be3a5dea51707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CharacterImage: {fileID: 7360924931160734904}
+  m_CharacterDialogue: {fileID: 3373195542678151982}
+  m_CharacterName: {fileID: 2299646963152258339}
+  m_CharacterSprites:
+  - {fileID: 21300000, guid: d51b18acdffafe84e914c26bc2281df3, type: 3}
+  - {fileID: 21300000, guid: ffc639f064d701a4ca48e43c9a885732, type: 3}
+  - {fileID: 21300000, guid: ea166da30a7c5234eb5dc2fb9e786c92, type: 3}
+  - {fileID: 21300000, guid: 8510b9d237fe54947b8bbe30fc451ad0, type: 3}
+  - {fileID: 21300000, guid: 3f81e548110968747abedc235a3d8c69, type: 3}
+  - {fileID: 21300000, guid: 95f11419e8f53e14eba760fe35560fc9, type: 3}
+  - {fileID: 21300000, guid: 734d9515b7bdaf644832557478d26419, type: 3}
+  - {fileID: 21300000, guid: d7c60ab0c9ebc834a9045002a7b23a0f, type: 3}
 --- !u!1 &1405122979490381815
 GameObject:
   m_ObjectHideFlags: 0
@@ -1773,8 +1798,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 480, y: 720}
+  m_AnchoredPosition: {x: 0, y: -30}
+  m_SizeDelta: {x: 480, y: 750}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &1084532265462061793
 CanvasRenderer:
@@ -1797,7 +1822,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2582,7 +2607,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -300, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7392043805052613599
 CanvasRenderer:
