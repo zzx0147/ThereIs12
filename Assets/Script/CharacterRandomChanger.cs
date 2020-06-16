@@ -23,7 +23,7 @@ public class CharacterRandomChanger : MonoBehaviour
         int num = Random.Range(1, m_CharacterInfoCsv.GetLength(0));
 
         m_CharacterName.text = m_CharacterInfoCsv[num, 1];
-        m_CharacterDialogue.text = m_CharacterInfoCsv[num,2];
+        m_CharacterDialogue.text = m_CharacterInfoCsv[num,2].Trim(new char[1] {'\"'});
 
         switch(m_CharacterInfoCsv[num,1])
         {

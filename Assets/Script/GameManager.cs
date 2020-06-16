@@ -430,7 +430,7 @@ public class GameManager : MonoBehaviour
         AddMoney(int.Parse(m_PlantCsv[speciesId + 1, 6]));
         m_plantLibraryManager.OnGainPlant(speciesId);
 
-        if (!m_isFeverOn)
+        if ((!m_isFeverOn) && speciesId != 1)
         {
             m_FeverCountText.text = ++m_FeverCount + "/" + m_FeverCountMax;
             DataManager.SetFeverCount(m_FeverCount);
@@ -615,7 +615,7 @@ public class GameManager : MonoBehaviour
     {
         while(true)
         {
-            yield return new WaitForSecondsRealtime(Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade],m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]));
+            yield return new WaitForSecondsRealtime(0.1f * Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade],m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]));
             SpawnRandomGreenPlant();
         }
     }

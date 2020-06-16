@@ -107,6 +107,10 @@ public class Plant : MonoBehaviour
         m_AdultPlantSprite = adultSprite;
         m_plantSpeciesId = speciesId;
         m_State = state;
+
+        float scaling = Random.Range(0.9f, 1.05f);
+        GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1); 
+
     }
 
     public void StartGrowing(float time, int plantSpeciesID, Sprite adultSprite)
@@ -116,6 +120,8 @@ public class Plant : MonoBehaviour
         m_plantSpeciesId = plantSpeciesID;
         m_State = PlantState.SPROUT;
         m_AdultPlantSprite = adultSprite;
+        float scaling = Random.Range(0.9f, 1.05f);
+        GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
         m_GrowCoroutine = StartCoroutine(GrowCoroutine());
     }
 
@@ -127,6 +133,8 @@ public class Plant : MonoBehaviour
             if (m_RemaingTime2Grow < 0)
             {
                 m_State = PlantState.ADULT;
+                float scaling = Random.Range(0.9f, 1.05f);
+                GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
                 m_onEndGrowEvent.Invoke();
                 m_GrowCoroutine = null;
                 break;
