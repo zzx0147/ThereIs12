@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6387166986442437284}
-  m_Layer: 0
+  - component: {fileID: 6354986103728161530}
+  m_Layer: 5
   m_Name: FX_PlantTouch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,13 +25,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6387166986442437307}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5915082, y: 3.4818897, z: 0.18079233}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6387166986478097610}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6354986103728161530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6387166986442437307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a88e29d02cf9c3e4db9c0690ae6e587b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6387166986478097609
 GameObject:
   m_ObjectHideFlags: 0
@@ -42,7 +55,7 @@ GameObject:
   - component: {fileID: 6387166986478097610}
   - component: {fileID: 6387166986478097652}
   - component: {fileID: 6387166986478097611}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: 01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +93,7 @@ ParticleSystem:
   looping: 0
   prewarm: 0
   playOnAwake: 1
-  useUnscaledTime: 0
+  useUnscaledTime: 1
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
   startDelay:
@@ -138,7 +151,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3

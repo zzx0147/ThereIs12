@@ -1702,8 +1702,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 46.006844, y: 21.467712, z: 31.95044}
-  m_Center: {x: 1.5156059, y: -1.7026138, z: -7.6616745}
+  m_Size: {x: 50.862816, y: 21.467712, z: 31.95044}
+  m_Center: {x: -0.9123802, y: -1.7026138, z: -7.6616745}
 --- !u!4 &336760763
 Transform:
   m_ObjectHideFlags: 0
@@ -5774,7 +5774,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1409579303}
+  - component: {fileID: 1409579305}
   - component: {fileID: 1409579302}
   - component: {fileID: 1409579300}
   - component: {fileID: 1409579301}
@@ -5797,7 +5797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volumeTrigger: {fileID: 1409579303}
+  volumeTrigger: {fileID: 0}
   volumeLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -5857,6 +5857,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e04577733757fa4e92f6a225af6cf00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_NormalTouchEffectPrefab: {fileID: 3890429964744939763, guid: f079055915060a747a87b5386d98fc6e,
+    type: 3}
+  m_PlantTouchEffectPrefab: {fileID: 6387166986442437307, guid: 81b5602a6550a154c8877e48ed6dfd62,
+    type: 3}
+  m_Parents: {fileID: 236134311}
 --- !u!20 &1409579302
 Camera:
   m_ObjectHideFlags: 0
@@ -5883,7 +5888,7 @@ Camera:
   near clip plane: 0.1
   far clip plane: 1.1
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: 1
   m_CullingMask:
@@ -5900,8 +5905,8 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!4 &1409579303
-Transform:
+--- !u!224 &1409579305
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5914,6 +5919,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1422731324
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6264,7 +6274,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 1409579302}
-  m_PlaneDistance: 0.2
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -6272,7 +6282,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1540306034
 RectTransform:
@@ -7777,7 +7787,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -8782,7 +8792,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 1409579302}
-  m_PlaneDistance: 0.2
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
