@@ -10,14 +10,14 @@
   <Class Name="DataManager">
     <Position X="0.5" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAACAAAAAAAECAAgQAAEAACAQEQABAAAAEAAAESIAg=</HashCode>
+      <HashCode>AAAECAAAGAAAEiAAgwAAEAACBcEQCBAAIAECIAUSIAg=</HashCode>
       <FileName>Assets\Script\DataManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GameManager">
     <Position X="3.5" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>FCYiEYoAQCUIIAAAREFgIAMEAgEABAIQCJACQgIDYEA=</HashCode>
+      <HashCode>VCYikY4AMCUKIIAIREBgIAeMAgEDFAIQIJACQgKRYNA=</HashCode>
       <FileName>Assets\Script\GameManager.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -51,7 +51,7 @@
   <Class Name="PlantLibraryManager">
     <Position X="7.75" Y="0.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>gAAAAQAEACAAAAAAAYACAAAAAAAAAAAgAACAAAMAAEg=</HashCode>
+      <HashCode>gAAAAQAEgCAAAAAAAYAAAAAAAAAAAAAgAACAAAMAAEg=</HashCode>
       <FileName>Assets\Script\PlantLibraryManager.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -59,7 +59,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="CameraSlider">
-    <Position X="0.5" Y="7.5" Width="2.5" />
+    <Position X="0.5" Y="8.25" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAQAQAAAAAAAAAAAAAAAAAAEAAAAAAAAAAgAAACAAAA=</HashCode>
       <FileName>Assets\Script\CameraSlider.cs</FileName>
@@ -72,18 +72,55 @@
       <FileName>Assets\Script\RadioButton.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="CharacterRandomChanger">
+    <Position X="17.25" Y="9.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAACAAAAAAAAAAAAAAAAAAgQAACAAAAAAAAGA=</HashCode>
+      <FileName>Assets\Script\CharacterRandomChanger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StoreManager">
+    <Position X="12" Y="7.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ADACKgAIACAEAGAAAACEACCpAAAAAAAAQEAAAAIAAEA=</HashCode>
+      <FileName>Assets\Script\StoreManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="m_ETCItemCells" />
+      <Field Name="m_LampItemCells" />
+      <Field Name="m_NutrientsItemCells" />
+      <Field Name="m_SprinklerItemCells" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="StoreItemCell">
+    <Position X="15" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAECAAAAiAAAQBAAAAAAQACAAAQAAQAAAAAAAAAgEA=</HashCode>
+      <FileName>Assets\Script\StoreItemCell.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="m_Category" />
+    </ShowAsAssociation>
+  </Class>
   <Enum Name="LibraryState">
-    <Position X="14.75" Y="1.25" Width="1.5" />
+    <Position X="14.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAABAAAAAgAAAAAAAAAAAAAQAAAAAAAAAAEAA=</HashCode>
       <FileName>Assets\Script\DataManager.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="PlantState">
-    <Position X="10.25" Y="7.5" Width="1.5" />
+    <Position X="10.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACAgAAAAQAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Script\Plant.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ItemCategory">
+    <Position X="17.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAQAAAAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Script\StoreItemCell.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="맑은 고딕" Size="9" />
