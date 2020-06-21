@@ -63,6 +63,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_MoneyText = null;//돈을 표기하는 텍스트(연구점수)
     [SerializeField] private Text m_FeverCountText = null;//피버 타임까지 필요한 식물 수확 수 표기 텍스트
     [SerializeField] private Text m_TimerText = null;//식물 성장 시간을 표시하는 타이머
+
+    [SerializeField] private Animator[] m_AnimationsOnFeverStart = null;//피버타임 시작시 플레이할 애니메이션들
+    [SerializeField] private Animator m_MirrorBallAnimator = null;
+    [SerializeField] private Animator m_SprinklerAnimator = null;
+    [SerializeField] private Animator m_NutrientsAnimator = null;
+    [SerializeField] private GameObject m_MirrorBallEffect = null;
+
     #endregion
 
     #region Property
@@ -549,12 +556,28 @@ public class GameManager : MonoBehaviour
                 m_Plants[i].Initialize(i, -1, m_SproutSprite, null, PlantState.NONE);
             }
 
+
+            foreach (var v in m_AnimationsOnFeverStart)
+            {
+                v.SetFloat("Speed", 1.0f);
+                v.Play("FeverStart", -1, 0f);
+            }
+            m_MirrorBallAnimator.SetFloat("Speed", 1.0f);
+            m_MirrorBallAnimator.Play("FeverStart",-1,0.0f);
             m_FeverTimeCoroutine = StartCoroutine(FeverTimeCoroutine());
         }
     }
 
     private IEnumerator FeverTimeCoroutine()
     {
+
+        yield return new WaitForSecondsRealtime(0.5f);
+        m_MirrorBallAnimator.Play("Fever", -1, 0.0f);
+        m_MirrorBallEffect.SetActive(true);
+        m_SprinklerAnimator.Play("Fever", -1, 0.0f);
+        m_NutrientsAnimator.Play("Fever", -1, 0.0f);
+
+
         float max = 15.0f;
         float time = 15.0f;
         float waiting = 0.0f;
@@ -597,6 +620,17 @@ public class GameManager : MonoBehaviour
         m_FeverTimeGaugeBar.gameObject.SetActive(false);
         m_FeverTimeGaugeBarBack.gameObject.SetActive(false);
         SpawnSprout();
+
+        foreach (var v in m_AnimationsOnFeverStart)
+        {
+            v.SetFloat("Speed", -1.0f);
+            v.Play("FeverStart", -1, 1.0f);
+        }
+        m_MirrorBallAnimator.SetFloat("Speed", -1.0f);
+        m_MirrorBallAnimator.Play("FeverStart", -1, 1.0f);
+        m_MirrorBallEffect.SetActive(false);
+        m_SprinklerAnimator.Play("Idle", -1, 0.0f);
+        m_NutrientsAnimator.Play("Idle", -1, 0.0f);
     }
 
     private void StartSpawnGreenPlant()

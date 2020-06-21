@@ -52,6 +52,12 @@ public class StoreManager : MonoBehaviour
             m_SprinklerItemCells[j].Initialize(m_SprinklerSprites[j], ItemCategory.SPRINKLER, j, m_ItemCsv[i + 1, 2], int.Parse(m_ItemCsv[i + 1, 8]), DataManager.GetHaveItem(ItemCategory.SPRINKLER, j));
             m_SprinklerItemCells[j].m_OnClickedEvent.AddListener(OnStoreItemCellClicked);
         }
+
+        for (int j = 0; i < m_LampItemCells.Length + m_NutrientsItemCells.Length + m_SprinklerItemCells.Length + m_ETCItemCells.Length; ++i, ++j)
+        {
+            m_ETCItemCells[j].Initialize(m_ETCSprites[j], ItemCategory.ETC, j, m_ItemCsv[i + 1, 2], int.Parse(m_ItemCsv[i + 1, 8]), DataManager.GetHaveItem(ItemCategory.ETC, j));
+            m_ETCItemCells[j].m_OnClickedEvent.AddListener(OnStoreItemCellClicked);
+        }
     }
 
     // Start is called before the first frame update
