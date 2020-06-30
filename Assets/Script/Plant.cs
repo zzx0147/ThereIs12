@@ -16,6 +16,7 @@ public enum PlantState
 {
     NONE,// 식물 없음
     SPROUT,//새싹, 식물이 자라는 중
+    SPROUT2,
     ADULT//성체, 식물이 다 자라서 수확할 수 있는 상태
 }
 
@@ -33,12 +34,14 @@ public class Plant : MonoBehaviour
     private int m_plantObjId;
 
     private float m_RemaingTime2Grow;
+    private float m_MaxTime2Grow;
 
     private Coroutine m_GrowCoroutine = null;
 
     private Image m_PlantImage = null;
     private Sprite m_AdultPlantSprite = null;
     private Sprite m_SproutSprite = null;
+    private Sprite m_SproutSprite2 = null;
     private Button m_Button = null;
 
     private UnityEvent<int> m_onHarvestEvent = null;
@@ -76,6 +79,18 @@ public class Plant : MonoBehaviour
                     DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.SPROUT, (int)m_RemaingTime2Grow, DataManager.GetNow());
                     break;
 
+                case PlantState.SPROUT2:
+                    if (m_plantSpeciesId == -1)
+                    {
+                        Debug.LogError("Critical Error");
+                    }
+                    m_PlantImage.enabled = true;
+                    m_Button.interactable = true;
+                    m_PlantImage.sprite = m_SproutSprite2;
+                    m_PlantImage.SetNativeSize();
+                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.SPROUT2, (int)m_RemaingTime2Grow, DataManager.GetNow());
+
+                    break;
                 case PlantState.ADULT:
                     m_PlantImage.enabled = true;
                     m_Button.interactable = true;
@@ -100,23 +115,31 @@ public class Plant : MonoBehaviour
         m_onEndGrowEvent = new UnityEvent();
     }
 
-    public void Initialize(int objId, int speciesId, Sprite sproutSprite, Sprite adultSprite, PlantState state)
+    public void Initialize(int objId, int speciesId, Sprite sproutSprite,Sprite sproutSprite2, Sprite adultSprite, PlantState state)
     {
         m_plantObjId = objId;
         m_SproutSprite = sproutSprite;
+        m_SproutSprite2 = sproutSprite2;
         m_AdultPlantSprite = adultSprite;
         m_plantSpeciesId = speciesId;
         m_State = state;
 
         float scaling = Random.Range(0.9f, 1.05f);
         GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1); 
+    }
 
+    public void SetPlant(int speciesId,Sprite adultSprite,PlantState state)
+    {
+        m_plantSpeciesId = speciesId;
+        m_AdultPlantSprite = adultSprite;
+        m_State = state;
     }
 
     public void StartGrowing(float time, int plantSpeciesID, Sprite adultSprite)
     {
         Debug.Log("Grow start");
-        m_RemaingTime2Grow = time;
+        m_MaxTime2Grow = time;
+        m_RemaingTime2Grow = m_MaxTime2Grow;
         m_plantSpeciesId = plantSpeciesID;
         m_State = PlantState.SPROUT;
         m_AdultPlantSprite = adultSprite;
@@ -127,6 +150,21 @@ public class Plant : MonoBehaviour
 
     private IEnumerator GrowCoroutine()
     {
+        while(true)
+        {
+            m_RemaingTime2Grow -= Time.deltaTime;
+            if (m_RemaingTime2Grow < (m_MaxTime2Grow / 2))
+            {
+                m_State = PlantState.SPROUT2;
+                float scaling = Random.Range(0.9f, 1.05f);
+                GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
+                break;
+            }
+            yield return null;
+        }
+
+
+
         while (true)
         {
             m_RemaingTime2Grow -= Time.deltaTime;
@@ -155,6 +193,7 @@ public class Plant : MonoBehaviour
                 break;
 
             case PlantState.SPROUT:
+            case PlantState.SPROUT2:
                 if (Time.timeScale >= 1.0f)
                 {
                     m_RemaingTime2Grow -= 3.0f;

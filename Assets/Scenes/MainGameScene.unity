@@ -2681,6 +2681,11 @@ MonoBehaviour:
   m_MoneyText: {fileID: 704367245}
   m_FeverCountText: {fileID: 1774632622}
   m_TimerText: {fileID: 1122796910}
+  m_PanelChangeButtonText:
+  - {fileID: 1043227682}
+  - {fileID: 1635920608}
+  - {fileID: 2133768227}
+  - {fileID: 306608208}
   m_AnimationsOnFeverStart:
   - {fileID: 750420904}
   - {fileID: 1728075692}
@@ -3650,38 +3655,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8740970062864882466, guid: 1754f2af5abb5184893874c5d98efd0f,
         type: 3}
-      propertyPath: m_ETCSprites.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8740970062864882466, guid: 1754f2af5abb5184893874c5d98efd0f,
-        type: 3}
       propertyPath: m_GameManager
       value: 
       objectReference: {fileID: 776203971}
-    - target: {fileID: 8740970062864882466, guid: 1754f2af5abb5184893874c5d98efd0f,
-        type: 3}
-      propertyPath: m_ETCSprites.Array.data[0]
-      value: 
-      objectReference: {fileID: 21300000, guid: 4357c53210e8f564fbf85a7c93b09657,
-        type: 3}
-    - target: {fileID: 8740970062864882466, guid: 1754f2af5abb5184893874c5d98efd0f,
-        type: 3}
-      propertyPath: m_ETCSprites.Array.data[1]
-      value: 
-      objectReference: {fileID: 21300000, guid: 4f29396394c7ceb4dbc4c2fbc705277e,
-        type: 3}
-    - target: {fileID: 8740970062864882466, guid: 1754f2af5abb5184893874c5d98efd0f,
-        type: 3}
-      propertyPath: m_ETCSprites.Array.data[2]
-      value: 
-      objectReference: {fileID: 21300000, guid: 91f7c541a79bef94d9567292546d3cc1,
-        type: 3}
-    - target: {fileID: 8740970062864882466, guid: 1754f2af5abb5184893874c5d98efd0f,
-        type: 3}
-      propertyPath: m_ETCSprites.Array.data[3]
-      value: 
-      objectReference: {fileID: 21300000, guid: f3b6dbefe6b27e3419cc1bd6b233db46,
-        type: 3}
     - target: {fileID: 9105481172207051321, guid: 1754f2af5abb5184893874c5d98efd0f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3939,7 +3915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -3957,7 +3933,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uBA54\uC778\uD654\uBA74"
+  m_Text: "\uC5F0\uAD6C\uC2E4"
 --- !u!222 &1043227683
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7925,7 +7901,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC0C1\uC810"
+  m_Text: "\uAE30\uB85D\uC2E4"
 --- !u!222 &1635920609
 CanvasRenderer:
   m_ObjectHideFlags: 0
