@@ -6,11 +6,9 @@ using UnityEngine.UI;
 
 public class RadioButton : Button
 {
-    [SerializeField]
-    private RadioButton[] m_OtherButton;
+    [SerializeField] private RadioButton[] m_OtherButton = null;
 
-    [SerializeField]
-    private Vector2 m_ChangeDeltaOnPressed;
+    [SerializeField] private Vector2 m_ChangeDeltaOnPressed = Vector2.zero;
 
     public override void OnPointerClick(PointerEventData eventData)
     {

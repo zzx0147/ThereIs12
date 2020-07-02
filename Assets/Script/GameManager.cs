@@ -7,12 +7,12 @@ public class GameManager : MonoBehaviour
 {
     #region Variable
     [SerializeField] private float m_DogPlantRespawnProbability = 50.0f;//개풀 스폰 확률
-    [SerializeField] private int m_FeverCountMax;//피버까지 필요한 식물 수확 갯수
+    [SerializeField] private int m_FeverCountMax = 0;//피버까지 필요한 식물 수확 갯수
 
-    [SerializeField] private float[] m_PlantRespawnTimeMin = { 70, 60, 50, 40, 30 }; //식물 리스폰 속도 최소치
-    [SerializeField] private float[] m_PlantRespawnTimeWeight = { 20, 19, 18, 17, 16 };//식물 리스폰 속도 가중치 (최소치 + 가중치 = 최대치)
-    [SerializeField] private float[] m_GreenPlantRespawnTimeMin = { 180, 300, 600, 1000, 1800 };//녹초 리스폰 속도 최소치
-    [SerializeField] private float[] m_GreenPlantRespawnTimeWeight = { 120, 150, 200, 400, 600 };//녹초 리스폰 속도 가중치
+    [SerializeField] private int[] m_PlantRespawnTimeMin = { 70, 60, 50, 40, 30 }; //식물 리스폰 속도 최소치
+    [SerializeField] private int[] m_PlantRespawnTimeWeight = { 20, 19, 18, 17, 16 };//식물 리스폰 속도 가중치 (최소치 + 가중치 = 최대치)
+    [SerializeField] private int[] m_GreenPlantRespawnTimeMin = { 180, 300, 600, 1000, 1800 };//녹초 리스폰 속도 최소치
+    [SerializeField] private int[] m_GreenPlantRespawnTimeWeight = { 120, 150, 200, 400, 600 };//녹초 리스폰 속도 가중치
 
     private int m_NumberOfAvailablePlant;
     private int m_lampGrade;
@@ -32,7 +32,6 @@ public class GameManager : MonoBehaviour
     private string[,] m_PlantProbabilityCsv;
 
     private bool m_isTimeLeft = false;
-    private bool m_LastSpawnSproutIsFailed = false;
     private bool m_isFeverOn = false;
     #endregion
 
@@ -178,32 +177,28 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         #region Time Compute
-        ulong refTime = DataManager.GetReferenceTime();//RemainingTime의 기준 시점
+        ulong refTime = DataManager.GetReferenceTimeOfTimeItem();//RemainingTimeOfTimeItem을 저장한 시점, 시간 아이템을 구매한 시점을 말함
         ulong now = DataManager.GetNow();//현재 시간
-        float pastRemainingTime = m_RemainingTime = DataManager.GetRemainingTime();//마지막으로 저장된 시간 아이템의 남은 시간
-        m_RemainingTime -= (now - refTime);//시간 아이템의 남은 시간을 현재 시간 기준으로 업데이트
-        if (m_RemainingTime < 0)
+        int pastRemainingTime = DataManager.GetRemainingTimeOfTimeItem();//마지막으로 저장된 시간 아이템의 남은 시간
+        m_RemainingTime = pastRemainingTime;
+        m_RemainingTime -= (int)(now - refTime);//시간 아이템의 남은 시간을 계산, (now - refTime) 지난 시간을 저장된 남은 시간에서 빼서 남은 시간을 구함
+
+        if (m_RemainingTime < 0)//남은 시간이 0보다 작을 경우 0으로 설정
         {
             m_RemainingTime = 0;
-        }
-
-        DataManager.SetRemainingTime((int)m_RemainingTime);
-        DataManager.RecordReferenceTime();
-        m_TimerText.text = System.String.Format("{0:00}", (int)m_RemainingTime / 60) + ":" + System.String.Format("{0:00}", (int)m_RemainingTime % 60);
-       
-
-        m_NumberOfAvailablePlant = DataManager.GetNumberOfAvailablePlant();
-
-
-        if (m_RemainingTime > 0)
-        {
-            m_IsTimeLeft = true;
+            m_IsTimeLeft = false;
+            //StartSpawnGreenPlant();//시간 아이템을 전부 소모하였으니 녹초 생성을 On
         }
         else
         {
-            m_IsTimeLeft = false;
-            StartSpawnGreenPlant();
+            m_IsTimeLeft = true;
         }
+        DataManager.SetRemainingTimeOfTimeItem((int)m_RemainingTime);//시간 아이템의 기준 시간과 남은 시간을 업데이트
+        DataManager.RecordReferenceTimeOfTimeItem();
+        m_TimerText.text = $"{(int)m_RemainingTime / 60:00}" + ":" + $"{(int)m_RemainingTime % 60:00}";//시간 표시
+
+        m_NumberOfAvailablePlant = DataManager.GetNumberOfAvailablePlant();//사용 가능한 식물 칸의 갯수를 얻어옴(재화를 주고 해방함에 따라 갯수가 달라짐)
+
         #endregion
 
         #region Probability Compute
@@ -213,7 +208,7 @@ public class GameManager : MonoBehaviour
         float devidedProbability = (50.0f - m_DogPlantRespawnProbability) / 49.0f;//(50 - 개풀 확률)/(개풀 제외 식물 수)로 하여 나온 값
         //개풀 확률을 50보다 낮게 조정할 경우에 줄어든 확률을 다른 식물에게 똑같이 분배
 
-        for (int i = 2; i < m_PlantSprites.Length - 1; ++i)
+        for (int i = 2; i < m_PlantSprites.Length - 1; ++i)//최종적으로 각 식물 확률을 저장함
         {
             m_PlantRespawnProbability[i] = float.Parse(m_PlantProbabilityCsv[i + 3, 1]) + devidedProbability;
         }
@@ -221,7 +216,9 @@ public class GameManager : MonoBehaviour
         #endregion
 
         #region spawn plant between off
-        bool haveSprout = false;
+
+        //bool haveSprout = false;//현재 맵에 새싹이 있는지 없는지를 판단하는 플래그
+        ulong lastSproutGrowingTime = 0;//게임을 끄기 전 마지막 새싹이 다 자라는 순간의 시간// 재접속시 마지막 새싹이 다 자라지 않았다면 사용하지 않음
         for (int i = 0; i < m_Plants.Length; ++i)
         {
             PlantDataStruct temp = DataManager.GetPlantData(i);
@@ -230,36 +227,43 @@ public class GameManager : MonoBehaviour
             m_Plants[i].OnEndGrowEvent.AddListener(SpawnSprout);
             m_Plants[i].OnHarvestEvent.AddListener(GainPlant);
 
-            if (temp.state != PlantState.SPROUT)
+            if (temp.state != PlantState.SPROUT && temp.state != PlantState.SPROUT2)//성체 식물 혹은 아예 없는 경우
             {
-                m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite,m_SproutSprite2 ,(temp.SpeciesId == -1) ? (null) : (m_PlantSprites[temp.SpeciesId]), temp.state);
+                m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2, (temp.SpeciesId == -1) ? (null) : (m_PlantSprites[temp.SpeciesId]), temp.state);
             }
-            else
+            else//새싹SPROUT,SPROUT2인 경우
             {
                 if ((ulong)temp.RemainingTime < (now - temp.ReferenceTime))//새싹의 성장까지 남은 시간이 흐른 시간보다 적다(이미 성장했어야 하는 시간이다)
                 {
-                    ulong lastSproutGrowingTime = 0;
-                    m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite,m_SproutSprite2, m_PlantSprites[temp.SpeciesId], PlantState.ADULT);
+                    m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2, m_PlantSprites[temp.SpeciesId], PlantState.ADULT);//새싹으로 저장되어 있지만 이미 성장할 시간이 지났으므로 성체 식물로 초기화한다
                     lastSproutGrowingTime = temp.ReferenceTime + (ulong)temp.RemainingTime;
-                    RespawnPlantBetweenTurnOff((m_IsTimeLeft) ? now - lastSproutGrowingTime : pastRemainingTime);
-                    SpawnSprout();
-                    haveSprout = true;
                 }
                 else//새싹의 성장까지 남은 시간이 흐른 시간보다 많다(아직 성장하지 않았을 시간이다)
                     //이 말은 게임 종료 후 다시 접속했을 때 마지막 새싹이 아직 자라지 않았음을 의미
                     //즉 지난 시간을 계산해 식물을 소환할 필요가 없음을 의미
                 {
-                    m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite,m_SproutSprite2 ,m_PlantSprites[temp.SpeciesId], PlantState.SPROUT);
-                    m_Plants[i].StartGrowing((temp.RemainingTime - (int)(now - temp.ReferenceTime)), temp.SpeciesId, m_PlantSprites[temp.SpeciesId]);
-                    haveSprout = true;
+                    m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2, m_PlantSprites[temp.SpeciesId], PlantState.SPROUT);
+                    m_Plants[i].StartGrowing(temp.MaxTime, (temp.RemainingTime - (int)(now - temp.ReferenceTime)), temp.SpeciesId, m_PlantSprites[temp.SpeciesId]);
+                    //haveSprout = true;
                 }
             }
         }
 
-        if (!haveSprout)
+
+        if (lastSproutGrowingTime > 0)//끄기 전 마지막 새싹이 다 자랐을 경우
         {
-            SpawnSprout();
+            RespawnPlantBetweenTurnOff((m_IsTimeLeft) ? (int)(now - lastSproutGrowingTime) : pastRemainingTime);
         }
+
+        if (!m_IsTimeLeft)
+        {
+            RespawnGreenPlantBetweenTurnOff((int)(now - ((ulong)pastRemainingTime + refTime)));//기준 시간 + 시간 아이템 남은 시간 = 시간 아이템이 끝나는 시간
+                                                                                               //시간 아이템이 끝나는 시간과 현재 시간 사이의 차 만큼 녹초를 생성
+        }
+        //else if (!haveSprout)
+        //{
+        //    SpawnSprout();
+        //}
 
         #endregion
     }
@@ -271,7 +275,7 @@ public class GameManager : MonoBehaviour
         {
             m_RemainingTime -= Time.deltaTime;
 
-            m_TimerText.text = System.String.Format("{0:00}", (int)m_RemainingTime / 60) + ":" + System.String.Format("{0:00}", (int)m_RemainingTime % 60);
+            m_TimerText.text = $"{(int)m_RemainingTime / 60:00}" + ":" + $"{(int)m_RemainingTime % 60:00}";
 
             if (m_RemainingTime < 0.0f)
             {
@@ -282,51 +286,43 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private float RespawnPlantBetweenTurnOff(float time)
+    private void RespawnPlantBetweenTurnOff(int time)
     {
         while (true)
         {
-            float randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMin[m_MaxLampGrade] + m_PlantRespawnTimeWeight[m_MaxLampGrade]);
-            if ((time - randTime) >= 0)
+            int randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMin[m_MaxLampGrade] + m_PlantRespawnTimeWeight[m_MaxLampGrade]);
+            if ((time - randTime) >= 0)//주어진 시간(게임이 꺼진 동안 지난 시간이면서 남아있던 시간아이템 시간)이 여유가 있으면
             {
-                SpawnRandomAdultPlant();
+                SpawnRandomAdultPlant();//성체 식물을 하나 스폰
                 time -= randTime;
-                
             }
-            else
+            else//아니라면
             {
-                return randTime - time;
+                int sel = SelectOnePlantObjRandomly();
+                if (sel < 0)//식물 칸이 꽉 참
+                {
+                    return;
+                }
+                int plantspecies = SelectOnePlantSpeciesRandomly();
+                m_Plants[sel].StartGrowing(randTime, randTime - time, plantspecies, m_PlantSprites[plantspecies]);
+                return;
             }
-
         }
     }
 
     private bool SpawnRandomAdultPlant()
     {
-        int[] EmptyPlantObjectsIndexes = GetEmptyPlantImageNumbers();
-        if (EmptyPlantObjectsIndexes.Length < 1)
+        int plantObjNum = SelectOnePlantObjRandomly();
+        if (plantObjNum < 0)
         {
             return false;
         }
 
-        int targetPlant = Random.Range(0, EmptyPlantObjectsIndexes.Length);
+        int plantSpeciesNum = SelectOnePlantSpeciesRandomly();
 
-        while (true)
-        {
-            float randFloat = Random.Range(0.0f, 100.0f);//
-            float probabilityMin = 0.0f;
-            for (int i = 0; i < (m_MaxNutrientsGrade + 1) * 10 + 1; ++i)//현재 장비 등급이 허용하는 범위 내의 식물을 순회하며 확률에 걸렸는지 체크
-            {
-                if (probabilityMin <= randFloat && m_PlantRespawnProbability[i] + probabilityMin > randFloat)//확률 범위 안에 randFloat가 들어올 경우
-                {
-                    m_Plants[EmptyPlantObjectsIndexes[targetPlant]].Initialize(EmptyPlantObjectsIndexes[targetPlant], i, m_SproutSprite,m_SproutSprite2 ,m_PlantSprites[i], PlantState.ADULT);
-                    DataManager.SetPlantData(EmptyPlantObjectsIndexes[targetPlant], i, PlantState.ADULT, 0, 0);
-                    goto whileEnd;
-                }
-                probabilityMin += m_PlantRespawnProbability[i];
-            }
-        }
-        whileEnd:
+        m_Plants[plantObjNum].SetPlant(plantSpeciesNum, m_PlantSprites[plantSpeciesNum], PlantState.ADULT);
+        DataManager.SetPlantData(plantObjNum, plantSpeciesNum, PlantState.ADULT, 0, 0, 0);
+
         return true;
     }
 
@@ -344,7 +340,7 @@ public class GameManager : MonoBehaviour
 
         return temp.ToArray();
     }
-    
+
     private int[] GetNotEmptyPlantImageNumbers()
     {
         List<int> temp = new List<int>();
@@ -398,9 +394,18 @@ public class GameManager : MonoBehaviour
             m_RemainingTime = time;
             m_IsTimeLeft = true;
             StopSpawnGreenPlantCoroutine();
-            DataManager.RecordReferenceTime();
-            DataManager.SetRemainingTime((int)m_RemainingTime);
+            DataManager.RecordReferenceTimeOfTimeItem();
+            DataManager.SetRemainingTimeOfTimeItem((int)m_RemainingTime);
             DataManager.SetMaxTimeOfLastUsedTimeItem((int)m_RemainingTime);
+
+            foreach (var v in m_Plants)
+            {
+                if (v.m_State == PlantState.SPROUT || v.m_State == PlantState.SPROUT2)
+                {
+                    return;
+                }
+            }
+            SpawnSprout();
         }
     }
 
@@ -455,29 +460,40 @@ public class GameManager : MonoBehaviour
         }
 
 
-        if (m_LastSpawnSproutIsFailed)
+
+        if (!CheckHaveSprout() && !m_isFeverOn)
         {
             SpawnSprout();
         }
     }
 
+    private bool CheckHaveSprout()
+    {
+        foreach (var v in m_Plants)
+        {
+            if (v.m_State == PlantState.SPROUT || v.m_State == PlantState.SPROUT2)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void SpawnSprout()
     {
 
-        float randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMin[m_MaxLampGrade] + m_PlantRespawnTimeWeight[m_MaxLampGrade]);
+        int randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMin[m_MaxLampGrade] + m_PlantRespawnTimeWeight[m_MaxLampGrade]);
+        Debug.Log("randTime: " + randTime);
         int selecObj = SelectOnePlantObjRandomly();
 
         if (selecObj == -1)
         {
-            m_LastSpawnSproutIsFailed = true;
             return;
         }
-        m_LastSpawnSproutIsFailed = false;
 
         int species = SelectOnePlantSpeciesRandomly();
 
-        m_Plants[selecObj].StartGrowing(randTime, species, m_PlantSprites[species]);
-
+        m_Plants[selecObj].StartGrowing(randTime, randTime, species, m_PlantSprites[species]);
     }
 
     private int SelectOnePlantObjRandomly()
@@ -517,11 +533,11 @@ public class GameManager : MonoBehaviour
             StopCoroutine(m_ChangeGamePanelCoroutine);
         }
 
-        foreach(var v in m_PanelChangeButtonText)
+        foreach (var v in m_PanelChangeButtonText)
         {
-            v.color = new Color(0.0f,0.0f,0.0f);
+            v.color = new Color(103.0f / 255.0f, 65 / 255.0f, 41 / 255.0f, 1.0f);
         }
-        m_PanelChangeButtonText[num].color = new Color(1.0f,1.0f,1.0f);
+        m_PanelChangeButtonText[num].color = new Color(233.0f / 255.0f, 230.0f / 255.0f, 223.0f / 255.0f, 1.0f);
 
         m_ChangeGamePanelCoroutine = StartCoroutine(ChangeGamePanelCoroutine(num));
     }
@@ -562,7 +578,7 @@ public class GameManager : MonoBehaviour
                 {
                     GainPlant(m_Plants[i].m_PlantSpeciesId);
                 }
-                m_Plants[i].Initialize(i, -1, m_SproutSprite,m_SproutSprite2 ,null, PlantState.NONE);
+                m_Plants[i].Initialize(i, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
             }
 
 
@@ -572,7 +588,7 @@ public class GameManager : MonoBehaviour
                 v.Play("FeverStart", -1, 0f);
             }
             m_MirrorBallAnimator.SetFloat("Speed", 1.0f);
-            m_MirrorBallAnimator.Play("FeverStart",-1,0.0f);
+            m_MirrorBallAnimator.Play("FeverStart", -1, 0.0f);
             m_FeverTimeCoroutine = StartCoroutine(FeverTimeCoroutine());
         }
     }
@@ -594,7 +610,7 @@ public class GameManager : MonoBehaviour
             int select = SelectOnePlantObjRandomly();
             int species = SelectOnePlantSpeciesRandomly();
 
-            m_Plants[select].Initialize(select, species, m_SproutSprite,m_SproutSprite2, m_PlantSprites[species], PlantState.ADULT);
+            m_Plants[select].Initialize(select, species, m_SproutSprite, m_SproutSprite2, m_PlantSprites[species], PlantState.ADULT);
 
             waiting = 0.2f + Random.Range(0.2f, 0.4f);
             while (true)
@@ -602,7 +618,7 @@ public class GameManager : MonoBehaviour
                 time -= Time.unscaledDeltaTime;
                 if (time <= 0.0f)
                 {
-                    m_Plants[select].Initialize(select, -1, m_SproutSprite,m_SproutSprite2, null, PlantState.NONE);
+                    m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
                     goto EndLoop;
                 }
 
@@ -615,7 +631,7 @@ public class GameManager : MonoBehaviour
                 yield return null;
             }
 
-            m_Plants[select].Initialize(select, -1, m_SproutSprite,m_SproutSprite2, null, PlantState.NONE);
+            m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
         }
     EndLoop:
 
@@ -624,10 +640,8 @@ public class GameManager : MonoBehaviour
         DataManager.SetFeverCount(0);
         m_FeverTimeCoroutine = null;
         m_isFeverOn = false;
-        Time.timeScale = 1.0f;
         m_FeverTimeGaugeBar.gameObject.SetActive(false);
         m_FeverTimeGaugeBarBack.gameObject.SetActive(false);
-        SpawnSprout();
 
         foreach (var v in m_AnimationsOnFeverStart)
         {
@@ -639,13 +653,20 @@ public class GameManager : MonoBehaviour
         m_MirrorBallEffect.SetActive(false);
         m_SprinklerAnimator.Play("Idle", -1, 0.0f);
         m_NutrientsAnimator.Play("Idle", -1, 0.0f);
+
+        yield return new WaitForSecondsRealtime(1.0f);
+        if (m_isTimeLeft)
+        {
+            Time.timeScale = 1.0f;
+            SpawnSprout();
+        }
     }
 
-    private void StartSpawnGreenPlant()
+    private void StartSpawnGreenPlant(int time = 0)//time은 최초 1회에 한해 녹초의 생성 시간을 단축시키는 변수, 꺼져있는 동안 녹초를 생성시키고 남은 시간만큼 다음 녹초의 생성 시간을 앞당기는 용도
     {
-        if(m_SpawnGreenPlantCoroutine == null)
+        if (m_SpawnGreenPlantCoroutine == null)
         {
-            m_SpawnGreenPlantCoroutine = StartCoroutine(SpawnGreenPlant());
+            m_SpawnGreenPlantCoroutine = StartCoroutine(SpawnGreenPlantCoroutine(time));
         }
         else
         {
@@ -653,18 +674,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator SpawnGreenPlant()
+    private IEnumerator SpawnGreenPlantCoroutine(int time)
     {
-        while(true)
+        int nextGreenPlantSpawnTime = Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade], m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]);
+
+        int temp = nextGreenPlantSpawnTime - time;
+        if (temp < 0)
         {
-            yield return new WaitForSecondsRealtime(0.1f * Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade],m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]));
+            temp = 0;
+        }
+
+        yield return new WaitForSecondsRealtime(temp);
+
+        SpawnRandomGreenPlant();
+
+        while (true)
+        {
+            yield return new WaitForSecondsRealtime(Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade], m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]));
             SpawnRandomGreenPlant();
         }
     }
-    
+
     private void StopSpawnGreenPlantCoroutine()
     {
-        if(m_SpawnGreenPlantCoroutine != null)
+        if (m_SpawnGreenPlantCoroutine != null)
         {
             StopCoroutine(m_SpawnGreenPlantCoroutine);
             m_SpawnGreenPlantCoroutine = null;
@@ -674,23 +707,27 @@ public class GameManager : MonoBehaviour
     private void SpawnRandomGreenPlant()
     {
         int[] arr = GetNotEmptyPlantImageNumbers();
+        if (arr.Length <= 0)
+        {
+            return;
+        }
         int sel = Random.Range(0, arr.Length);
-        m_Plants[arr[sel]].Initialize(arr[sel],1,m_SproutSprite,m_SproutSprite2,m_PlantSprites[1],PlantState.ADULT);
+        m_Plants[arr[sel]].Initialize(arr[sel], 1, m_SproutSprite, m_SproutSprite2, m_PlantSprites[1], PlantState.ADULT);
     }
 
-    private void RespawnGreenPlantBetweenTurnOff(float time)
+    private void RespawnGreenPlantBetweenTurnOff(int time)
     {
         while (true)
         {
-            float randTime = Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade], m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]);
-            if(time - randTime >= 0)
+            int randTime = Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade], m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]);
+            if (time - randTime >= 0)
             {
                 time -= randTime;
-                SpawnGreenPlant();
-
+                SpawnRandomGreenPlant();
             }
             else
             {
+                StartSpawnGreenPlant((randTime - time));
                 return;
             }
         }

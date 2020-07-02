@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class CharacterRandomChanger : MonoBehaviour
 {
-    [SerializeField] private Image m_CharacterImage;
-    [SerializeField] private Text m_CharacterDialogue;
-    [SerializeField] private Text m_CharacterName;
-    [SerializeField] private Sprite[] m_CharacterSprites;
+    [SerializeField] private Image m_CharacterImage = null;
+    [SerializeField] private Text m_CharacterDialogue = null;
+    [SerializeField] private Text m_CharacterName = null;
+    [SerializeField] private Sprite[] m_CharacterSprites = null;
 
     private string[,] m_CharacterInfoCsv;
 

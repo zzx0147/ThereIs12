@@ -7,6 +7,12 @@ Shader "Custom/BlurShader" {
 		_MainTex("Tint Color (RGB)", 2D) = "white" {}
 		_BumpMap("Normalmap", 2D) = "bump" {}
 		_Size("Size", Range(0, 20)) = 1
+		_StencilComp("Stencil Comparison", Float) = 8
+		_Stencil("Stencil ID", Float) = 0
+		_StencilOp("Stencil Operation", Float) = 0
+		_StencilWriteMask("Stencil Write Mask", Float) = 255
+		_StencilReadMask("Stencil Read Mask", Float) = 255
+		_ColorMask("Color Mask", Float) = 15
 	}
 
 		Category{
@@ -19,6 +25,18 @@ Shader "Custom/BlurShader" {
 				GrabPass {
 					Tags { "LightMode" = "Always" }
 				}
+
+			// required for UI.Mask
+				 Stencil
+				 {
+					 Ref[_Stencil]
+					 Comp[_StencilComp]
+					 Pass[_StencilOp]
+					 ReadMask[_StencilReadMask]
+					 WriteMask[_StencilWriteMask]
+				 }
+				  ColorMask[_ColorMask]
+
 				Pass {
 					Tags { "LightMode" = "Always" }
 
@@ -196,5 +214,5 @@ Shader "Custom/BlurShader" {
 					ENDCG
 				}
 			}
-		}
+	}
 }

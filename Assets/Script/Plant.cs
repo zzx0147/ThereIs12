@@ -8,6 +8,7 @@ public struct PlantDataStruct
 {
     public int SpeciesId;//식물의 종류 id 새싹의 경우 자랐을 때 무슨 종이 될 지를 결정
     public PlantState state;//식물의 상태, NONE이면 , SPROUT면, ADULT면 식물이 다 자람
+    public int MaxTime;//식물이 성체가 되기까지 필요한(최대치) 시간
     public int RemainingTime;//식물이 성체가 되기까지 필요한(남은) 시간
     public ulong ReferenceTime;//RemainingTime이 기록된 시간, RemainingTime은 이 시간을 기준으로 얼마나 남았는지를 기록하게 됨
 }
@@ -34,7 +35,7 @@ public class Plant : MonoBehaviour
     private int m_plantObjId;
 
     private float m_RemaingTime2Grow;
-    private float m_MaxTime2Grow;
+    private int m_MaxTime2Grow;
 
     private Coroutine m_GrowCoroutine = null;
 
@@ -64,7 +65,7 @@ public class Plant : MonoBehaviour
                         m_GrowCoroutine = null;
                     }
 
-                    DataManager.SetPlantData(m_plantObjId, -1, PlantState.NONE, 0, 0);
+                    DataManager.SetPlantData(m_plantObjId, -1, PlantState.NONE,0, 0, 0);
                     break;
 
                 case PlantState.SPROUT:
@@ -76,7 +77,7 @@ public class Plant : MonoBehaviour
                     m_Button.interactable = true;
                     m_PlantImage.sprite = m_SproutSprite;
                     m_PlantImage.SetNativeSize();
-                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.SPROUT, (int)m_RemaingTime2Grow, DataManager.GetNow());
+                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.SPROUT,m_MaxTime2Grow, (int)m_RemaingTime2Grow, DataManager.GetNow());
                     break;
 
                 case PlantState.SPROUT2:
@@ -88,7 +89,7 @@ public class Plant : MonoBehaviour
                     m_Button.interactable = true;
                     m_PlantImage.sprite = m_SproutSprite2;
                     m_PlantImage.SetNativeSize();
-                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.SPROUT2, (int)m_RemaingTime2Grow, DataManager.GetNow());
+                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.SPROUT2,m_MaxTime2Grow, (int)m_RemaingTime2Grow, DataManager.GetNow());
 
                     break;
                 case PlantState.ADULT:
@@ -96,7 +97,7 @@ public class Plant : MonoBehaviour
                     m_Button.interactable = true;
                     m_PlantImage.sprite = m_AdultPlantSprite;
                     m_PlantImage.SetNativeSize();
-                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.ADULT, 0, 0);
+                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.ADULT, 0,0, 0);
                     break;
             }
         }
@@ -135,11 +136,11 @@ public class Plant : MonoBehaviour
         m_State = state;
     }
 
-    public void StartGrowing(float time, int plantSpeciesID, Sprite adultSprite)
+    public void StartGrowing(int maxtime,int time, int plantSpeciesID, Sprite adultSprite)
     {
-        Debug.Log("Grow start");
-        m_MaxTime2Grow = time;
-        m_RemaingTime2Grow = m_MaxTime2Grow;
+        Debug.Log(maxtime);
+        m_MaxTime2Grow = maxtime;
+        m_RemaingTime2Grow = time;
         m_plantSpeciesId = plantSpeciesID;
         m_State = PlantState.SPROUT;
         m_AdultPlantSprite = adultSprite;

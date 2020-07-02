@@ -112,30 +112,30 @@ public class DataManager//데이터의 세이브와 로드를 담당
         PlayerPrefs.Save();
     }
 
-    public static ulong GetReferenceTime()
+    public static ulong GetReferenceTimeOfTimeItem()
     {
-        return ulong.Parse(PlayerPrefs.GetString("ReferenceTime", System.DateTime.Now.ToFileTime().ToString().Substring(0, 11)));
+        return ulong.Parse(PlayerPrefs.GetString("ReferenceTimeOfTimeItem", System.DateTime.Now.ToFileTime().ToString().Substring(0, 11)));
     }
 
-    public static void RecordReferenceTime()
+    public static void RecordReferenceTimeOfTimeItem()
     {
-        PlayerPrefs.SetString("ReferenceTime", System.DateTime.Now.ToFileTime().ToString().Substring(0, 11));
+        PlayerPrefs.SetString("ReferenceTimeOfTimeItem", System.DateTime.Now.ToFileTime().ToString().Substring(0, 11));
         PlayerPrefs.Save();
     }
 
-    public static int GetRemainingTime()
+    public static int GetRemainingTimeOfTimeItem()
     {
-        return PlayerPrefs.GetInt("RemainingTime", 0);
+        return PlayerPrefs.GetInt("RemainingTimeOfTimeItem", 0);
     }
 
-    public static void SetRemainingTime(int remaining)
+    public static void SetRemainingTimeOfTimeItem(int remaining)
     {
         if (remaining < 0)
         {
             remaining = 0;
         }
 
-        PlayerPrefs.SetInt("RemainingTime", remaining);
+        PlayerPrefs.SetInt("RemainingTimeOfTimeItem", remaining);
         PlayerPrefs.Save();
     }
 
@@ -158,17 +158,18 @@ public class DataManager//데이터의 세이브와 로드를 담당
 
     public static PlantDataStruct GetPlantData(int objId)
     {
-        PlantDataStruct temp;
+        PlantDataStruct temp = new PlantDataStruct();
         temp.SpeciesId = PlayerPrefs.GetInt("Plant_SpeciesId_" + objId, -1);
         temp.state = (PlantState)PlayerPrefs.GetInt("Plant_State_" + objId, (int)PlantState.NONE);
         temp.RemainingTime = PlayerPrefs.GetInt("Plant_RemainingTime_" + objId, 0);
         temp.ReferenceTime = ulong.Parse(PlayerPrefs.GetString("Plant_ReferenceTime_" + objId, (0).ToString()));
+        temp.MaxTime = PlayerPrefs.GetInt("Plant_MaxTime_" + objId, 0);
         return temp;
     }
 
-    public static void SetPlantData(int objId, int speciesId, PlantState state, int remainingTime, ulong referanceTime)
+    public static void SetPlantData(int objId, int speciesId, PlantState state, int MaxTime, int remainingTime, ulong referanceTime)
     {
-        if(state == PlantState.SPROUT && speciesId == -1)
+        if (state == PlantState.SPROUT && speciesId == -1)
         {
             Debug.LogError("sprout wiht no adult type");
         }
@@ -177,6 +178,7 @@ public class DataManager//데이터의 세이브와 로드를 담당
         PlayerPrefs.SetInt("Plant_SpeciesId_" + objId, speciesId);
         PlayerPrefs.SetInt("Plant_State_" + objId, (int)state);
         PlayerPrefs.SetInt("Plant_RemainingTime_" + objId, remainingTime);
+        PlayerPrefs.SetInt("Plant_MaxTime_" + objId, MaxTime);
         PlayerPrefs.SetString("Plant_ReferenceTime_" + objId, referanceTime.ToString());
         PlayerPrefs.Save();
     }
@@ -200,13 +202,13 @@ public class DataManager//데이터의 세이브와 로드를 담당
 
     public static void SetFeverCount(int num)
     {
-        PlayerPrefs.SetInt("FeverCount",num);
+        PlayerPrefs.SetInt("FeverCount", num);
         PlayerPrefs.Save();
     }
 
-    public static bool GetHaveItem(ItemCategory category,int num)
+    public static bool GetHaveItem(ItemCategory category, int num)
     {
-        if(num == 0)
+        if (num == 0)
         {
             return true;
         }
@@ -216,20 +218,20 @@ public class DataManager//데이터의 세이브와 로드를 담당
         return (temp == 0) ? (false) : (true);
     }
 
-    public static void SetHaveItem(ItemCategory category,int num, bool haveAlready)
+    public static void SetHaveItem(ItemCategory category, int num, bool haveAlready)
     {
-        PlayerPrefs.SetInt("Item_" + category.ToString() + "_" + num,(haveAlready)?(1):(0));
+        PlayerPrefs.SetInt("Item_" + category.ToString() + "_" + num, (haveAlready) ? (1) : (0));
         PlayerPrefs.Save();
     }
 
     public static bool GetIsItemBuyable(ItemCategory category, int num)
     {
-        if(num == 0)
+        if (num == 0)
         {
             return true;
         }
 
-        int temp = PlayerPrefs.GetInt("Item_" + category.ToString() + "_" + num + "_Buyable",0);
+        int temp = PlayerPrefs.GetInt("Item_" + category.ToString() + "_" + num + "_Buyable", 0);
 
 
         return (temp == 0) ? (false) : (true);
@@ -237,7 +239,7 @@ public class DataManager//데이터의 세이브와 로드를 담당
 
     public static void SetIsItemBuyable(ItemCategory category, int num, bool isBuyable)
     {
-        PlayerPrefs.SetInt("Item_" + category.ToString() + "_" + num + "_Buyable", (isBuyable)?(1):(0));
+        PlayerPrefs.SetInt("Item_" + category.ToString() + "_" + num + "_Buyable", (isBuyable) ? (1) : (0));
         PlayerPrefs.Save();
     }
 }
