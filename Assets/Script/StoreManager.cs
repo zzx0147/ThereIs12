@@ -8,7 +8,7 @@ public class StoreManager : MonoBehaviour
     [SerializeField] private GameManager m_GameManager = null;
 
     [SerializeField] private GameObject m_NotifyPanel = null;
-    [SerializeField] private Text m_NotifyText;
+    [SerializeField] private Text m_NotifyText = null;
 
     [SerializeField] private GameObject m_QuestionPanel = null;
     [SerializeField] private Text m_QuestionText = null;
@@ -23,6 +23,8 @@ public class StoreManager : MonoBehaviour
     [SerializeField] private Sprite[] m_SprinklerSprites = null;
     [SerializeField] private Sprite[] m_NutrientsSprites = null;
     [SerializeField] private Sprite[] m_ETCSprites = null;
+
+    [SerializeField] private Text[] m_CategoryText = null;
 
     private ItemCategory m_RecentSelectedItemCategory;
     private int m_RecentSelectedItemId;
@@ -105,17 +107,17 @@ public class StoreManager : MonoBehaviour
             }
             //사용중인 장비가 아닌 경우
             m_QuestionPanel.SetActive(true);
-            m_QuestionText.text =m_ItemCsv[(int)category * 5 + id + 1, 13];
+            m_QuestionText.text = m_ItemCsv[(int)category * 5 + id + 1, 13];
             Debug.Log(System.Text.RegularExpressions.Regex.Unescape(m_ItemCsv[(int)category * 5 + id + 1, 13]));
             Debug.Log("장비의 외형을 변경합니다.\n(성능은 바뀌지 않습니다.");
             m_QuestionYesButton.onClick.RemoveAllListeners();
             m_QuestionYesButton.onClick.AddListener(ChangeEquipment);
-            m_QuestionYesButton.onClick.AddListener(delegate { m_QuestionPanel.SetActive(false);});
+            m_QuestionYesButton.onClick.AddListener(delegate { m_QuestionPanel.SetActive(false); });
 
         }
         else//가지고 있지 않은 아이템일 경우
         {
-            if(DataManager.GetIsItemBuyable(category, id))//기본 조건이 충족된 경우
+            if (DataManager.GetIsItemBuyable(category, id))//기본 조건이 충족된 경우
             {
                 m_QuestionPanel.SetActive(true);
                 m_QuestionText.text = m_ItemCsv[(int)category * 5 + id + 1, 6];
@@ -178,5 +180,15 @@ public class StoreManager : MonoBehaviour
                 m_GameManager.m_SprinklerGrade = m_RecentSelectedItemId;
                 break;
         }
+    }
+
+    public void ChangeCategory(int num)
+    {
+        foreach (var v in m_CategoryText)
+        {
+            v.color = new Color(222.0f / 255.0f, 219.0f / 255.0f, 206.0f / 255.0f, 1.0f);
+        }
+
+        m_CategoryText[num].color = new Color(88.0f / 255.0f, 62.0f / 255.0f, 45.0f / 255.0f, 1.0f);
     }
 }

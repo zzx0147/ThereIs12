@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 
 public class TouchEffectController : MonoBehaviour
 {
-    [SerializeField] private GameObject m_NormalTouchEffectPrefab;
-    [SerializeField] private GameObject m_PlantTouchEffectPrefab;
+    [SerializeField] private GameObject m_NormalTouchEffectPrefab = null;
+    [SerializeField] private GameObject m_PlantTouchEffectPrefab = null;
     void Update()
     {
         RaycastWorldUI();

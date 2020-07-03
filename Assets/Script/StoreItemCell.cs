@@ -48,7 +48,7 @@ public class StoreItemCell : MonoBehaviour
         m_Name = name;
         m_Price = price;
         m_AlreadyHave = alreadyHave;
-        m_IntroductionText.text = m_Price + " : " + m_Name;
+        m_IntroductionText.text = m_Price + "pt " + m_Name;
         if (m_AlreadyHave)
         {
             m_ItemImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
