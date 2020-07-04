@@ -73,8 +73,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject m_MirrorBallEffect = null;
     [SerializeField] private GameObject m_MirrorBallLightEffect = null;
 
-    [SerializeField] private StudioEventEmitter m_StudioEventEmitter = null;
-
     #endregion
 
     #region Property
@@ -605,7 +603,8 @@ public class GameManager : MonoBehaviour
         m_MirrorBallLightEffect.SetActive(true);
         m_SprinklerAnimator.Play("Fever", -1, 0.0f);
         m_NutrientsAnimator.Play("Fever", -1, 0.0f);
-        m_StudioEventEmitter.SetParameter("Main_BGM_Tempo", 1.0f);
+        RuntimeManager.StudioSystem.setParameterByName("Main_BGM_Tempo",1.0f);
+
 
         float max = 15.0f;
         float time = 15.0f;
@@ -662,7 +661,7 @@ public class GameManager : MonoBehaviour
         m_MirrorBallLightEffect.SetActive(false);
         m_SprinklerAnimator.Play("Idle", -1, 0.0f);
         m_NutrientsAnimator.Play("Idle", -1, 0.0f);
-        m_StudioEventEmitter.SetParameter("Main_BGM_Tempo", 0.0f);
+        RuntimeManager.StudioSystem.setParameterByName("Main_BGM_Tempo", 0.0f);
 
         yield return new WaitForSecondsRealtime(1.0f);
         if (m_isTimeLeft)
