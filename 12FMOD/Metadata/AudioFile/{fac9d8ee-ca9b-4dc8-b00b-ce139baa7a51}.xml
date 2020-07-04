@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{fac9d8ee-ca9b-4dc8-b00b-ce139baa7a51}">
+		<property name="assetPath">
+			<value>flashlight-click-button-spring-01-sound-effect-54595948 (online-audio-converter.com).ogg</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.039478458049886624</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{2af06af7-41a7-4658-b9ab-fef0cfbb345a}</destination>
+		</relationship>
+	</object>
+</objects>

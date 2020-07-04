@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{9e3ece15-e31c-4546-8c69-4405f1912317}">
+		<property name="assetPath">
+			<value>SFX_IconTouch3.ogg</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.03616780045351474</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{2af06af7-41a7-4658-b9ab-fef0cfbb345a}</destination>
+		</relationship>
+	</object>
+</objects>

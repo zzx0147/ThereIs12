@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{5dfc9b92-70fe-4d37-be8f-3b1afb739d6a}">
+		<property name="assetPath">
+			<value>LobbyTime.ogg</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>40.681360544217689</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{2af06af7-41a7-4658-b9ab-fef0cfbb345a}</destination>
+		</relationship>
+	</object>
+</objects>

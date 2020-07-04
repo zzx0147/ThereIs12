@@ -152,8 +152,10 @@ public class Plant : MonoBehaviour
                 StartCoroutine(DecayAnimationCoroutine());
                 break;
             case AnimationType.FEVER:
+                m_State = state;
                 break;
             case AnimationType.GROWUP:
+                m_State = state;
                 break;
         }
     }

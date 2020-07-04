@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{8c29dbeb-d21f-4a61-b611-91aa42623526}">
+		<property name="assetPath">
+			<value>flashlight-click-button-01-sound-effect-89151001.ogg</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.024557823129251699</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{2af06af7-41a7-4658-b9ab-fef0cfbb345a}</destination>
+		</relationship>
+	</object>
+</objects>

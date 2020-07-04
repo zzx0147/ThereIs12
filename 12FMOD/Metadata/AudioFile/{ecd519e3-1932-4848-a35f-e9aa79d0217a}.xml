@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{ecd519e3-1932-4848-a35f-e9aa79d0217a}">
+		<property name="assetPath">
+			<value>earcon-start-go-musical--(ver-17)-sound-effect-5358887.ogg</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.70689342403628119</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{2af06af7-41a7-4658-b9ab-fef0cfbb345a}</destination>
+		</relationship>
+	</object>
+</objects>

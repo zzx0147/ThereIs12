@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="ParameterPreset" id="{cb84757e-0bae-422a-b8cf-7b7327d79473}">
+		<property name="name">
+			<value>Touch_Type</value>
+		</property>
+		<relationship name="folder">
+			<destination>{c5490540-2167-4a67-9b1d-30ae0588298d}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{53c590dc-067d-4ea1-bc46-e7ed609b958e}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{53c590dc-067d-4ea1-bc46-e7ed609b958e}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>5</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>Normal_Touch</value>
+			<value>Plant_Grow</value>
+			<value>Plant_Pop</value>
+			<value>Nokcho_Pop</value>
+			<value>UI_Touch</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>

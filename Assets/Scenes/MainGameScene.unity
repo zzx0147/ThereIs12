@@ -2614,8 +2614,8 @@ MonoBehaviour:
   m_FeverCountMax: 50
   m_PlantRespawnTimeMin: 460000003c00000032000000280000001e000000
   m_PlantRespawnTimeWeight: 1400000013000000120000001100000010000000
-  m_GreenPlantRespawnTimeMin: 0100000001000000010000000100000001000000
-  m_GreenPlantRespawnTimeWeight: 0100000001000000010000000100000001000000
+  m_GreenPlantRespawnTimeMin: b40000002c01000058020000e803000008070000
+  m_GreenPlantRespawnTimeWeight: 7800000096000000c80000009001000058020000
   m_LampSprites:
   - {fileID: 21300000, guid: e9b77d7f24cb3f249a98024b6c6e28bf, type: 3}
   - {fileID: 21300000, guid: 6e57bbe37b90ee2469d223e8182fb216, type: 3}
@@ -2675,6 +2675,7 @@ MonoBehaviour:
   m_NutrientsAnimator: {fileID: 743275177}
   m_MirrorBallEffect: {fileID: 1197125089}
   m_MirrorBallLightEffect: {fileID: 947475771}
+  m_StudioEventEmitter: {fileID: 1642752185}
 --- !u!4 &776203972
 Transform:
   m_ObjectHideFlags: 0
@@ -6936,7 +6937,7 @@ PrefabInstance:
     - target: {fileID: 493863944040600837, guid: 8dc653543465bed4fa55da4db24a0743,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -21.299805
+      value: -21.300781
       objectReference: {fileID: 0}
     - target: {fileID: 647781266459504060, guid: 8dc653543465bed4fa55da4db24a0743,
         type: 3}
@@ -8134,6 +8135,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635920606}
   m_CullTransparentMesh: 0
+--- !u!1 &1642752184
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1642752186}
+  - component: {fileID: 1642752185}
+  m_Layer: 0
+  m_Name: FmodManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1642752185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642752184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/BGM/BGM_Main
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
+--- !u!4 &1642752186
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642752184}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.1970854, y: -5.8201203, z: -15.705328}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 29
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1674045637
 GameObject:
   m_ObjectHideFlags: 0
