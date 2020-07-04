@@ -21,6 +21,14 @@ public enum PlantState
     ADULT//성체, 식물이 다 자라서 수확할 수 있는 상태
 }
 
+public enum AnimationType
+{
+    GROWUP,
+    DECAY,
+    FEVER,
+    NONE
+}
+
 class OnHarvestEvent : UnityEvent<int>
 {
 }
@@ -124,16 +132,30 @@ public class Plant : MonoBehaviour
         m_AdultPlantSprite = adultSprite;
         m_plantSpeciesId = speciesId;
         m_State = state;
-
         float scaling = Random.Range(0.9f, 1.05f);
         GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1); 
     }
 
-    public void SetPlant(int speciesId,Sprite adultSprite,PlantState state)
+    public void SetPlant(int speciesId,Sprite adultSprite,PlantState state,AnimationType animationType)
     {
+        Debug.Log("StartGrowupAnimation");
         m_plantSpeciesId = speciesId;
         m_AdultPlantSprite = adultSprite;
-        m_State = state;
+        switch(animationType)
+        {
+            case AnimationType.NONE:
+                m_State = state;
+                float scaling = Random.Range(0.9f, 1.05f);
+                GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
+                break;
+            case AnimationType.DECAY:
+                StartCoroutine(DecayAnimationCoroutine());
+                break;
+            case AnimationType.FEVER:
+                break;
+            case AnimationType.GROWUP:
+                break;
+        }
     }
 
     public void StartGrowing(int maxtime,int time, int plantSpeciesID, Sprite adultSprite)
@@ -144,8 +166,11 @@ public class Plant : MonoBehaviour
         m_plantSpeciesId = plantSpeciesID;
         m_State = PlantState.SPROUT;
         m_AdultPlantSprite = adultSprite;
-        float scaling = Random.Range(0.9f, 1.05f);
-        GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
+
+
+        StartCoroutine(GrowUpAnimationCoroutine());
+        //float scaling = Random.Range(0.9f, 1.05f);
+        //GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
         m_GrowCoroutine = StartCoroutine(GrowCoroutine());
     }
 
@@ -157,14 +182,13 @@ public class Plant : MonoBehaviour
             if (m_RemaingTime2Grow < (m_MaxTime2Grow / 2))
             {
                 m_State = PlantState.SPROUT2;
-                float scaling = Random.Range(0.9f, 1.05f);
-                GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
+                StartCoroutine(GrowUpAnimationCoroutine());
+                //float scaling = Random.Range(0.9f, 1.05f);
+                //GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
                 break;
             }
             yield return null;
         }
-
-
 
         while (true)
         {
@@ -172,8 +196,9 @@ public class Plant : MonoBehaviour
             if (m_RemaingTime2Grow < 0)
             {
                 m_State = PlantState.ADULT;
-                float scaling = Random.Range(0.9f, 1.05f);
-                GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
+                StartCoroutine(GrowUpAnimationCoroutine());
+                //float scaling = Random.Range(0.9f, 1.05f);
+                //GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
                 m_onEndGrowEvent.Invoke();
                 m_GrowCoroutine = null;
                 break;
@@ -182,6 +207,71 @@ public class Plant : MonoBehaviour
         }
     }
 
+    private IEnumerator GrowUpAnimationCoroutine()
+    {
+        m_Button.interactable = false;
+        float targetScale = Random.Range(0.9f, 1.05f);
+        RectTransform rectTransform  = GetComponent<RectTransform>();
+        float scaler = 0.0f;
+        while (true)
+        {
+            scaler += Time.unscaledDeltaTime;
+
+            float temp = Mathf.Lerp(0.0f, targetScale,scaler / 0.15f);
+            rectTransform.localScale = new Vector3(temp, temp, 1.0f);
+
+            if(scaler / 0.15f > 1.0f)
+            {
+                rectTransform.localScale = new Vector3(targetScale, targetScale, 1.0f);
+                break;
+            }
+
+            yield return null;
+        }
+        m_Button.interactable = true;
+    }
+
+    private IEnumerator DecayAnimationCoroutine()
+    {
+        m_Button.interactable = false;
+        float scaler = 0.075f;
+
+        while(true)
+        {
+            scaler -= Time.unscaledDeltaTime;
+            float temp = Mathf.Lerp(0.0f, 1.0f, scaler / 0.075f);
+            Debug.Log(temp);
+            m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, temp);
+
+            if(scaler / 0.075f < 0.0f)
+            {
+                m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+                break;
+            }
+
+            yield return null;
+        }
+
+        scaler = 0.0f;
+        m_PlantImage.sprite = m_AdultPlantSprite;
+        m_PlantImage.SetNativeSize();
+
+        while (true)
+        {
+            scaler += Time.unscaledDeltaTime;
+            float temp = Mathf.Lerp(0.0f, 1.0f, scaler / 0.075f);
+            m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, temp);
+            Debug.Log(m_plantObjId + ":"+temp);
+
+            if (scaler / 0.075f > 1.0f)
+            {
+                m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                break;
+            }
+            yield return null;
+        }
+        m_Button.interactable = true;
+    }
 
     public void OnTouched()
     {
@@ -197,7 +287,7 @@ public class Plant : MonoBehaviour
             case PlantState.SPROUT2:
                 if (Time.timeScale >= 1.0f)
                 {
-                    m_RemaingTime2Grow -= 3.0f;
+                    m_RemaingTime2Grow -= 1.0f;
                 }
                 break;
         }

@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Animator m_SprinklerAnimator = null;
     [SerializeField] private Animator m_NutrientsAnimator = null;
     [SerializeField] private GameObject m_MirrorBallEffect = null;
+    [SerializeField] private GameObject m_MirrorBallLightEffect = null;
 
     #endregion
 
@@ -320,7 +321,7 @@ public class GameManager : MonoBehaviour
 
         int plantSpeciesNum = SelectOnePlantSpeciesRandomly();
 
-        m_Plants[plantObjNum].SetPlant(plantSpeciesNum, m_PlantSprites[plantSpeciesNum], PlantState.ADULT);
+        m_Plants[plantObjNum].SetPlant(plantSpeciesNum, m_PlantSprites[plantSpeciesNum], PlantState.ADULT, AnimationType.NONE);
         DataManager.SetPlantData(plantObjNum, plantSpeciesNum, PlantState.ADULT, 0, 0, 0);
 
         return true;
@@ -578,7 +579,7 @@ public class GameManager : MonoBehaviour
                 {
                     GainPlant(m_Plants[i].m_PlantSpeciesId);
                 }
-                m_Plants[i].Initialize(i, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
+                m_Plants[i].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE);
             }
 
 
@@ -595,10 +596,10 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator FeverTimeCoroutine()
     {
-
         yield return new WaitForSecondsRealtime(0.5f);
         m_MirrorBallAnimator.Play("Fever", -1, 0.0f);
         m_MirrorBallEffect.SetActive(true);
+        m_MirrorBallLightEffect.SetActive(true);
         m_SprinklerAnimator.Play("Fever", -1, 0.0f);
         m_NutrientsAnimator.Play("Fever", -1, 0.0f);
 
@@ -610,7 +611,8 @@ public class GameManager : MonoBehaviour
             int select = SelectOnePlantObjRandomly();
             int species = SelectOnePlantSpeciesRandomly();
 
-            m_Plants[select].Initialize(select, species, m_SproutSprite, m_SproutSprite2, m_PlantSprites[species], PlantState.ADULT);
+            //m_Plants[select].Initialize(select, species, m_SproutSprite, m_SproutSprite2, m_PlantSprites[species], PlantState.ADULT);
+            m_Plants[select].SetPlant(species, m_PlantSprites[species], PlantState.ADULT, AnimationType.FEVER);
 
             waiting = 0.2f + Random.Range(0.2f, 0.4f);
             while (true)
@@ -618,7 +620,8 @@ public class GameManager : MonoBehaviour
                 time -= Time.unscaledDeltaTime;
                 if (time <= 0.0f)
                 {
-                    m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
+                    //m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
+                    m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE);
                     goto EndLoop;
                 }
 
@@ -631,7 +634,8 @@ public class GameManager : MonoBehaviour
                 yield return null;
             }
 
-            m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
+            //m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
+            m_Plants[select].SetPlant(-1,null,PlantState.NONE, AnimationType.NONE);
         }
     EndLoop:
 
@@ -651,6 +655,7 @@ public class GameManager : MonoBehaviour
         m_MirrorBallAnimator.SetFloat("Speed", -1.0f);
         m_MirrorBallAnimator.Play("FeverStart", -1, 1.0f);
         m_MirrorBallEffect.SetActive(false);
+        m_MirrorBallLightEffect.SetActive(false);
         m_SprinklerAnimator.Play("Idle", -1, 0.0f);
         m_NutrientsAnimator.Play("Idle", -1, 0.0f);
 
@@ -686,12 +691,12 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(temp);
 
-        SpawnRandomGreenPlant();
+        SpawnRandomGreenPlant(true);
 
         while (true)
         {
             yield return new WaitForSecondsRealtime(Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade], m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]));
-            SpawnRandomGreenPlant();
+            SpawnRandomGreenPlant(true);
         }
     }
 
@@ -704,7 +709,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SpawnRandomGreenPlant()
+    private void SpawnRandomGreenPlant(bool isAnimated)
     {
         int[] arr = GetNotEmptyPlantImageNumbers();
         if (arr.Length <= 0)
@@ -712,7 +717,8 @@ public class GameManager : MonoBehaviour
             return;
         }
         int sel = Random.Range(0, arr.Length);
-        m_Plants[arr[sel]].Initialize(arr[sel], 1, m_SproutSprite, m_SproutSprite2, m_PlantSprites[1], PlantState.ADULT);
+
+        m_Plants[arr[sel]].SetPlant(1,m_PlantSprites[1],PlantState.ADULT,(isAnimated)?(AnimationType.DECAY):(AnimationType.NONE));
     }
 
     private void RespawnGreenPlantBetweenTurnOff(int time)
@@ -723,7 +729,7 @@ public class GameManager : MonoBehaviour
             if (time - randTime >= 0)
             {
                 time -= randTime;
-                SpawnRandomGreenPlant();
+                SpawnRandomGreenPlant(false);
             }
             else
             {
