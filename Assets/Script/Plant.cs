@@ -394,16 +394,16 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
             m_PlantImage.rectTransform.anchoredPosition.y + m_PlantImage.rectTransform.sizeDelta.y * m_PlantImage.rectTransform.localScale.y);
 
 
-        while (time < 0.15f)
+        while (time < 0.2f)
         {
             time += 0.01f;
-            float xtemp = Mathf.Lerp(xScale, xTargetScale3, time / 0.15f);
-            float ytemp = Mathf.Lerp(yScale, yTargetScale3, time / 0.15f);
+            float xtemp = Mathf.Lerp(xScale, xTargetScale3, time / 0.2f);
+            float ytemp = Mathf.Lerp(yScale, yTargetScale3, time / 0.2f);
             m_PlantImage.rectTransform.localScale = new Vector3(xtemp, ytemp, 1.0f);
             yield return new WaitForSecondsRealtime(0.01f);
         }
 
-        yield return new WaitForSecondsRealtime(0.05f);
+        //yield return new WaitForSecondsRealtime(0.05f);
 
         time = 0.0f;
         float ypos = m_PlantImage.rectTransform.anchoredPosition.y;
