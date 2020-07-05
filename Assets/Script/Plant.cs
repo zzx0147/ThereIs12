@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public struct PlantDataStruct
@@ -29,21 +30,34 @@ public enum AnimationType
     NONE
 }
 
+public enum InteractionMode
+{
+    BUTTON,
+    DRAG,
+    NONE,
+}
+
+
+
 class OnHarvestEvent : UnityEvent<int>
 {
 }
 
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(Button))]
-public class Plant : MonoBehaviour
+public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
-    private PlantState m_state;
+    private Vector2 BeginDragPos;
+    private bool m_DragEnabled = true;
 
     private int m_plantSpeciesId;
     private int m_plantObjId;
 
-    private float m_RemaingTime2Grow;
     private int m_MaxTime2Grow;
+    private float m_RemaingTime2Grow;
+
+    private PlantState m_state;
+    private InteractionMode m_interactionMode;
 
     private Coroutine m_GrowCoroutine = null;
 
@@ -52,6 +66,7 @@ public class Plant : MonoBehaviour
     private Sprite m_SproutSprite = null;
     private Sprite m_SproutSprite2 = null;
     private Button m_Button = null;
+
 
     private UnityEvent<int> m_onHarvestEvent = null;
     private UnityEvent m_onEndGrowEvent = null;
@@ -66,26 +81,25 @@ public class Plant : MonoBehaviour
             {
                 case PlantState.NONE:
                     m_PlantImage.enabled = false;
-                    m_Button.interactable = false;
-                    if(m_GrowCoroutine != null)
+                    if (m_GrowCoroutine != null)
                     {
                         StopCoroutine(m_GrowCoroutine);
                         m_GrowCoroutine = null;
                     }
 
-                    DataManager.SetPlantData(m_plantObjId, -1, PlantState.NONE,0, 0, 0);
+                    DataManager.SetPlantData(m_plantObjId, -1, PlantState.NONE, 0, 0, 0);
                     break;
 
                 case PlantState.SPROUT:
-                    if(m_plantSpeciesId == -1)
+                    if (m_plantSpeciesId == -1)
                     {
                         Debug.LogError("Critical Error");
                     }
                     m_PlantImage.enabled = true;
-                    m_Button.interactable = true;
+                    m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
                     m_PlantImage.sprite = m_SproutSprite;
                     m_PlantImage.SetNativeSize();
-                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.SPROUT,m_MaxTime2Grow, (int)m_RemaingTime2Grow, DataManager.GetNow());
+                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.SPROUT, m_MaxTime2Grow, (int)m_RemaingTime2Grow, DataManager.GetNow());
                     break;
 
                 case PlantState.SPROUT2:
@@ -94,18 +108,45 @@ public class Plant : MonoBehaviour
                         Debug.LogError("Critical Error");
                     }
                     m_PlantImage.enabled = true;
-                    m_Button.interactable = true;
+                    m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
                     m_PlantImage.sprite = m_SproutSprite2;
                     m_PlantImage.SetNativeSize();
-                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.SPROUT2,m_MaxTime2Grow, (int)m_RemaingTime2Grow, DataManager.GetNow());
+                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.SPROUT2, m_MaxTime2Grow, (int)m_RemaingTime2Grow, DataManager.GetNow());
 
                     break;
                 case PlantState.ADULT:
                     m_PlantImage.enabled = true;
-                    m_Button.interactable = true;
+                    m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
                     m_PlantImage.sprite = m_AdultPlantSprite;
                     m_PlantImage.SetNativeSize();
-                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.ADULT, 0,0, 0);
+                    DataManager.SetPlantData(m_plantObjId, m_plantSpeciesId, PlantState.ADULT, 0, 0, 0);
+                    break;
+            }
+        }
+    }
+
+    public InteractionMode m_InteractionMode
+    {
+        get => m_interactionMode;
+
+        set
+        {
+            m_interactionMode = value;
+            switch (m_interactionMode)
+            {
+                case InteractionMode.BUTTON:
+                    m_Button.interactable = true;
+                    m_DragEnabled = false;
+                    break;
+
+                case InteractionMode.DRAG:
+                    m_Button.interactable = false;
+                    m_DragEnabled = true;
+                    break;
+
+                case InteractionMode.NONE:
+                    m_Button.interactable = false;
+                    m_DragEnabled = false;
                     break;
             }
         }
@@ -124,7 +165,7 @@ public class Plant : MonoBehaviour
         m_onEndGrowEvent = new UnityEvent();
     }
 
-    public void Initialize(int objId, int speciesId, Sprite sproutSprite,Sprite sproutSprite2, Sprite adultSprite, PlantState state)
+    public void Initialize(int objId, int speciesId, Sprite sproutSprite, Sprite sproutSprite2, Sprite adultSprite, PlantState state, InteractionMode mode)
     {
         m_plantObjId = objId;
         m_SproutSprite = sproutSprite;
@@ -132,16 +173,18 @@ public class Plant : MonoBehaviour
         m_AdultPlantSprite = adultSprite;
         m_plantSpeciesId = speciesId;
         m_State = state;
+        m_InteractionMode = mode;
         float scaling = Random.Range(0.9f, 1.05f);
-        GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1); 
+        GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
     }
 
-    public void SetPlant(int speciesId,Sprite adultSprite,PlantState state,AnimationType animationType)
+    public void SetPlant(int speciesId, Sprite adultSprite, PlantState state, AnimationType animationType, InteractionMode mode)
     {
         Debug.Log("StartGrowupAnimation");
         m_plantSpeciesId = speciesId;
         m_AdultPlantSprite = adultSprite;
-        switch(animationType)
+        m_InteractionMode = mode;
+        switch (animationType)
         {
             case AnimationType.NONE:
                 m_State = state;
@@ -160,17 +203,17 @@ public class Plant : MonoBehaviour
         }
     }
 
-    public void StartGrowing(int maxtime,int time, int plantSpeciesID, Sprite adultSprite)
+    public void StartGrowing(int maxtime, int time, int plantSpeciesID, Sprite adultSprite)
     {
         Debug.Log(maxtime);
         m_MaxTime2Grow = maxtime;
         m_RemaingTime2Grow = time;
         m_plantSpeciesId = plantSpeciesID;
         m_State = PlantState.SPROUT;
+        //m_InteractionMode = InteractionMode.BUTTON;
         m_AdultPlantSprite = adultSprite;
 
-
-        StartCoroutine(GrowUpAnimationCoroutine());
+        StartCoroutine(GrowUpAnimationCoroutine(InteractionMode.BUTTON));
         //float scaling = Random.Range(0.9f, 1.05f);
         //GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
         m_GrowCoroutine = StartCoroutine(GrowCoroutine());
@@ -178,13 +221,13 @@ public class Plant : MonoBehaviour
 
     private IEnumerator GrowCoroutine()
     {
-        while(true)
+        while (true)
         {
             m_RemaingTime2Grow -= Time.deltaTime;
             if (m_RemaingTime2Grow < (m_MaxTime2Grow / 2))
             {
                 m_State = PlantState.SPROUT2;
-                StartCoroutine(GrowUpAnimationCoroutine());
+                StartCoroutine(GrowUpAnimationCoroutine(InteractionMode.BUTTON));
                 //float scaling = Random.Range(0.9f, 1.05f);
                 //GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
                 break;
@@ -198,7 +241,7 @@ public class Plant : MonoBehaviour
             if (m_RemaingTime2Grow < 0)
             {
                 m_State = PlantState.ADULT;
-                StartCoroutine(GrowUpAnimationCoroutine());
+                StartCoroutine(GrowUpAnimationCoroutine(InteractionMode.DRAG));
                 //float scaling = Random.Range(0.9f, 1.05f);
                 //GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
                 m_onEndGrowEvent.Invoke();
@@ -209,20 +252,20 @@ public class Plant : MonoBehaviour
         }
     }
 
-    private IEnumerator GrowUpAnimationCoroutine()
+    private IEnumerator GrowUpAnimationCoroutine(InteractionMode mode)
     {
-        m_Button.interactable = false;
+        m_InteractionMode = InteractionMode.NONE;
         float targetScale = Random.Range(0.9f, 1.05f);
-        RectTransform rectTransform  = GetComponent<RectTransform>();
+        RectTransform rectTransform = GetComponent<RectTransform>();
         float scaler = 0.0f;
         while (true)
         {
             scaler += Time.unscaledDeltaTime;
 
-            float temp = Mathf.Lerp(0.0f, targetScale,scaler / 0.15f);
+            float temp = Mathf.Lerp(0.0f, targetScale, scaler / 0.15f);
             rectTransform.localScale = new Vector3(temp, temp, 1.0f);
 
-            if(scaler / 0.15f > 1.0f)
+            if (scaler / 0.15f > 1.0f)
             {
                 rectTransform.localScale = new Vector3(targetScale, targetScale, 1.0f);
                 break;
@@ -230,22 +273,22 @@ public class Plant : MonoBehaviour
 
             yield return null;
         }
-        m_Button.interactable = true;
+        m_InteractionMode = mode;
     }
 
     private IEnumerator DecayAnimationCoroutine()
     {
-        m_Button.interactable = false;
+        m_InteractionMode = InteractionMode.NONE;
         float scaler = 0.075f;
 
-        while(true)
+        while (true)
         {
             scaler -= Time.unscaledDeltaTime;
             float temp = Mathf.Lerp(0.0f, 1.0f, scaler / 0.075f);
             Debug.Log(temp);
             m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, temp);
 
-            if(scaler / 0.075f < 0.0f)
+            if (scaler / 0.075f < 0.0f)
             {
                 m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
                 break;
@@ -255,15 +298,14 @@ public class Plant : MonoBehaviour
         }
 
         scaler = 0.0f;
-        m_PlantImage.sprite = m_AdultPlantSprite;
-        m_PlantImage.SetNativeSize();
+        m_State = PlantState.ADULT;
 
         while (true)
         {
             scaler += Time.unscaledDeltaTime;
             float temp = Mathf.Lerp(0.0f, 1.0f, scaler / 0.075f);
             m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, temp);
-            Debug.Log(m_plantObjId + ":"+temp);
+            Debug.Log(m_plantObjId + ":" + temp);
 
             if (scaler / 0.075f > 1.0f)
             {
@@ -272,7 +314,7 @@ public class Plant : MonoBehaviour
             }
             yield return null;
         }
-        m_Button.interactable = true;
+        m_InteractionMode = InteractionMode.BUTTON;
     }
 
     public void OnTouched()
@@ -280,9 +322,16 @@ public class Plant : MonoBehaviour
         switch (m_State)
         {
             case PlantState.ADULT:
-                int temp = m_plantSpeciesId;
-                m_State = PlantState.NONE;
-                m_onHarvestEvent.Invoke(temp);
+                if(m_plantSpeciesId == 1)
+                {
+                    Debug.Log("GreenPlantHarvested");
+                    StartCoroutine(GreenPlantHarvestAnimationCoroutine());
+                }
+                else
+                {
+                    Debug.Log("PlantHarvested");
+                    StartCoroutine(PlantHarvestAnimationCoroutine());
+                }
                 break;
 
             case PlantState.SPROUT:
@@ -292,6 +341,130 @@ public class Plant : MonoBehaviour
                     m_RemaingTime2Grow -= 1.0f;
                 }
                 break;
+        }
+    }
+
+    private IEnumerator PlantHarvestAnimationCoroutine()
+    {
+        Vector2 Origin = m_PlantImage.rectTransform.anchoredPosition;
+
+        float time = 0.0f;
+        float xScale = m_PlantImage.rectTransform.localScale.x;
+        float yScale = m_PlantImage.rectTransform.localScale.y;
+
+        float xTargetScale1 = xScale * 1.4f;
+        float yTargetScale1 = yScale * 0.8f;
+
+        float xTargetScale2 = xScale * 0.7f;
+        float yTargetScale2 = yScale * 1.2f;
+
+        float xTargetScale3 = xScale;
+        float yTargetScale3 = yScale;
+
+
+        while (time < 0.15f)
+        {
+            time += 0.01f;
+            float xtemp = Mathf.Lerp(xScale, xTargetScale1, time / 0.15f);
+            float ytemp = Mathf.Lerp(yScale, yTargetScale1, time / 0.15f);
+            m_PlantImage.rectTransform.localScale = new Vector3(xtemp, ytemp, 1.0f);
+            yield return new WaitForSecondsRealtime(0.01f);
+        }
+
+        yield return new WaitForSecondsRealtime(0.05f);
+
+        time = 0.0f;
+        xScale = m_PlantImage.rectTransform.localScale.x;
+        yScale = m_PlantImage.rectTransform.localScale.y;
+
+        while (time < 0.3f)
+        {
+            time += 0.01f;
+            float xtemp = Mathf.Lerp(xScale, xTargetScale2, time / 0.3f);
+            float ytemp = Mathf.Lerp(yScale, yTargetScale2, time / 0.3f);
+            m_PlantImage.rectTransform.localScale = new Vector3(xtemp, ytemp, 1.0f);
+            yield return new WaitForSecondsRealtime(0.01f);
+        }
+
+        time = 0.0f;
+        xScale = m_PlantImage.rectTransform.localScale.x;
+        yScale = m_PlantImage.rectTransform.localScale.y;
+        m_PlantImage.rectTransform.pivot = new Vector2(0.5f, 1.0f);//피봇을 바꾸면 이미지의 위치도 변함
+        m_PlantImage.rectTransform.anchoredPosition = new Vector2(m_PlantImage.rectTransform.anchoredPosition.x,
+            m_PlantImage.rectTransform.anchoredPosition.y + m_PlantImage.rectTransform.sizeDelta.y * m_PlantImage.rectTransform.localScale.y);
+
+
+        while (time < 0.15f)
+        {
+            time += 0.01f;
+            float xtemp = Mathf.Lerp(xScale, xTargetScale3, time / 0.15f);
+            float ytemp = Mathf.Lerp(yScale, yTargetScale3, time / 0.15f);
+            m_PlantImage.rectTransform.localScale = new Vector3(xtemp, ytemp, 1.0f);
+            yield return new WaitForSecondsRealtime(0.01f);
+        }
+
+        yield return new WaitForSecondsRealtime(0.05f);
+
+        time = 0.0f;
+        float ypos = m_PlantImage.rectTransform.anchoredPosition.y;
+        float targetYPos = ypos + 40;
+
+        while (time < 0.3f)
+        {
+            time += 0.01f;
+            m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f,1.0f - time / 0.3f);
+            float yPosTemp = Mathf.Lerp(ypos, targetYPos, time / 0.3f);
+            m_PlantImage.rectTransform.anchoredPosition = new Vector2(m_PlantImage.rectTransform.anchoredPosition.x, yPosTemp);
+            yield return new WaitForSecondsRealtime(0.01f);
+        }
+
+
+        int temp = m_plantSpeciesId;
+        m_State = PlantState.NONE;
+        m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        m_PlantImage.rectTransform.pivot = new Vector2(0.5f, 0.0f);
+        m_PlantImage.rectTransform.anchoredPosition = Origin;
+        m_onHarvestEvent.Invoke(temp);
+    }
+
+    private IEnumerator GreenPlantHarvestAnimationCoroutine()
+    {
+
+        float scaler = 1.0f;
+        while((scaler -= Time.unscaledDeltaTime) > 0.0f)
+        {
+            m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, scaler);
+            yield return null;
+        }
+        m_PlantImage.enabled = false;
+        m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+
+        int temp = m_plantSpeciesId;
+        m_State = PlantState.NONE;
+        m_onHarvestEvent.Invoke(temp);
+
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (m_DragEnabled)
+        {
+            Debug.Log("BeginDrag: " + eventData.position.y);
+            BeginDragPos = eventData.position;
+        }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (m_DragEnabled)
+        {
+            Debug.Log("OnDrag" + eventData.position.y);
+            if (eventData.position.y > BeginDragPos.y + 40)
+            {
+                Debug.Log("Fit!!!!!!");
+                m_DragEnabled = false;
+                OnTouched();
+            }
         }
     }
 }

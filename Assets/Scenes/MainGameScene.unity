@@ -2614,8 +2614,8 @@ MonoBehaviour:
   m_FeverCountMax: 50
   m_PlantRespawnTimeMin: 460000003c00000032000000280000001e000000
   m_PlantRespawnTimeWeight: 1400000013000000120000001100000010000000
-  m_GreenPlantRespawnTimeMin: b40000002c01000058020000e803000008070000
-  m_GreenPlantRespawnTimeWeight: 7800000096000000c80000009001000058020000
+  m_GreenPlantRespawnTimeMin: 0100000001000000010000000100000001000000
+  m_GreenPlantRespawnTimeWeight: 0100000001000000010000000100000001000000
   m_LampSprites:
   - {fileID: 21300000, guid: e9b77d7f24cb3f249a98024b6c6e28bf, type: 3}
   - {fileID: 21300000, guid: 6e57bbe37b90ee2469d223e8182fb216, type: 3}
@@ -2675,7 +2675,6 @@ MonoBehaviour:
   m_NutrientsAnimator: {fileID: 743275177}
   m_MirrorBallEffect: {fileID: 1197125089}
   m_MirrorBallLightEffect: {fileID: 947475771}
-  m_StudioEventEmitter: {fileID: 1642752185}
 --- !u!4 &776203972
 Transform:
   m_ObjectHideFlags: 0

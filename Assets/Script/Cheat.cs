@@ -8,4 +8,22 @@ public class Cheat : MonoBehaviour
     {
         Time.timeScale = 100.0f;
     }
+
+    public void RemoveAllData()
+    {
+        Debug.Log("RemoveAllData");
+        PlayerPrefs.DeleteAll();
+        Quit();
+    }
+
+    public static void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_WEBPLAYER
+         Application.OpenURL(webplayerQuitURL);
+#else
+         Application.Quit();
+#endif
+    }
 }

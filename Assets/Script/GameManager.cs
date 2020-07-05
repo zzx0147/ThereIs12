@@ -231,20 +231,35 @@ public class GameManager : MonoBehaviour
 
             if (temp.state != PlantState.SPROUT && temp.state != PlantState.SPROUT2)//성체 식물 혹은 아예 없는 경우
             {
-                m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2, (temp.SpeciesId == -1) ? (null) : (m_PlantSprites[temp.SpeciesId]), temp.state);
+                if (temp.state == PlantState.NONE)
+                {
+                    m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2,
+                        (temp.SpeciesId == -1) ? (null) : (m_PlantSprites[temp.SpeciesId]), temp.state, InteractionMode.NONE);
+                }
+                else if (temp.SpeciesId == 1)
+                {
+                    m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2,
+                        (temp.SpeciesId == -1) ? (null) : (m_PlantSprites[temp.SpeciesId]), temp.state, InteractionMode.BUTTON);
+                }
+                else
+                {
+                    m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2,
+                        (temp.SpeciesId == -1) ? (null) : (m_PlantSprites[temp.SpeciesId]), temp.state, InteractionMode.DRAG);
+                }
+
             }
             else//새싹SPROUT,SPROUT2인 경우
             {
                 if ((ulong)temp.RemainingTime < (now - temp.ReferenceTime))//새싹의 성장까지 남은 시간이 흐른 시간보다 적다(이미 성장했어야 하는 시간이다)
                 {
-                    m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2, m_PlantSprites[temp.SpeciesId], PlantState.ADULT);//새싹으로 저장되어 있지만 이미 성장할 시간이 지났으므로 성체 식물로 초기화한다
+                    m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2, m_PlantSprites[temp.SpeciesId], PlantState.ADULT,InteractionMode.DRAG);//새싹으로 저장되어 있지만 이미 성장할 시간이 지났으므로 성체 식물로 초기화한다
                     lastSproutGrowingTime = temp.ReferenceTime + (ulong)temp.RemainingTime;
                 }
                 else//새싹의 성장까지 남은 시간이 흐른 시간보다 많다(아직 성장하지 않았을 시간이다)
                     //이 말은 게임 종료 후 다시 접속했을 때 마지막 새싹이 아직 자라지 않았음을 의미
                     //즉 지난 시간을 계산해 식물을 소환할 필요가 없음을 의미
                 {
-                    m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2, m_PlantSprites[temp.SpeciesId], PlantState.SPROUT);
+                    m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2, m_PlantSprites[temp.SpeciesId], PlantState.SPROUT,InteractionMode.BUTTON);
                     m_Plants[i].StartGrowing(temp.MaxTime, (temp.RemainingTime - (int)(now - temp.ReferenceTime)), temp.SpeciesId, m_PlantSprites[temp.SpeciesId]);
                     //haveSprout = true;
                 }
@@ -322,7 +337,7 @@ public class GameManager : MonoBehaviour
 
         int plantSpeciesNum = SelectOnePlantSpeciesRandomly();
 
-        m_Plants[plantObjNum].SetPlant(plantSpeciesNum, m_PlantSprites[plantSpeciesNum], PlantState.ADULT, AnimationType.NONE);
+        m_Plants[plantObjNum].SetPlant(plantSpeciesNum, m_PlantSprites[plantSpeciesNum], PlantState.ADULT, AnimationType.NONE,InteractionMode.DRAG);
         DataManager.SetPlantData(plantObjNum, plantSpeciesNum, PlantState.ADULT, 0, 0, 0);
 
         return true;
@@ -463,7 +478,7 @@ public class GameManager : MonoBehaviour
 
 
 
-        if (!CheckHaveSprout() && !m_isFeverOn)
+        if (!CheckHaveSprout() && !m_isFeverOn && m_IsTimeLeft)
         {
             SpawnSprout();
         }
@@ -580,7 +595,7 @@ public class GameManager : MonoBehaviour
                 {
                     GainPlant(m_Plants[i].m_PlantSpeciesId);
                 }
-                m_Plants[i].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE);
+                m_Plants[i].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE,InteractionMode.NONE);
             }
 
 
@@ -603,7 +618,7 @@ public class GameManager : MonoBehaviour
         m_MirrorBallLightEffect.SetActive(true);
         m_SprinklerAnimator.Play("Fever", -1, 0.0f);
         m_NutrientsAnimator.Play("Fever", -1, 0.0f);
-        RuntimeManager.StudioSystem.setParameterByName("Main_BGM_Tempo",1.0f);
+        RuntimeManager.StudioSystem.setParameterByName("Main_BGM_Tempo", 1.0f);
 
 
         float max = 15.0f;
@@ -615,7 +630,7 @@ public class GameManager : MonoBehaviour
             int species = SelectOnePlantSpeciesRandomly();
 
             //m_Plants[select].Initialize(select, species, m_SproutSprite, m_SproutSprite2, m_PlantSprites[species], PlantState.ADULT);
-            m_Plants[select].SetPlant(species, m_PlantSprites[species], PlantState.ADULT, AnimationType.FEVER);
+            m_Plants[select].SetPlant(species, m_PlantSprites[species], PlantState.ADULT, AnimationType.FEVER,InteractionMode.BUTTON);
 
             waiting = 0.2f + Random.Range(0.2f, 0.4f);
             while (true)
@@ -624,7 +639,7 @@ public class GameManager : MonoBehaviour
                 if (time <= 0.0f)
                 {
                     //m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
-                    m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE);
+                    m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE,InteractionMode.NONE);
                     goto EndLoop;
                 }
 
@@ -638,7 +653,7 @@ public class GameManager : MonoBehaviour
             }
 
             //m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
-            m_Plants[select].SetPlant(-1,null,PlantState.NONE, AnimationType.NONE);
+            m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE,InteractionMode.NONE);
         }
     EndLoop:
 
@@ -722,7 +737,7 @@ public class GameManager : MonoBehaviour
         }
         int sel = Random.Range(0, arr.Length);
 
-        m_Plants[arr[sel]].SetPlant(1,m_PlantSprites[1],PlantState.ADULT,(isAnimated)?(AnimationType.DECAY):(AnimationType.NONE));
+        m_Plants[arr[sel]].SetPlant(1, m_PlantSprites[1], PlantState.ADULT, (isAnimated) ? (AnimationType.DECAY) : (AnimationType.NONE),InteractionMode.BUTTON);
     }
 
     private void RespawnGreenPlantBetweenTurnOff(int time)

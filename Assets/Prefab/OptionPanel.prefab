@@ -537,18 +537,15 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC81C\uC791\uC790\r\n \r\n\uAE30\uD68D\r\n\uC724\uB2E4\uC740\r\n\uAE40\uD61C\uC9C4\r\n
-    \r\nQA&\uAE30\uD68D\uBCF4\uC870\r\n\uC774\uB450\uD604\r\n \r\n2D\uB9AC\uC18C\uC2A4&\uCE90\uB9AD\uD130&\uB85C\uACE0&\uCEF7\uC52C\r\n\uC815\uCC44\uB9B0\r\n\uC815\uB2E8\uBE44\r\n
-    \r\nUI\r\n\uAE40\uC724\uC601\r\n \r\n3D\uBC30\uACBD&\uC774\uD399\uD2B8\r\n\uBC15\uC138\uC601\r\n
-    \r\n\uC0AC\uC6B4\uB4DC\r\n\uC724\uB2E4\uC740\r\n \r\n----------\r\n\uC800\uC791\uAD8C\r\n
-    \r\n\uD3F0\uD2B8\r\n\uBB34\uB8CC\uD3F0\uD2B8, \uB9C8\uD3EC\uAD6C, Mapo\uBC30\uB0AD\uC5EC\uD589\r\n\uBB34\uB8CC\uD3F0\uD2B8,
+  m_Text: "\uC81C\uC791\uC790\r\n \r\n\uAE30\uD68D\r\n\uC724\uB2E4\uC740\r\n\uAE40\uD61C\uC9C4\r\n\r\nQA&\uAE30\uD68D\uBCF4\uC870\r\n\uC774\uB450\uD604\r\n\r\n2D\uB9AC\uC18C\uC2A4&\uCE90\uB9AD\uD130&\uB85C\uACE0&\uCEF7\uC52C\r\n\uC815\uCC44\uB9B0\r\n\uC815\uB2E8\uBE44\r\n\r\nUI\r\n\uAE40\uC724\uC601\r\n\r\n3D\uBC30\uACBD&\uC774\uD399\uD2B8\r\n\uBC15\uC138\uC601\r\n\r\n\uC0AC\uC6B4\uB4DC\r\n\uC724\uB2E4\uC740\r\n\r\n----------\r\n\uC800\uC791\uAD8C\r\n\r\n\uD3F0\uD2B8\r\n\uBB34\uB8CC\uD3F0\uD2B8,
+    \uB9C8\uD3EC\uAD6C, Mapo\uBC30\uB0AD\uC5EC\uD589\r\n\uBB34\uB8CC\uD3F0\uD2B8,
     \uACE0\uC591\uC2DC\uCCAD, \uACE0\uC591\uB355\uC591\uCCB4 B\r\n\uBB34\uB8CC\uD3F0\uD2B8,
     \uB9C8\uD3EC\uAD6C, Mapo\uB9C8\uD3EC\uB098\uB8E8\r\nKCC\uBB34\uB7ED\uBB34\uB7ED\uCCB4,
-    \uD55C\uAD6D\uC800\uC791\uAD8C\uC704\uC6D0\uD68C, \uACF5\uC720\uB9C8\uB2F9, OFL\r\n
-    \r\n\uC0AC\uC6B4\uB4DC\r\nWholesome by Kevin MacLeod\r\nLink: https://incompetech.filmmusic.io/song/5050-wholesome\r\nLicense:
+    \uD55C\uAD6D\uC800\uC791\uAD8C\uC704\uC6D0\uD68C, \uACF5\uC720\uB9C8\uB2F9, OFL\r\n\r\n\uC0AC\uC6B4\uB4DC\r\nWholesome
+    by Kevin MacLeod\r\nLink: https://incompetech.filmmusic.io/song/5050-wholesome\r\nLicense:
     http://creativecommons.org/licenses/by/4.0/\r\n \r\nLobby Time by Kevin MacLeod\r\nLink:
-    https://incompetech.filmmusic.io/song/3986-lobby-time\r\nLicense: http://creativecommons.org/licenses/by/4.0/\r\n
-    \r\nGlitter Blast by Kevin MacLeod\r\nLink: https://incompetech.filmmusic.io/song/4707-glitter-blast\r\nLicense:
+    https://incompetech.filmmusic.io/song/3986-lobby-time\r\nLicense: http://creativecommons.org/licenses/by/4.0/\r\n\r\nGlitter
+    Blast by Kevin MacLeod\r\nLink: https://incompetech.filmmusic.io/song/4707-glitter-blast\r\nLicense:
     http://creativecommons.org/licenses/by/4.0/\r"
 --- !u!1 &2521118022961491234
 GameObject:
@@ -758,6 +755,134 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6191974852495579017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5841403056867666253}
+  - component: {fileID: 3833081775185888352}
+  - component: {fileID: 3680843889350400813}
+  - component: {fileID: 5319630386861071224}
+  m_Layer: 5
+  m_Name: RemoveDataButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5841403056867666253
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6191974852495579017}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5343358370104017914}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 289, y: 573}
+  m_SizeDelta: {x: 200, y: 200}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3833081775185888352
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6191974852495579017}
+  m_CullTransparentMesh: 0
+--- !u!114 &3680843889350400813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6191974852495579017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5319630386861071224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6191974852495579017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 3680843889350400813}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7632896568617934326}
+        m_MethodName: RemoveAllData
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6733433784007492945
 GameObject:
   m_ObjectHideFlags: 0
@@ -1007,6 +1132,7 @@ RectTransform:
   m_Children:
   - {fileID: 5261137761741381426}
   - {fileID: 6467327681332973162}
+  - {fileID: 5841403056867666253}
   m_Father: {fileID: 2800076625493364143}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
