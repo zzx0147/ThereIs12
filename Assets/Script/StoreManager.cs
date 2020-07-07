@@ -62,12 +62,6 @@ public class StoreManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     public void OnStoreItemCellClicked(ItemCategory category, int id)
     {
         m_RecentSelectedItemCategory = category;
@@ -75,7 +69,7 @@ public class StoreManager : MonoBehaviour
 
         if (DataManager.GetHaveItem(category, id))//가지고 있는 아이템인 경우
         {
-            Debug.Log("already have!!");
+            //Debug.Log("already have!!");
             switch (category)//이미 사용중인 장비를 클릭했을 경우
             {
                 case ItemCategory.LAMP:
@@ -108,8 +102,8 @@ public class StoreManager : MonoBehaviour
             //사용중인 장비가 아닌 경우
             m_QuestionPanel.SetActive(true);
             m_QuestionText.text = m_ItemCsv[(int)category * 5 + id + 1, 13];
-            Debug.Log(System.Text.RegularExpressions.Regex.Unescape(m_ItemCsv[(int)category * 5 + id + 1, 13]));
-            Debug.Log("장비의 외형을 변경합니다.\n(성능은 바뀌지 않습니다.");
+            //Debug.Log(System.Text.RegularExpressions.Regex.Unescape(m_ItemCsv[(int)category * 5 + id + 1, 13]));
+            //Debug.Log("장비의 외형을 변경합니다.\n(성능은 바뀌지 않습니다.");
             m_QuestionYesButton.onClick.RemoveAllListeners();
             m_QuestionYesButton.onClick.AddListener(ChangeEquipment);
             m_QuestionYesButton.onClick.AddListener(delegate { m_QuestionPanel.SetActive(false); });

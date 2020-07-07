@@ -8,20 +8,12 @@ public class CameraSlider : MonoBehaviour
     private Transform[] m_CameraPosition = null;
     Coroutine m_NowPlayedCoroutine = null;
 
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void MoveCameraPoint(int pointNum)
     {
         if (m_NowPlayedCoroutine != null)
         {
             StopCoroutine(m_NowPlayedCoroutine);
         }
-        Debug.Log("Camera move");
         m_NowPlayedCoroutine = StartCoroutine(MoveCameraPointCoroutine(pointNum));
     }
 

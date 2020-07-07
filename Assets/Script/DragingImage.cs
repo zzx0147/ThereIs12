@@ -13,7 +13,7 @@ public class DragingImage : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         if (m_DragEnabled)
         {
-            Debug.Log("BeginDrag: " + eventData.position.y);
+            //Debug.Log("BeginDrag: " + eventData.position.y);
             BeginDragPos = eventData.position;
         }
     }
@@ -22,10 +22,10 @@ public class DragingImage : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         if (m_DragEnabled)
         {
-            Debug.Log("OnDrag" + eventData.position.y);
+            //Debug.Log("OnDrag" + eventData.position.y);
             if (eventData.position.y > BeginDragPos.y + 40)
             {
-                Debug.Log("Fit!!!!!!");
+                //Debug.Log("Fit!!!!!!");
                 m_DragEnabled = false;
             }
         }

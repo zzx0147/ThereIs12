@@ -171,7 +171,7 @@ public class DataManager//데이터의 세이브와 로드를 담당
     {
         if (state == PlantState.SPROUT && speciesId == -1)
         {
-            Debug.LogError("sprout wiht no adult type");
+            //Debug.LogError("sprout wiht no adult type");
         }
 
         //Debug.Log(objId + " : " + speciesId + " : " + state + " : " + remainingTime);

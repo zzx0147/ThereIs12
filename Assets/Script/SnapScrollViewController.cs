@@ -18,7 +18,7 @@ public class SnapScrollViewController : MonoBehaviour, IEndDragHandler, IBeginDr
     {
         midXPos = snapPoint[0].localPosition.x;
         contentRef = GetComponent<ScrollRect>().content;
-        Debug.Log("Mid Pos" + midXPos);
+        //Debug.Log("Mid Pos" + midXPos);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -39,7 +39,7 @@ public class SnapScrollViewController : MonoBehaviour, IEndDragHandler, IBeginDr
                 targetPosX = temp;
             }
         }
-        Debug.Log(targetPosX);
+        //Debug.Log(targetPosX);
 
         targetPos = new Vector3(targetPosX, 0, 0);
         isLerpOn = true;

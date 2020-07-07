@@ -470,13 +470,11 @@ public class GameManager : MonoBehaviour
             if (m_FeverCount >= m_FeverCountMax)
             {
                 m_FeverCount = 0;
-                Debug.Log("Ready to Fever");
+                //Debug.Log("Ready to Fever");
                 StartFeverTime();
                 return;
             }
         }
-
-
 
         if (!CheckHaveSprout() && !m_isFeverOn && m_IsTimeLeft)
         {
@@ -500,7 +498,7 @@ public class GameManager : MonoBehaviour
     {
 
         int randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMin[m_MaxLampGrade] + m_PlantRespawnTimeWeight[m_MaxLampGrade]);
-        Debug.Log("randTime: " + randTime);
+        //Debug.Log("randTime: " + randTime);
         int selecObj = SelectOnePlantObjRandomly();
 
         if (selecObj == -1)
@@ -563,7 +561,7 @@ public class GameManager : MonoBehaviour
     {
         int screenwidth = 2 * (int)m_MainPanel.localPosition.x;
         int targetPositionX = -(screenwidth * num);
-        Debug.Log("Start");
+        //Debug.Log("Start");
         while (true)
         {
             if (Mathf.Abs(m_Content.transform.localPosition.x - targetPositionX) < Mathf.Epsilon)
@@ -694,7 +692,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Already SpawnGreenPlant is in Operating");
+            //Debug.LogError("Already SpawnGreenPlant is in Operating");
         }
     }
 

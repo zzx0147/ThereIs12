@@ -93,7 +93,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
                 case PlantState.SPROUT:
                     if (m_plantSpeciesId == -1)
                     {
-                        Debug.LogError("Critical Error");
+                        //Debug.LogError("Critical Error");
                     }
                     m_PlantImage.enabled = true;
                     m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -105,7 +105,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
                 case PlantState.SPROUT2:
                     if (m_plantSpeciesId == -1)
                     {
-                        Debug.LogError("Critical Error");
+                        //Debug.LogError("Critical Error");
                     }
                     m_PlantImage.enabled = true;
                     m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -180,7 +180,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void SetPlant(int speciesId, Sprite adultSprite, PlantState state, AnimationType animationType, InteractionMode mode)
     {
-        Debug.Log("StartGrowupAnimation");
+        //Debug.Log("StartGrowupAnimation");
         m_plantSpeciesId = speciesId;
         m_AdultPlantSprite = adultSprite;
         m_InteractionMode = mode;
@@ -205,7 +205,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void StartGrowing(int maxtime, int time, int plantSpeciesID, Sprite adultSprite)
     {
-        Debug.Log(maxtime);
+        //Debug.Log(maxtime);
         m_MaxTime2Grow = maxtime;
         m_RemaingTime2Grow = time;
         m_plantSpeciesId = plantSpeciesID;
@@ -285,7 +285,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             scaler -= Time.unscaledDeltaTime;
             float temp = Mathf.Lerp(0.0f, 1.0f, scaler / 0.075f);
-            Debug.Log(temp);
+            //Debug.Log(temp);
             m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, temp);
 
             if (scaler / 0.075f < 0.0f)
@@ -305,7 +305,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
             scaler += Time.unscaledDeltaTime;
             float temp = Mathf.Lerp(0.0f, 1.0f, scaler / 0.075f);
             m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, temp);
-            Debug.Log(m_plantObjId + ":" + temp);
+            //Debug.Log(m_plantObjId + ":" + temp);
 
             if (scaler / 0.075f > 1.0f)
             {
@@ -324,12 +324,12 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
             case PlantState.ADULT:
                 if(m_plantSpeciesId == 1)
                 {
-                    Debug.Log("GreenPlantHarvested");
+                    //Debug.Log("GreenPlantHarvested");
                     StartCoroutine(GreenPlantHarvestAnimationCoroutine());
                 }
                 else
                 {
-                    Debug.Log("PlantHarvested");
+                    //Debug.Log("PlantHarvested");
                     StartCoroutine(PlantHarvestAnimationCoroutine());
                 }
                 break;
@@ -449,7 +449,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         if (m_DragEnabled)
         {
-            Debug.Log("BeginDrag: " + eventData.position.y);
+            //Debug.Log("BeginDrag: " + eventData.position.y);
             BeginDragPos = eventData.position;
         }
     }
@@ -458,10 +458,10 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         if (m_DragEnabled)
         {
-            Debug.Log("OnDrag" + eventData.position.y);
+            //Debug.Log("OnDrag" + eventData.position.y);
             if (eventData.position.y > BeginDragPos.y + 40)
             {
-                Debug.Log("Fit!!!!!!");
+                //Debug.Log("Fit!!!!!!");
                 m_DragEnabled = false;
                 OnTouched();
             }

@@ -33,11 +33,6 @@ public class StoreItemCell : MonoBehaviour
 
     public UnityEvent<ItemCategory,int> m_OnClickedEvent { get => m_onClickedEvent; }
 
-    private void Awake()
-    {
-
-    }
-
     public void Initialize(Sprite sprite,ItemCategory category,int id, string name, int price, bool alreadyHave)
     {
         m_onClickedEvent = new OnClickedEvent();

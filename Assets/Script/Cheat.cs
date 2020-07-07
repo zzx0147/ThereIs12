@@ -11,7 +11,7 @@ public class Cheat : MonoBehaviour
 
     public void RemoveAllData()
     {
-        Debug.Log("RemoveAllData");
+        //Debug.Log("RemoveAllData");
         PlayerPrefs.DeleteAll();
         Quit();
     }
