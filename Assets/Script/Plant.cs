@@ -364,11 +364,11 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         while (time < 0.15f)
         {
-            time += 0.01f;
+            time += Time.unscaledDeltaTime;
             float xtemp = Mathf.Lerp(xScale, xTargetScale1, time / 0.15f);
             float ytemp = Mathf.Lerp(yScale, yTargetScale1, time / 0.15f);
             m_PlantImage.rectTransform.localScale = new Vector3(xtemp, ytemp, 1.0f);
-            yield return new WaitForSecondsRealtime(0.01f);
+            yield return null;
         }
 
         yield return new WaitForSecondsRealtime(0.05f);
@@ -379,11 +379,11 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         while (time < 0.3f)
         {
-            time += 0.01f;
+            time += Time.unscaledDeltaTime;
             float xtemp = Mathf.Lerp(xScale, xTargetScale2, time / 0.3f);
             float ytemp = Mathf.Lerp(yScale, yTargetScale2, time / 0.3f);
             m_PlantImage.rectTransform.localScale = new Vector3(xtemp, ytemp, 1.0f);
-            yield return new WaitForSecondsRealtime(0.01f);
+            yield return null;
         }
 
         time = 0.0f;
@@ -396,11 +396,11 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         while (time < 0.2f)
         {
-            time += 0.01f;
+            time += Time.unscaledDeltaTime;
             float xtemp = Mathf.Lerp(xScale, xTargetScale3, time / 0.2f);
             float ytemp = Mathf.Lerp(yScale, yTargetScale3, time / 0.2f);
             m_PlantImage.rectTransform.localScale = new Vector3(xtemp, ytemp, 1.0f);
-            yield return new WaitForSecondsRealtime(0.01f);
+            yield return null;
         }
 
         //yield return new WaitForSecondsRealtime(0.05f);
@@ -411,11 +411,11 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         while (time < 0.3f)
         {
-            time += 0.01f;
+            time += Time.unscaledDeltaTime;
             m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f,1.0f - time / 0.3f);
             float yPosTemp = Mathf.Lerp(ypos, targetYPos, time / 0.3f);
             m_PlantImage.rectTransform.anchoredPosition = new Vector2(m_PlantImage.rectTransform.anchoredPosition.x, yPosTemp);
-            yield return new WaitForSecondsRealtime(0.01f);
+            yield return null;
         }
 
 
