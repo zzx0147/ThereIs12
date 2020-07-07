@@ -28,7 +28,7 @@ public class LibraryPlantCell : MonoBehaviour
                 switch (m_state)
                 {
                     case LibraryState.UNKNOWN:
-                        m_PlantImage.color = new Color(0.3f, 0.3f, 0.3f, 1.0f);
+                        m_PlantImage.color = new Color(32.0f / 255.0f, 32.0f / 255.0f, 32.0f / 255.0f, 1.0f);
                         m_NewMark.enabled = false;
                         m_Button.interactable = false;
                         m_PlantName.text = "???";

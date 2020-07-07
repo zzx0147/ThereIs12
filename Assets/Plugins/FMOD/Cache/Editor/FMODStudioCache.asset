@@ -15,15 +15,32 @@ MonoBehaviour:
   Path: event:/SFX/SFX_Choice
   guid: 0385985f977c1a4faa3a2664e56513a2
   Banks:
-  - {fileID: -7056920023655984777}
+  - {fileID: -4485798036266051657}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
   Parameters:
-  - {fileID: 3367350095959194852}
+  - {fileID: -991321047383486940}
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &-8349436053565541338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: Main_BGM_Tempo
+  m_EditorClassIdentifier: 
+  Name: Main_BGM_Tempo
+  Min: 0
+  Max: 1
+  Default: 0
+  Exists: 1
 --- !u!114 &-7056920023655984777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,12 +92,12 @@ MonoBehaviour:
   Path: event:/SFX/SFX_Touch
   guid: 2bb04e89bf53df4eae6402fd21041fce
   Banks:
-  - {fileID: -7056920023655984777}
+  - {fileID: -4485798036266051657}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
   Parameters:
-  - {fileID: -4927090388317617146}
+  - {fileID: 5197258701349899818}
   MinDistance: 0
   MaxDistance: 0
   Length: 0
@@ -115,11 +132,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: 12FMOD/Build/Desktop/Master.strings.bank
   SubDir: 
-  lastModified: 637296525633866308
+  lastModified: 637294690091084623
   LoadResult: 0
   FileSizes:
   - Name: Desktop
     Value: 1322
+  Exists: 1
+--- !u!114 &-4485798036266051657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: 12FMOD/Build/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637294690091004827
+  LoadResult: 0
+  FileSizes: []
   Exists: 1
 --- !u!114 &-4377800907384375123
 MonoBehaviour:
@@ -136,12 +171,12 @@ MonoBehaviour:
   Path: event:/BGM/BGM_Main
   guid: 55a174d8e549c84882dae1ea5c65b0de
   Banks:
-  - {fileID: -7056920023655984777}
+  - {fileID: -4485798036266051657}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 578176562312483184}
+  - {fileID: -2091783174876959525}
   MinDistance: 0
   MaxDistance: 0
   Length: 0
@@ -160,7 +195,7 @@ MonoBehaviour:
   Path: event:/SFX/SFX_Start
   guid: 49d8654a59a44e42a09c3040e8a92028
   Banks:
-  - {fileID: -7056920023655984777}
+  - {fileID: -4485798036266051657}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -185,6 +220,23 @@ MonoBehaviour:
   Max: 5
   Default: 0
   Exists: 0
+--- !u!114 &-2091783174876959525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/BGM_Main/Main_BGM_Scene
+  m_EditorClassIdentifier: 
+  Name: Main_BGM_Scene
+  Min: 0
+  Max: 1
+  Default: 0
+  Exists: 1
 --- !u!114 &-1159341587386567144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,7 +252,7 @@ MonoBehaviour:
   Path: event:/BGM/BGM_Title
   guid: 397125f154e13346af53ef22bb376f13
   Banks:
-  - {fileID: -7056920023655984777}
+  - {fileID: -4485798036266051657}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -208,6 +260,23 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 39466
+--- !u!114 &-991321047383486940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/SFX_Choice/Choice
+  m_EditorClassIdentifier: 
+  Name: Choice
+  Min: 0
+  Max: 2
+  Default: 0
+  Exists: 1
 --- !u!114 &-818805447949425046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,7 +292,7 @@ MonoBehaviour:
   Path: event:/SFX/AMB/AMB_Title
   guid: e07214c3fee77a44a6a4f70794c23663
   Banks:
-  - {fileID: -7056920023655984777}
+  - {fileID: -4485798036266051657}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -245,7 +314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: -4625293561155607355}
-  - {fileID: -7056920023655984777}
+  - {fileID: -4485798036266051657}
   EditorEvents:
   - {fileID: -8963159523594147870}
   - {fileID: -5902281803962650975}
@@ -257,12 +326,12 @@ MonoBehaviour:
   - {fileID: -818805447949425046}
   - {fileID: 3673283724175470732}
   EditorParameters:
-  - {fileID: 7747992714510433557}
+  - {fileID: -8349436053565541338}
   MasterBanks:
-  - {fileID: -7056920023655984777}
+  - {fileID: -4485798036266051657}
   StringsBanks:
   - {fileID: -4625293561155607355}
-  stringsBankWriteTime: 637296525633866308
+  stringsBankWriteTime: 637294690091084623
   cacheVersion: 3
 --- !u!114 &578176562312483184
 MonoBehaviour:
@@ -296,7 +365,7 @@ MonoBehaviour:
   Path: event:/SFX/SFX_CheckShake
   guid: 69c7cc47b81b4545929928ee475652e9
   Banks:
-  - {fileID: -7056920023655984777}
+  - {fileID: -4485798036266051657}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -336,7 +405,7 @@ MonoBehaviour:
   Path: event:/SFX/AMB/AMB_Main
   guid: a25c8f1c6764cf479db27c8cf9f7cc01
   Banks:
-  - {fileID: -7056920023655984777}
+  - {fileID: -4485798036266051657}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -376,7 +445,7 @@ MonoBehaviour:
   Path: event:/BGM/BGM_Check
   guid: eca3798a102bea45959e3cf2ffe9a562
   Banks:
-  - {fileID: -7056920023655984777}
+  - {fileID: -4485798036266051657}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -401,6 +470,23 @@ MonoBehaviour:
   Max: 2
   Default: 0
   Exists: 0
+--- !u!114 &5197258701349899818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/SFX_Touch/Touch_Type
+  m_EditorClassIdentifier: 
+  Name: Touch_Type
+  Min: 0
+  Max: 5
+  Default: 0
+  Exists: 1
 --- !u!114 &5873699680468742169
 MonoBehaviour:
   m_ObjectHideFlags: 0

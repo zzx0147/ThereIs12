@@ -15,7 +15,7 @@ public class PositionCopyer : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         m_RectTransform.position = m_TargetPanel.position;
     }
