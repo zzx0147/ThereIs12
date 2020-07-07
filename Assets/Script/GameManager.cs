@@ -618,7 +618,7 @@ public class GameManager : MonoBehaviour
         m_MirrorBallLightEffect.SetActive(true);
         m_SprinklerAnimator.Play("Fever", -1, 0.0f);
         m_NutrientsAnimator.Play("Fever", -1, 0.0f);
-        RuntimeManager.StudioSystem.setParameterByName("Main_BGM_Tempo", 1.0f);
+        //RuntimeManager.StudioSystem.setParameterByName("Main_BGM_Tempo", 1.0f);
 
 
         float max = 15.0f;
