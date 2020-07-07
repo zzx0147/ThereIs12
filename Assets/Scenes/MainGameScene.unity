@@ -5444,11 +5444,6 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0.75
       objectReference: {fileID: 0}
-    - target: {fileID: 3680843889350400813, guid: 8ddbd1fdd42c0b54bb5d9c1cc7326d2a,
-        type: 3}
-      propertyPath: m_Color.a
-      value: 0.21176471
-      objectReference: {fileID: 0}
     - target: {fileID: 4497613765442374649, guid: 8ddbd1fdd42c0b54bb5d9c1cc7326d2a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
