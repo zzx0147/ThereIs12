@@ -641,7 +641,7 @@ public class GameManager : MonoBehaviour
                 if (time <= 0.0f)
                 {
                     //m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
-                    m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE, InteractionMode.NONE);
+                    m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE, InteractionMode.NONE);//종료하기 전 마지막 식물 제거
                     goto EndLoop;
                 }
 
@@ -655,7 +655,10 @@ public class GameManager : MonoBehaviour
             }
 
             //m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
-            m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE, InteractionMode.NONE);
+            if(!m_Plants[select].m_IsOnHarvesting)
+            {
+                m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE, InteractionMode.NONE);
+            }
         }
     EndLoop:
 
@@ -712,11 +715,24 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(temp);
 
+        while(true)
+        {
+            if(m_FeverTimeCoroutine == null)
+            {
+                break;
+            }
+            yield return null;
+        }
+
         SpawnRandomGreenPlant(true);
 
         while (true)
         {
             yield return new WaitForSecondsRealtime(Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade], m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]));
+            if(m_FeverTimeCoroutine != null)
+            {
+                continue;
+            }
             SpawnRandomGreenPlant(true);
         }
     }

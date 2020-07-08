@@ -49,10 +49,10 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
     private Vector2 BeginDragPos;
     private bool m_DragEnabled = true;
+    private bool m_isOnHarvesting = false;
 
     private int m_plantSpeciesId;
     private int m_plantObjId;
-
     private int m_MaxTime2Grow;
     private float m_RemaingTime2Grow;
 
@@ -66,7 +66,6 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
     private Sprite m_SproutSprite = null;
     private Sprite m_SproutSprite2 = null;
     private Button m_Button = null;
-
 
     private UnityEvent<int> m_onHarvestEvent = null;
     private UnityEvent m_onEndGrowEvent = null;
@@ -155,6 +154,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
     public int m_PlantSpeciesId { get => m_plantSpeciesId; }
     public UnityEvent OnEndGrowEvent { get => m_onEndGrowEvent; set => m_onEndGrowEvent = value; }
     public UnityEvent<int> OnHarvestEvent { get => m_onHarvestEvent; set => m_onHarvestEvent = value; }
+    public bool m_IsOnHarvesting { get => m_isOnHarvesting;}
 
     private void Awake()
     {
@@ -346,6 +346,8 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     private IEnumerator PlantHarvestAnimationCoroutine()
     {
+        m_isOnHarvesting = true;
+        int temp = m_plantSpeciesId;
         Vector2 Origin = m_PlantImage.rectTransform.anchoredPosition;
 
         float time = 0.0f;
@@ -419,17 +421,16 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
         }
 
 
-        int temp = m_plantSpeciesId;
         m_State = PlantState.NONE;
         m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         m_PlantImage.rectTransform.pivot = new Vector2(0.5f, 0.0f);
         m_PlantImage.rectTransform.anchoredPosition = Origin;
+        m_isOnHarvesting = false;
         m_onHarvestEvent.Invoke(temp);
     }
 
     private IEnumerator GreenPlantHarvestAnimationCoroutine()
     {
-
         float scaler = 1.0f;
         while((scaler -= Time.unscaledDeltaTime) > 0.0f)
         {
