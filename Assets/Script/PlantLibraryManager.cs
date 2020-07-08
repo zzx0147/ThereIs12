@@ -7,6 +7,7 @@ public class PlantLibraryManager : MonoBehaviour
 {
     public LibraryPlantCell[] m_LibraryPlantCell = null;
     private Sprite[] m_PlantSprites = new Sprite[51];
+    private Sprite[] m_BluredPlantSprites = new Sprite[51];
     private string[,] m_PlantCsv = null;
 
     [SerializeField]
@@ -36,11 +37,12 @@ public class PlantLibraryManager : MonoBehaviour
         for (int i = 0; i < m_PlantSprites.Length; ++i)
         {
             m_PlantSprites[i] = Resources.Load<Sprite>("Plant/" + m_PlantCsv[i + 1, 2]);
-            m_LibraryPlantCell[i].SetSprites(m_PlantSprites[i]);
+            m_BluredPlantSprites[i] = Resources.Load<Sprite>("Plant/" + m_PlantCsv[i + 1, 2] + "_B");
+
+            m_LibraryPlantCell[i].SetSprites(m_PlantSprites[i], m_BluredPlantSprites[i]);
             m_LibraryPlantCell[i].m_PlantNameString = m_PlantCsv[i + 1, 3];
             m_LibraryPlantCell[i].m_SpeciesId = i;
             m_LibraryPlantCell[i].m_State = DataManager.GetPlantLibraryState(i);
-            //DiscoverPlant(i);
         }
     }
 
@@ -49,7 +51,7 @@ public class PlantLibraryManager : MonoBehaviour
         if (m_LibraryPlantCell[SpeciesId].m_State == LibraryState.UNKNOWN)
         {
             m_LibraryPlantCell[SpeciesId].m_State = LibraryState.DISCOVERED;
-            switch(SpeciesId)
+            switch (SpeciesId)
             {
                 case 10:
                     DataManager.SetIsItemBuyable(ItemCategory.LAMP, 1, true);

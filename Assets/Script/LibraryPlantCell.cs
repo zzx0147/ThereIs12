@@ -14,7 +14,8 @@ public class LibraryPlantCell : MonoBehaviour
     [SerializeField] private Text m_PlantName = null;
     [SerializeField] private Button m_Button = null;
     [SerializeField] private PlantLibraryManager m_plantLibraryManager = null;
-    [SerializeField] private Image m_BlurImage = null;
+    [SerializeField] private Image m_BluredPlantImage = null;
+
     public LibraryState m_State
     {
         get => m_state;
@@ -28,25 +29,25 @@ public class LibraryPlantCell : MonoBehaviour
                 switch (m_state)
                 {
                     case LibraryState.UNKNOWN:
-                        m_PlantImage.color = new Color(32.0f / 255.0f, 32.0f / 255.0f, 32.0f / 255.0f, 1.0f);
+                        //m_PlantImage.color = new Color(32.0f / 255.0f, 32.0f / 255.0f, 32.0f / 255.0f, 1.0f);
                         m_NewMark.enabled = false;
                         m_Button.interactable = false;
                         m_PlantName.text = "???";
-                        m_BlurImage.gameObject.SetActive(true);
+                        m_BluredPlantImage.gameObject.SetActive(true);
                         break;
                     case LibraryState.DISCOVERED:
-                        m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                        //m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
                         m_NewMark.enabled = true;
                         m_Button.interactable = true;
                         m_PlantName.text = m_plantNameString;
-                        m_BlurImage.gameObject.SetActive(false);
+                        m_BluredPlantImage.gameObject.SetActive(false);
                         break;
                     case LibraryState.IDENTIFIED:
-                        m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                        //m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
                         m_NewMark.enabled = false;
                         m_Button.interactable = true;
                         m_PlantName.text = m_plantNameString;
-                        m_BlurImage.gameObject.SetActive(false);
+                        m_BluredPlantImage.gameObject.SetActive(false);
                         break;
                 }
             }
@@ -56,11 +57,12 @@ public class LibraryPlantCell : MonoBehaviour
     public string m_PlantNameString { set => m_plantNameString = value; }
     public int m_SpeciesId { set => m_speciesId = value; }
 
-    public void SetSprites(Sprite newSprite)
+    public void SetSprites(Sprite newSprite,Sprite bluredSprite)
     {
         m_PlantImage.sprite = newSprite;
         m_PlantImage.SetNativeSize();
-        m_BlurImage.rectTransform.sizeDelta = m_PlantImage.rectTransform.sizeDelta;
+        m_BluredPlantImage.sprite = bluredSprite;
+        m_BluredPlantImage.SetNativeSize();
     }
 
     public void SetStateByInt(int newState)

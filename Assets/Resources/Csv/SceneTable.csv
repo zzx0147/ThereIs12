@@ -1,0 +1,7 @@
+﻿Scene_Code,Scene_Img,Scene_Condition,Scene_Condition_Value
+Scene_01,UI_Scene_01,0,10
+Scene_02,UI_Scene_02,1,1
+Scene_03,UI_Scene_03,2,50
+Scene_04,UI_Scene_04,2,100
+Scene_05,UI_Scene_05,3,100000
+Scene_06,UI_Scene_06,4,8
