@@ -11,6 +11,7 @@ public class BlinderSwitch : MonoBehaviour
     {
         if (m_Target != null)
         {
+            Debug.Log(gameObject.name);
             m_Target.SetActive(true);
             m_Target.GetComponent<Button>().onClick.AddListener(() => gameObject.SetActive(false));
         }
