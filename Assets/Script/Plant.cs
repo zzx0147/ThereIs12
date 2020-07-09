@@ -185,7 +185,14 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
         switch (animationType)
         {
             case AnimationType.NONE:
-                m_InteractionMode = InteractionMode.NONE;
+                if(state == PlantState.NONE)
+                {
+                    m_InteractionMode = InteractionMode.NONE;
+                }
+                else if(state == PlantState.ADULT)
+                {
+                    m_InteractionMode = InteractionMode.BUTTON;
+                }
                 m_State = state;
                 float scaling = Random.Range(0.9f, 1.05f);
                 GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
