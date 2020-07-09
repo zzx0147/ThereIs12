@@ -5204,6 +5204,16 @@ PrefabInstance:
       propertyPath: m_Target
       value: 
       objectReference: {fileID: 1371119146}
+    - target: {fileID: 8853110163279371571, guid: 8ddbd1fdd42c0b54bb5d9c1cc7326d2a,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 776203971}
+    - target: {fileID: 8853110163279371571, guid: 8ddbd1fdd42c0b54bb5d9c1cc7326d2a,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: FeverCountCheat
+      objectReference: {fileID: 0}
     - target: {fileID: 8979042607195163100, guid: 8ddbd1fdd42c0b54bb5d9c1cc7326d2a,
         type: 3}
       propertyPath: m_AnchorMax.y

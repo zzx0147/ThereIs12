@@ -641,7 +641,10 @@ public class GameManager : MonoBehaviour
                 if (time <= 0.0f)
                 {
                     //m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
-                    m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE, InteractionMode.NONE);//종료하기 전 마지막 식물 제거
+                    if (!m_Plants[select].m_IsOnHarvesting)
+                    {
+                        m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE, InteractionMode.NONE);//종료하기 전 마지막 식물 제거
+                    }
                     goto EndLoop;
                 }
 
@@ -774,5 +777,11 @@ public class GameManager : MonoBehaviour
                 return;
             }
         }
+    }
+
+    public void FeverCountCheat()
+    {
+        m_FeverCount = m_FeverCountMax - 1;
+        m_FeverCountText.text = m_FeverCount + "/" + m_FeverCountMax;
     }
 }

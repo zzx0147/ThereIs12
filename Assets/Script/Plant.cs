@@ -160,7 +160,8 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         m_PlantImage = GetComponent<Image>();
         m_Button = GetComponent<Button>();
-        m_Button.onClick.AddListener(OnTouched);
+        m_Button.onClick.RemoveAllListeners();
+        //m_Button.onClick.AddListener(OnTouched);//alreay added on Inspector
         m_onHarvestEvent = new OnHarvestEvent();
         m_onEndGrowEvent = new UnityEvent();
     }
@@ -325,10 +326,12 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
                 if(m_plantSpeciesId == 1)
                 {
                     //Debug.Log("GreenPlantHarvested");
+                    m_InteractionMode = InteractionMode.NONE;
                     StartCoroutine(GreenPlantHarvestAnimationCoroutine());
                 }
                 else
                 {
+                    m_InteractionMode = InteractionMode.NONE;
                     //Debug.Log("PlantHarvested");
                     StartCoroutine(PlantHarvestAnimationCoroutine());
                 }
@@ -346,6 +349,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     private IEnumerator PlantHarvestAnimationCoroutine()
     {
+        //Debug.Log("StartPlantHarvestAnimation");
         m_isOnHarvesting = true;
         int temp = m_plantSpeciesId;
         Vector2 Origin = m_PlantImage.rectTransform.anchoredPosition;
@@ -457,13 +461,13 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (m_DragEnabled)
+        if (m_InteractionMode == InteractionMode.DRAG)
         {
             //Debug.Log("OnDrag" + eventData.position.y);
             if (eventData.position.y > BeginDragPos.y + 40)
             {
                 //Debug.Log("Fit!!!!!!");
-                m_DragEnabled = false;
+                m_InteractionMode = InteractionMode.NONE;
                 OnTouched();
             }
         }
