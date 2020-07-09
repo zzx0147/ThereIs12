@@ -37,8 +37,6 @@ public enum InteractionMode
     NONE,
 }
 
-
-
 class OnHarvestEvent : UnityEvent<int>
 {
 }
@@ -154,7 +152,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
     public int m_PlantSpeciesId { get => m_plantSpeciesId; }
     public UnityEvent OnEndGrowEvent { get => m_onEndGrowEvent; set => m_onEndGrowEvent = value; }
     public UnityEvent<int> OnHarvestEvent { get => m_onHarvestEvent; set => m_onHarvestEvent = value; }
-    public bool m_IsOnHarvesting { get => m_isOnHarvesting;}
+    public bool m_IsOnHarvesting { get => m_isOnHarvesting; }
 
     private void Awake()
     {
@@ -179,24 +177,33 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
         GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
     }
 
-    public void SetPlant(int speciesId, Sprite adultSprite, PlantState state, AnimationType animationType, InteractionMode mode)
+    public void SetPlant(int speciesId, Sprite adultSprite, PlantState state, AnimationType animationType)
     {
         //Debug.Log("StartGrowupAnimation");
         m_plantSpeciesId = speciesId;
         m_AdultPlantSprite = adultSprite;
-        m_InteractionMode = mode;
         switch (animationType)
         {
             case AnimationType.NONE:
+                m_InteractionMode = InteractionMode.NONE;
                 m_State = state;
                 float scaling = Random.Range(0.9f, 1.05f);
                 GetComponent<RectTransform>().localScale = new Vector3(scaling, scaling, 1);
                 break;
+
             case AnimationType.DECAY:
                 StartCoroutine(DecayAnimationCoroutine());
                 break;
+
             case AnimationType.FEVER:
-                m_State = state;
+                if(state == PlantState.NONE)
+                {
+                    StartCoroutine(FeverTimePlantRemoveAnimationCoroutine());
+                }
+                else if(state == PlantState.ADULT)
+                {
+                    StartCoroutine(FeverTimePlantGrowAnimationCoroutine());
+                }
                 break;
             case AnimationType.GROWUP:
                 m_State = state;
@@ -323,7 +330,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
         switch (m_State)
         {
             case PlantState.ADULT:
-                if(m_plantSpeciesId == 1)
+                if (m_plantSpeciesId == 1)
                 {
                     //Debug.Log("GreenPlantHarvested");
                     m_InteractionMode = InteractionMode.NONE;
@@ -345,6 +352,63 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
                 }
                 break;
         }
+    }
+
+    private IEnumerator FeverTimePlantGrowAnimationCoroutine()
+    {
+        Debug.Log("StartFeverGrow");
+        m_State = PlantState.ADULT;
+        float imageYSize = m_PlantImage.rectTransform.sizeDelta.y;
+        float time = 0.0f;
+        float TargetTime = 0.2f;
+        float StartYPos = m_PlantImage.rectTransform.anchoredPosition.y - imageYSize;
+        float TargetYPos = m_PlantImage.rectTransform.anchoredPosition.y;
+        float nowYPos;
+
+        m_PlantImage.rectTransform.anchoredPosition = new Vector2(m_PlantImage.rectTransform.anchoredPosition.x,StartYPos);
+
+        while (true)
+        {
+            yield return null;
+            time += Time.unscaledDeltaTime;
+            if (time >= TargetTime)
+            {
+                m_PlantImage.rectTransform.anchoredPosition = new Vector2(m_PlantImage.rectTransform.anchoredPosition.x, TargetYPos);
+                m_InteractionMode = InteractionMode.BUTTON;
+                break;
+            }
+            nowYPos = Mathf.Lerp(StartYPos, TargetYPos, time / TargetTime);
+            m_PlantImage.rectTransform.anchoredPosition = new Vector2(m_PlantImage.rectTransform.anchoredPosition.x,nowYPos);
+        }
+    }
+
+    private IEnumerator FeverTimePlantRemoveAnimationCoroutine()
+    {
+        m_InteractionMode = InteractionMode.NONE;
+        Debug.Log("StartFeverGrow");
+        float imageYSize = m_PlantImage.rectTransform.sizeDelta.y;
+        float time = 0.0f;
+        float TargetTime = 0.2f;
+        float StartYPos = m_PlantImage.rectTransform.anchoredPosition.y;
+        float TargetYPos = m_PlantImage.rectTransform.anchoredPosition.y - imageYSize;
+        float nowYPos;
+
+        m_PlantImage.rectTransform.anchoredPosition = new Vector2(m_PlantImage.rectTransform.anchoredPosition.x, StartYPos);
+
+        while (true)
+        {
+            yield return null;
+            time += Time.unscaledDeltaTime;
+            if (time >= TargetTime)
+            {
+                m_PlantImage.rectTransform.anchoredPosition = new Vector2(m_PlantImage.rectTransform.anchoredPosition.x, StartYPos);
+                m_State = PlantState.NONE;
+                break;
+            }
+            nowYPos = Mathf.Lerp(StartYPos, TargetYPos, time / TargetTime);
+            m_PlantImage.rectTransform.anchoredPosition = new Vector2(m_PlantImage.rectTransform.anchoredPosition.x, nowYPos);
+        }
+        yield return null;
     }
 
     private IEnumerator PlantHarvestAnimationCoroutine()
@@ -418,7 +482,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
         while (time < 0.3f)
         {
             time += Time.unscaledDeltaTime;
-            m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f,1.0f - time / 0.3f);
+            m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f - time / 0.3f);
             float yPosTemp = Mathf.Lerp(ypos, targetYPos, time / 0.3f);
             m_PlantImage.rectTransform.anchoredPosition = new Vector2(m_PlantImage.rectTransform.anchoredPosition.x, yPosTemp);
             yield return null;
@@ -436,7 +500,7 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
     private IEnumerator GreenPlantHarvestAnimationCoroutine()
     {
         float scaler = 1.0f;
-        while((scaler -= Time.unscaledDeltaTime) > 0.0f)
+        while ((scaler -= Time.unscaledDeltaTime) > 0.0f)
         {
             m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, scaler);
             yield return null;

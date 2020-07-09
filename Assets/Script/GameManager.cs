@@ -341,7 +341,7 @@ public class GameManager : MonoBehaviour
 
         int plantSpeciesNum = SelectOnePlantSpeciesRandomly();
 
-        m_Plants[plantObjNum].SetPlant(plantSpeciesNum, m_PlantSprites[plantSpeciesNum], PlantState.ADULT, AnimationType.NONE, InteractionMode.DRAG);
+        m_Plants[plantObjNum].SetPlant(plantSpeciesNum, m_PlantSprites[plantSpeciesNum], PlantState.ADULT, AnimationType.NONE/*, InteractionMode.DRAG*/);
         DataManager.SetPlantData(plantObjNum, plantSpeciesNum, PlantState.ADULT, 0, 0, 0);
 
         return true;
@@ -597,7 +597,7 @@ public class GameManager : MonoBehaviour
                 {
                     GainPlant(m_Plants[i].m_PlantSpeciesId);
                 }
-                m_Plants[i].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE, InteractionMode.NONE);
+                m_Plants[i].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE/*, InteractionMode.NONE*/);
             }
 
 
@@ -632,7 +632,7 @@ public class GameManager : MonoBehaviour
             int species = SelectOnePlantSpeciesRandomly();
 
             //m_Plants[select].Initialize(select, species, m_SproutSprite, m_SproutSprite2, m_PlantSprites[species], PlantState.ADULT);
-            m_Plants[select].SetPlant(species, m_PlantSprites[species], PlantState.ADULT, AnimationType.FEVER, InteractionMode.BUTTON);
+            m_Plants[select].SetPlant(species, m_PlantSprites[species], PlantState.ADULT, AnimationType.FEVER/*, InteractionMode.BUTTON*/);
 
             waiting = 0.2f + Random.Range(0.2f, 0.4f);
             while (true)
@@ -643,7 +643,7 @@ public class GameManager : MonoBehaviour
                     //m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
                     if (!m_Plants[select].m_IsOnHarvesting)
                     {
-                        m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE, InteractionMode.NONE);//종료하기 전 마지막 식물 제거
+                        m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.FEVER/*, InteractionMode.NONE*/);//종료하기 전 마지막 식물 제거
                     }
                     goto EndLoop;
                 }
@@ -660,7 +660,7 @@ public class GameManager : MonoBehaviour
             //m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
             if(!m_Plants[select].m_IsOnHarvesting)
             {
-                m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.NONE, InteractionMode.NONE);
+                m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.FEVER/*, InteractionMode.NONE*/);
             }
         }
     EndLoop:
@@ -758,7 +758,7 @@ public class GameManager : MonoBehaviour
         }
         int sel = Random.Range(0, arr.Length);
 
-        m_Plants[arr[sel]].SetPlant(1, m_PlantSprites[1], PlantState.ADULT, (isAnimated) ? (AnimationType.DECAY) : (AnimationType.NONE), InteractionMode.BUTTON);
+        m_Plants[arr[sel]].SetPlant(1, m_PlantSprites[1], PlantState.ADULT, (isAnimated) ? (AnimationType.DECAY) : (AnimationType.NONE)/*, InteractionMode.BUTTON*/);
     }
 
     private void RespawnGreenPlantBetweenTurnOff(int time)
