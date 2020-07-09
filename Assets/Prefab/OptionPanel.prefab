@@ -665,18 +665,19 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC81C\uC791\uC790\r\n \r\n\uAE30\uD68D\r\n\uC724\uB2E4\uC740\r\n\uAE40\uD61C\uC9C4\r\n\r\nQA&\uAE30\uD68D\uBCF4\uC870\r\n\uC774\uB450\uD604\r\n
-    \r\n2D\uB9AC\uC18C\uC2A4&\uCE90\uB9AD\uD130&\uB85C\uACE0&\uCEF7\uC52C\r\n\uC815\uCC44\uB9B0\r\n\uC815\uB2E8\uBE44\r\n\r\n2D\uB9AC\uC18C\uC2A4&UI\r\n\uAE40\uC724\uC601\r\n
-    \r\n3D\uBC30\uACBD&\uC774\uD399\uD2B8\r\n\uBC15\uC138\uC601\r\n\r\n\uC0AC\uC6B4\uB4DC\r\n\uC724\uB2E4\uC740\r\n
-    \r\n----------\r\n\uC800\uC791\uAD8C\r\n\r\n\uD3F0\uD2B8\r\n\uBB34\uB8CC\uD3F0\uD2B8,
-    \uB9C8\uD3EC\uAD6C, Mapo\uBC30\uB0AD\uC5EC\uD589\r\n\uBB34\uB8CC\uD3F0\uD2B8,
+  m_Text: "\r\n\r\n\uC81C\uC791\uC790\r\n \r\n\uAE30\uD68D\r\n\uC724\uB2E4\uC740\r\n\uAE40\uD61C\uC9C4\r\n
+    \r\nQA&\uAE30\uD68D\uBCF4\uC870\r\n\uC774\uB450\uD604\r\n\r\n\uD504\uB85C\uADF8\uB798\uBC0D\r\n\uB098\uD638\uACB8\r\n
+    \r\n2D\uB9AC\uC18C\uC2A4&\uCE90\uB9AD\uD130&\uB85C\uACE0&\uCEF7\uC52C\r\n\uC815\uCC44\uB9B0\r\n\uC815\uB2E8\uBE44\r\n
+    \r\n2D\uB9AC\uC18C\uC2A4&UI\r\n\uAE40\uC724\uC601\r\n \r\n3D\uBC30\uACBD&\uC774\uD399\uD2B8\r\n\uBC15\uC138\uC601\r\n
+    \r\n\uC0AC\uC6B4\uB4DC\r\n\uC724\uB2E4\uC740\r\n \r\n----------\r\n\uC800\uC791\uAD8C\r\n
+    \r\n\uD3F0\uD2B8\r\n\uBB34\uB8CC\uD3F0\uD2B8, \uB9C8\uD3EC\uAD6C, Mapo\uBC30\uB0AD\uC5EC\uD589\r\n\uBB34\uB8CC\uD3F0\uD2B8,
     \uACE0\uC591\uC2DC\uCCAD, \uACE0\uC591\uB355\uC591\uCCB4 B\r\n\uBB34\uB8CC\uD3F0\uD2B8,
     \uB9C8\uD3EC\uAD6C, Mapo\uB9C8\uD3EC\uB098\uB8E8\r\nKCC\uBB34\uB7ED\uBB34\uB7ED\uCCB4,
-    \uD55C\uAD6D\uC800\uC791\uAD8C\uC704\uC6D0\uD68C, \uACF5\uC720\uB9C8\uB2F9, OFL\r\n\r\n\uC0AC\uC6B4\uB4DC\r\nWholesome
-    by Kevin MacLeod\r\nLink: https://incompetech.filmmusic.io/song/5050-wholesome\r\nLicense:
+    \uD55C\uAD6D\uC800\uC791\uAD8C\uC704\uC6D0\uD68C, \uACF5\uC720\uB9C8\uB2F9, OFL\r\n
+    \r\n\uC0AC\uC6B4\uB4DC\r\nWholesome by Kevin MacLeod\r\nLink: https://incompetech.filmmusic.io/song/5050-wholesome\r\nLicense:
     http://creativecommons.org/licenses/by/4.0/\r\n \r\nLobby Time by Kevin MacLeod\r\nLink:
-    https://incompetech.filmmusic.io/song/3986-lobby-time\r\nLicense: http://creativecommons.org/licenses/by/4.0/\r\n\r\nGlitter
-    Blast by Kevin MacLeod\r\nLink: https://incompetech.filmmusic.io/song/4707-glitter-blast\r\nLicense:
+    https://incompetech.filmmusic.io/song/3986-lobby-time\r\nLicense: http://creativecommons.org/licenses/by/4.0/\r\n
+    \r\nGlitter Blast by Kevin MacLeod\r\nLink: https://incompetech.filmmusic.io/song/4707-glitter-blast\r\nLicense:
     http://creativecommons.org/licenses/by/4.0/\r\n\r\nflashlight-click-button-01-sound-effect-89151001\r\nLink
     : http://freesoundeffect.net/sound/flashlight-click-button-01-sound-effect\r\napp-interface-click-2-sound-effect-61169434\r\nLink
     : http://freesoundeffect.net/sound/app-interface-click-2-sound-effect\r\n\r\ncomedy--blip--bubble-burst--small-1-sound-effect-86215210\r\nLink
@@ -686,7 +687,7 @@ MonoBehaviour:
     : http://freesoundeffect.net/sound/earcon-start-go-musical-ver-10-sound-effect\r\n\r\nearcon-start-go-musical--(ver-5)-sound-effect-23614502\r\nLink
     : http://freesoundeffect.net/sound/earcon-start-go-musical-ver-5-sound-effect\r\n\r\nearcon-start-go-musical--(ver-17)-sound-effect-5358887\r\nLink
     : http://freesoundeffect.net/sound/earcon-start-go-musical-ver-17-sound-effect\r\n\r\nleaves-rustle-around-short-01-sound-effect-12722779\r\nLink
-    : http://freesoundeffect.net/sound/leaves-rustle-around-01-sound-effect\r\n"
+    : http://freesoundeffect.net/sound/leaves-rustle-around-01-sound-effect\r"
 --- !u!1 &2521118022961491234
 GameObject:
   m_ObjectHideFlags: 0
