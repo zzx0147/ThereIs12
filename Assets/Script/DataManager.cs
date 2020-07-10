@@ -242,4 +242,15 @@ public class DataManager//데이터의 세이브와 로드를 담당
         PlayerPrefs.SetInt("Item_" + category.ToString() + "_" + num + "_Buyable", (isBuyable) ? (1) : (0));
         PlayerPrefs.Save();
     }
+
+    public static int GetLastUsedTimeItem()
+    {
+        return PlayerPrefs.GetInt("LastUsedTimeItem",-1);
+    }
+
+    public static void SetLastUsedTimeItem(int num)
+    {
+        PlayerPrefs.SetInt("LastUsedTimeItem", num);
+        PlayerPrefs.Save();
+    }
 }

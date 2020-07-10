@@ -44,6 +44,9 @@ public class GameManager : MonoBehaviour
     private Sprite m_SproutSprite = null;
     private Sprite m_SproutSprite2 = null;
 
+    [SerializeField] private Sprite m_TimeItemBackSprite;
+    [SerializeField] private Sprite m_TimeItemNBackSprite;
+
     [SerializeField] private Sprite[] m_LampSprites = null;
     [SerializeField] private Sprite[] m_SprinklerSprites = null;
     [SerializeField] private Sprite[] m_NutrientsSprites = null;
@@ -58,6 +61,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image m_LampImage = null;//램프 이미지
     [SerializeField] private Image m_SprinklerImage = null;//스프링클러 이미지
     [SerializeField] private Image m_NutrientsImage = null;//영양제 이미지
+    [SerializeField] private Image[] m_TimeItemBackImages = null;
 
     [SerializeField] private Plant[] m_Plants = null;//식물이 터치되었을 때 게임 매니저로 터치되었다는 걸 알려주는 클래스 식물 이미지와 동일한 오브젝트의 컴포넌트
 
@@ -65,6 +69,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_FeverCountText = null;//피버 타임까지 필요한 식물 수확 수 표기 텍스트
     [SerializeField] private Text m_TimerText = null;//식물 성장 시간을 표시하는 타이머
     [SerializeField] private Text[] m_PanelChangeButtonText = null;//(메인, 상점, 도감, 설정) 패널로 이동하는 버튼들의 텍스트
+    [SerializeField] private Text[] m_TimeItemPriceTexts = null;
+    [SerializeField] private Text[] m_TimeItemTimeTexts = null;
+
 
     [SerializeField] private Animator[] m_AnimationsOnFeverStart = null;//피버타임 시작시 플레이할 애니메이션들
     [SerializeField] private Animator m_MirrorBallAnimator = null;
@@ -72,6 +79,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Animator m_NutrientsAnimator = null;
     [SerializeField] private GameObject m_MirrorBallEffect = null;
     [SerializeField] private GameObject m_MirrorBallLightEffect = null;
+    [SerializeField] private GameObject m_SprinklerEffect = null;
+    [SerializeField] private GameObject[] m_NutrientsEffect = null;
+
 
     #endregion
 
@@ -85,9 +95,29 @@ public class GameManager : MonoBehaviour
             if (m_isTimeLeft)
             {
                 Time.timeScale = 1.0f;
+                int num = DataManager.GetLastUsedTimeItem();
+
+                for (int i = 0; i < 5; ++i)
+                {
+                    m_TimeItemBackImages[i].sprite = m_TimeItemNBackSprite;
+                    m_TimeItemPriceTexts[i].color = new Color(96.0f / 255.0f, 58.0f / 255.0f, 59.0f / 255.0f, 1.0f);
+                    m_TimeItemTimeTexts[i].color = new Color(96.0f / 255.0f, 58.0f / 255.0f, 59.0f / 255.0f, 1.0f);
+                }
+                if (num != -1)
+                {
+                    m_TimeItemBackImages[num].sprite = m_TimeItemBackSprite;
+                    m_TimeItemPriceTexts[num].color = new Color(233.0f / 255.0f, 230.0f / 255.0f, 233.0f / 255.0f, 1.0f);
+                    m_TimeItemTimeTexts[num].color = new Color(233.0f / 255.0f, 230.0f / 255.0f, 233.0f / 255.0f, 1.0f);
+                }
             }
             else
             {
+                for (int i = 0; i < 5; ++i)
+                {
+                    m_TimeItemBackImages[i].sprite = m_TimeItemNBackSprite;
+                    m_TimeItemPriceTexts[i].color = new Color(96.0f / 255.0f, 58.0f / 255.0f, 59.0f / 255.0f, 1.0f);
+                    m_TimeItemTimeTexts[i].color = new Color(96.0f / 255.0f, 58.0f / 255.0f, 59.0f / 255.0f, 1.0f);
+                }
                 Time.timeScale = 0.0f;
             }
         }
@@ -407,17 +437,18 @@ public class GameManager : MonoBehaviour
         AddMoney(999999);
     }
 
-    public void BuyTimeItem(int time, int price)
+    public void BuyTimeItem(int time, int num, int price)
     {
         if (UseMoney(price))
         {
             m_MaxTime = time;
             m_RemainingTime = time;
-            m_IsTimeLeft = true;
             StopSpawnGreenPlantCoroutine();
             DataManager.RecordReferenceTimeOfTimeItem();
             DataManager.SetRemainingTimeOfTimeItem((int)m_RemainingTime);
             DataManager.SetMaxTimeOfLastUsedTimeItem((int)m_RemainingTime);
+            DataManager.SetLastUsedTimeItem(num);
+            m_IsTimeLeft = true;
 
             foreach (var v in m_Plants)
             {
@@ -434,6 +465,7 @@ public class GameManager : MonoBehaviour
     {
         int time = 1;
         int price = 0;
+        DataManager.SetLastUsedTimeItem(num);
         switch (num)
         {
             case 0:
@@ -457,8 +489,7 @@ public class GameManager : MonoBehaviour
                 price = 65;
                 break;
         }
-        BuyTimeItem(time, price);
-
+        BuyTimeItem(time, num, price);
     }
 
     public void GainPlant(int speciesId)
@@ -617,6 +648,10 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
         m_MirrorBallAnimator.Play("Fever", -1, 0.0f);
         m_MirrorBallEffect.SetActive(true);
+        m_SprinklerEffect.SetActive(true);
+
+        m_NutrientsEffect[m_NutrientsGrade].transform.SetParent(null);
+        m_NutrientsEffect[m_NutrientsGrade].SetActive(true);
         m_MirrorBallLightEffect.SetActive(true);
         m_SprinklerAnimator.Play("Fever", -1, 0.0f);
         m_NutrientsAnimator.Play("Fever", -1, 0.0f);
@@ -658,7 +693,7 @@ public class GameManager : MonoBehaviour
             }
 
             //m_Plants[select].Initialize(select, -1, m_SproutSprite, m_SproutSprite2, null, PlantState.NONE);
-            if(!m_Plants[select].m_IsOnHarvesting)
+            if (!m_Plants[select].m_IsOnHarvesting)
             {
                 m_Plants[select].SetPlant(-1, null, PlantState.NONE, AnimationType.FEVER/*, InteractionMode.NONE*/);
             }
@@ -681,13 +716,15 @@ public class GameManager : MonoBehaviour
         m_MirrorBallAnimator.SetFloat("Speed", -1.0f);
         m_MirrorBallAnimator.Play("FeverStart", -1, 1.0f);
         m_MirrorBallEffect.SetActive(false);
+        m_SprinklerEffect.SetActive(false);
+        m_NutrientsEffect[m_NutrientsGrade].SetActive(false);
         m_MirrorBallLightEffect.SetActive(false);
         m_SprinklerAnimator.Play("Idle", -1, 0.0f);
         m_NutrientsAnimator.Play("Idle", -1, 0.0f);
         RuntimeManager.StudioSystem.setParameterByName("Main_BGM_Tempo", 0.0f);
 
         yield return new WaitForSecondsRealtime(1.0f);
-        if (m_isTimeLeft)
+        if (m_IsTimeLeft)
         {
             Time.timeScale = 1.0f;
             SpawnSprout();
@@ -718,9 +755,9 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(temp);
 
-        while(true)
+        while (true)
         {
-            if(m_FeverTimeCoroutine == null)
+            if (m_FeverTimeCoroutine == null)
             {
                 break;
             }
@@ -732,7 +769,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSecondsRealtime(Random.Range(m_GreenPlantRespawnTimeMin[m_sprinklerGrade], m_GreenPlantRespawnTimeMin[m_sprinklerGrade] + m_GreenPlantRespawnTimeWeight[m_sprinklerGrade]));
-            if(m_FeverTimeCoroutine != null)
+            if (m_FeverTimeCoroutine != null)
             {
                 continue;
             }
