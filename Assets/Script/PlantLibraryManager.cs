@@ -10,25 +10,21 @@ public class PlantLibraryManager : MonoBehaviour
     private Sprite[] m_BluredPlantSprites = new Sprite[51];
     private string[,] m_PlantCsv = null;
 
-    [SerializeField]
-    private GameObject m_InfoPanel = null;
-    [SerializeField]
-    private Text m_PlantNameText = null;
-    [SerializeField]
-    private Text m_PlantIdText = null;
-    [SerializeField]
-    private Text m_PlantPointText = null;
-    [SerializeField]
-    private Text m_PlantDialogueText = null;
-    [SerializeField]
-    private Text m_PlantExplainText = null;
-    [SerializeField]
-    private Image m_PlantInfoImage = null;
+    [SerializeField] private GameObject m_InfoPanel = null;
+    [SerializeField] private Text m_PlantNameText = null;
+    [SerializeField] private Text m_PlantIdText = null;
+    [SerializeField] private Text m_PlantPointText = null;
+    [SerializeField] private Text m_PlantDialogueText = null;
+    [SerializeField] private Text m_PlantExplainText = null;
+    [SerializeField] private Image m_PlantInfoImage = null;
+
+
+    [SerializeField] private GameObject m_UnkownPlantInfoPanel = null;
+    [SerializeField] private Text m_UnkownPlantConditionText = null;
 
     private void Awake()
     {
         m_PlantCsv = CsvLoader.LoadCsvBy2DimensionArray("Csv/PlantMasterTable");
-
     }
 
     // Start is called before the first frame update
@@ -87,5 +83,20 @@ public class PlantLibraryManager : MonoBehaviour
         m_PlantExplainText.text = m_PlantCsv[num + 1, 8];
         m_PlantInfoImage.sprite = m_PlantSprites[num];
         m_PlantInfoImage.SetNativeSize();
+    }
+
+    public void ShowUnkownPlantInfo(int num)
+    {
+        m_UnkownPlantInfoPanel.SetActive(true);
+        int grade = DataManager.GetMaxNutrientsGrade();
+
+        if(num < (grade + 1) * 10 + 1)//스폰은 되나 아직 못얻음
+        {
+            m_UnkownPlantConditionText.text = m_PlantCsv[num + 1, 9];
+        }
+        else//스폰도 안됨
+        {
+            m_UnkownPlantConditionText.text = m_PlantCsv[num + 1, 10];
+        }
     }
 }

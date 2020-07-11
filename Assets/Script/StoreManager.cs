@@ -57,7 +57,7 @@ public class StoreManager : MonoBehaviour
 
         for (int j = 0; i < m_LampItemCells.Length + m_NutrientsItemCells.Length + m_SprinklerItemCells.Length + m_ETCItemCells.Length; ++i, ++j)
         {
-            m_ETCItemCells[j].Initialize(m_ETCSprites[j], ItemCategory.ETC, j, m_ItemCsv[i + 1, 2], int.Parse(m_ItemCsv[i + 1, 8]), DataManager.GetHaveItem(ItemCategory.ETC, j));
+            m_ETCItemCells[j].Initialize(m_ETCSprites[j], ItemCategory.ETC, j, m_ItemCsv[i + 1, 2], int.Parse(m_ItemCsv[i + 1, 8]), true);
             m_ETCItemCells[j].m_OnClickedEvent.AddListener(OnStoreItemCellClicked);
         }
     }
@@ -96,8 +96,6 @@ public class StoreManager : MonoBehaviour
                         return;
                     }
                     break;
-                default:
-                    break;
             }
             //사용중인 장비가 아닌 경우
             m_QuestionPanel.SetActive(true);
@@ -135,22 +133,27 @@ public class StoreManager : MonoBehaviour
         {
             m_NotifyPanel.SetActive(true);
             m_NotifyText.text = m_ItemCsv[(int)m_RecentSelectedItemCategory * 5 + m_RecentSelectedItemId + 1, 10];
-            DataManager.SetHaveItem(m_RecentSelectedItemCategory, m_RecentSelectedItemId, true);
-            ChangeEquipment();
-
-            switch (m_RecentSelectedItemCategory)
+            if (m_RecentSelectedItemCategory != ItemCategory.ETC)//아이템이 장비 아이템일 경우
             {
-                case ItemCategory.LAMP:
-                    m_LampItemCells[m_RecentSelectedItemId].SetAlreadyHave(true);
-                    break;
-                case ItemCategory.NUTRIENTS:
-                    m_NutrientsItemCells[m_RecentSelectedItemId].SetAlreadyHave(true);
-                    break;
-                case ItemCategory.SPRINKLER:
-                    m_SprinklerItemCells[m_RecentSelectedItemId].SetAlreadyHave(true);
-                    break;
+                DataManager.SetHaveItem(m_RecentSelectedItemCategory, m_RecentSelectedItemId, true);
+                ChangeEquipment();
+                switch (m_RecentSelectedItemCategory)
+                {
+                    case ItemCategory.LAMP:
+                        m_LampItemCells[m_RecentSelectedItemId].SetAlreadyHave(true);
+                        break;
+                    case ItemCategory.NUTRIENTS:
+                        m_NutrientsItemCells[m_RecentSelectedItemId].SetAlreadyHave(true);
+                        break;
+                    case ItemCategory.SPRINKLER:
+                        m_SprinklerItemCells[m_RecentSelectedItemId].SetAlreadyHave(true);
+                        break;
+                }
             }
-
+            else//기타 아이템(1회성 아이템인 경우)
+            {
+                m_GameManager.UseETCItem(m_RecentSelectedItemId,100);
+            }
         }
         else
         {
@@ -162,7 +165,7 @@ public class StoreManager : MonoBehaviour
     public void ChangeEquipment()
     {
         //m_QuestionPanel.SetActive(false);
-        switch (m_RecentSelectedItemCategory)//이미 사용중인 장비를 클릭했을 경우
+        switch (m_RecentSelectedItemCategory)
         {
             case ItemCategory.LAMP:
                 m_GameManager.m_LampGrade = m_RecentSelectedItemId;

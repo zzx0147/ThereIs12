@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class FPSShower : MonoBehaviour
 {
-    [SerializeField] Text m_text;
+    [SerializeField] Text m_text = null;
 
     private void Start()
     {
@@ -14,11 +14,11 @@ public class FPSShower : MonoBehaviour
 
     IEnumerator UpdateFPS()
     {
-        while(true)
+        while (true)
         {
             m_text.text = ((int)(1 / Time.unscaledDeltaTime)).ToString();
             yield return new WaitForSecondsRealtime(0.1f);
         }
     }
-    
+
 }

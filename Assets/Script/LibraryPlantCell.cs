@@ -12,7 +12,6 @@ public class LibraryPlantCell : MonoBehaviour
     [SerializeField] private Image m_PlantImage = null;
     [SerializeField] private Image m_NewMark = null;
     [SerializeField] private Text m_PlantName = null;
-    [SerializeField] private Button m_Button = null;
     [SerializeField] private PlantLibraryManager m_plantLibraryManager = null;
     [SerializeField] private Image m_BluredPlantImage = null;
 
@@ -31,21 +30,18 @@ public class LibraryPlantCell : MonoBehaviour
                     case LibraryState.UNKNOWN:
                         //m_PlantImage.color = new Color(32.0f / 255.0f, 32.0f / 255.0f, 32.0f / 255.0f, 1.0f);
                         m_NewMark.enabled = false;
-                        m_Button.interactable = false;
-                        m_PlantName.text = "???";
+                        m_PlantName.text = m_speciesId + 1 + "번";
                         m_BluredPlantImage.gameObject.SetActive(true);
                         break;
                     case LibraryState.DISCOVERED:
                         //m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
                         m_NewMark.enabled = true;
-                        m_Button.interactable = true;
                         m_PlantName.text = m_plantNameString;
                         m_BluredPlantImage.gameObject.SetActive(false);
                         break;
                     case LibraryState.IDENTIFIED:
                         //m_PlantImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
                         m_NewMark.enabled = false;
-                        m_Button.interactable = true;
                         m_PlantName.text = m_plantNameString;
                         m_BluredPlantImage.gameObject.SetActive(false);
                         break;
@@ -65,14 +61,22 @@ public class LibraryPlantCell : MonoBehaviour
         m_BluredPlantImage.SetNativeSize();
     }
 
-    public void SetStateByInt(int newState)
-    {
-        m_State = (LibraryState)newState;
-    }
-
     public void OnClicked()
     {
-        SetStateByInt(2);
-        m_plantLibraryManager.ShowPlantInfo(m_speciesId);
+        Debug.Log("OnClick");
+        Debug.Log(m_State);
+        switch(m_State)
+        {
+            case LibraryState.DISCOVERED:
+                m_State = LibraryState.IDENTIFIED;
+                m_plantLibraryManager.ShowPlantInfo(m_speciesId);
+                break;
+            case LibraryState.IDENTIFIED:
+                m_plantLibraryManager.ShowPlantInfo(m_speciesId);
+                break;
+            case LibraryState.UNKNOWN:
+                m_plantLibraryManager.ShowUnkownPlantInfo(m_speciesId);
+                break;
+        }
     }
 }

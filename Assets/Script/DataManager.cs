@@ -208,7 +208,12 @@ public class DataManager//데이터의 세이브와 로드를 담당
 
     public static bool GetHaveItem(ItemCategory category, int num)
     {
-        if (num == 0)
+        if(category == ItemCategory.ETC)
+        {
+            return false;
+        }
+
+        else if (num == 0)
         {
             return true;
         }
@@ -226,7 +231,11 @@ public class DataManager//데이터의 세이브와 로드를 담당
 
     public static bool GetIsItemBuyable(ItemCategory category, int num)
     {
-        if (num == 0)
+        if(category == ItemCategory.ETC)
+        {
+            return true;
+        }
+        else if (num == 0)
         {
             return true;
         }

@@ -209,7 +209,6 @@ public class GameManager : MonoBehaviour
         #endregion
     }
 
-    // Start is called before the first frame update
     private void Start()
     {
         #region Time Compute
@@ -319,7 +318,6 @@ public class GameManager : MonoBehaviour
         #endregion
     }
 
-    // Update is called once per frame
     private void Update()
     {
         if (m_IsTimeLeft)
@@ -492,6 +490,11 @@ public class GameManager : MonoBehaviour
         BuyTimeItem(time, num, price);
     }
 
+    public void UseETCItem(int id,int time)
+    {
+
+    }
+
     public void GainPlant(int speciesId)
     {
         AddMoney(int.Parse(m_PlantCsv[speciesId + 1, 6]));
@@ -574,40 +577,6 @@ public class GameManager : MonoBehaviour
                 probabilityMin += m_PlantRespawnProbability[i];
             }
         }
-    }
-
-    public void ChangeGamePanel(int num)//게임 패널을 변경
-    {
-        if (m_ChangeGamePanelCoroutine != null)
-        {
-            StopCoroutine(m_ChangeGamePanelCoroutine);
-        }
-
-        foreach (var v in m_PanelChangeButtonText)
-        {
-            v.color = new Color(103.0f / 255.0f, 65 / 255.0f, 41 / 255.0f, 1.0f);
-        }
-        m_PanelChangeButtonText[num].color = new Color(233.0f / 255.0f, 230.0f / 255.0f, 223.0f / 255.0f, 1.0f);
-
-        m_ChangeGamePanelCoroutine = StartCoroutine(ChangeGamePanelCoroutine(num));
-    }
-
-    private IEnumerator ChangeGamePanelCoroutine(int num)//게임 패널을 변경하는 코루틴//메인화면은 0번 상점은 1번 도감은 2번 설정은 3번
-    {
-        int screenwidth = 2 * (int)m_MainPanel.localPosition.x;
-        int targetPositionX = -(screenwidth * num);
-        //Debug.Log("Start");
-        while (true)
-        {
-            if (Mathf.Abs(m_Content.transform.localPosition.x - targetPositionX) < Mathf.Epsilon)
-            {
-                break;
-            }
-            m_Content.transform.localPosition = new Vector3(Mathf.Lerp(m_Content.transform.localPosition.x, targetPositionX, Time.unscaledDeltaTime * 4), m_Content.transform.localPosition.y, 0);
-            yield return null;
-        }
-
-        m_ChangeGamePanelCoroutine = null;
     }
 
     private void StartFeverTime()
@@ -814,6 +783,40 @@ public class GameManager : MonoBehaviour
                 return;
             }
         }
+    }
+
+    public void ChangeGamePanel(int num)//게임 패널을 변경
+    {
+        if (m_ChangeGamePanelCoroutine != null)
+        {
+            StopCoroutine(m_ChangeGamePanelCoroutine);
+        }
+
+        foreach (var v in m_PanelChangeButtonText)
+        {
+            v.color = new Color(103.0f / 255.0f, 65 / 255.0f, 41 / 255.0f, 1.0f);
+        }
+        m_PanelChangeButtonText[num].color = new Color(233.0f / 255.0f, 230.0f / 255.0f, 223.0f / 255.0f, 1.0f);
+
+        m_ChangeGamePanelCoroutine = StartCoroutine(ChangeGamePanelCoroutine(num));
+    }
+
+    private IEnumerator ChangeGamePanelCoroutine(int num)//게임 패널을 변경하는 코루틴//메인화면은 0번 상점은 1번 도감은 2번 설정은 3번
+    {
+        int screenwidth = 2 * (int)m_MainPanel.localPosition.x;
+        int targetPositionX = -(screenwidth * num);
+        //Debug.Log("Start");
+        while (true)
+        {
+            if (Mathf.Abs(m_Content.transform.localPosition.x - targetPositionX) < Mathf.Epsilon)
+            {
+                break;
+            }
+            m_Content.transform.localPosition = new Vector3(Mathf.Lerp(m_Content.transform.localPosition.x, targetPositionX, Time.unscaledDeltaTime * 4), m_Content.transform.localPosition.y, 0);
+            yield return null;
+        }
+
+        m_ChangeGamePanelCoroutine = null;
     }
 
     public void FeverCountCheat()

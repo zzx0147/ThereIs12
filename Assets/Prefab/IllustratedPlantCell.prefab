@@ -209,7 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -317,7 +317,6 @@ MonoBehaviour:
   m_PlantImage: {fileID: 3771563554098097037}
   m_NewMark: {fileID: 684859363347661628}
   m_PlantName: {fileID: 6430603788976620319}
-  m_Button: {fileID: 9127535035326762179}
   m_plantLibraryManager: {fileID: 0}
   m_BluredPlantImage: {fileID: 2916262649859973024}
 --- !u!114 &9127535035326762179

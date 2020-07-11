@@ -9654,6 +9654,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: IllustratedPlantCell51
       objectReference: {fileID: 0}
+    - target: {fileID: 8992517924733906981, guid: b5a0aa8c9e744244cb4b6c1451e07a71,
+        type: 3}
+      propertyPath: m_Target
+      value: 
+      objectReference: {fileID: 1371119146}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5a0aa8c9e744244cb4b6c1451e07a71, type: 3}
 --- !u!1 &2018413782

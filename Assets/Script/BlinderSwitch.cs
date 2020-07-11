@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class BlinderSwitch : MonoBehaviour
 {
-    [SerializeField] GameObject m_Target;
+    [SerializeField] GameObject m_Target = null;
 
     private void OnEnable()
     {
