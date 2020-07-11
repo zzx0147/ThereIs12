@@ -810,6 +810,7 @@ public class GameManager : MonoBehaviour
         {
             if (Mathf.Abs(m_Content.transform.localPosition.x - targetPositionX) < Mathf.Epsilon)
             {
+                m_Content.transform.localPosition = new Vector3(targetPositionX, m_Content.transform.localPosition.y, 0);
                 break;
             }
             m_Content.transform.localPosition = new Vector3(Mathf.Lerp(m_Content.transform.localPosition.x, targetPositionX, Time.unscaledDeltaTime * 4), m_Content.transform.localPosition.y, 0);
