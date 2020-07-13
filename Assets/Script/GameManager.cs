@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int[] m_PlantRespawnTimeWeight = { 20, 19, 18, 17, 16 };//식물 리스폰 속도 가중치 (최소치 + 가중치 = 최대치)
     [SerializeField] private int[] m_GreenPlantRespawnTimeMin = { 180, 300, 600, 1000, 1800 };//녹초 리스폰 속도 최소치
     [SerializeField] private int[] m_GreenPlantRespawnTimeWeight = { 120, 150, 200, 400, 600 };//녹초 리스폰 속도 가중치
+    [SerializeField] private int m_TimePassCheat = 0;
 
     private int m_NumberOfAvailablePlant;
     private int m_lampGrade;
@@ -223,7 +224,7 @@ public class GameManager : MonoBehaviour
     {
         #region Time Compute
         ulong refTime = DataManager.GetReferenceTimeOfTimeItem();//RemainingTimeOfTimeItem을 저장한 시점, 시간 아이템을 구매한 시점을 말함
-        ulong now = DataManager.GetNow();//현재 시간
+        ulong now = DataManager.GetNow() + (ulong)m_TimePassCheat;//현재 시간
         int pastRemainingTime = DataManager.GetRemainingTimeOfTimeItem();//마지막으로 저장된 시간 아이템의 남은 시간
         m_RemainingTime = pastRemainingTime;
         m_RemainingTime -= (int)(now - refTime);//시간 아이템의 남은 시간을 계산, (now - refTime) 지난 시간을 저장된 남은 시간에서 빼서 남은 시간을 구함
