@@ -262,4 +262,51 @@ public class DataManager//데이터의 세이브와 로드를 담당
         PlayerPrefs.SetInt("LastUsedTimeItem", num);
         PlayerPrefs.Save();
     }
+
+    public static int GetLastUsedETCItem()
+    {
+        return PlayerPrefs.GetInt("LastUsedETCItem", -1);
+    }
+    public static void SetLastUsedETCItem(int num)
+    {
+        PlayerPrefs.SetInt("LastUsedETCItem", num);
+    }
+
+    public static ulong GetReferenceTimeOfETCItem()
+    {
+        return ulong.Parse(PlayerPrefs.GetString("ReferenceTimeOfETCItem", System.DateTime.Now.ToFileTime().ToString().Substring(0, 11)));
+    }
+
+    public static void RecordReferenceTimeOfETCItem()
+    {
+        PlayerPrefs.SetString("ReferenceTimeOfETCItem", System.DateTime.Now.ToFileTime().ToString().Substring(0, 11));
+        PlayerPrefs.Save();
+    }
+
+    public static int GetRemainingTimeOfETCItem()
+    {
+        return PlayerPrefs.GetInt("RemainingTimeOfETCItem", 0);
+    }
+
+    public static void SetRemainingTimeOfETCItem(int remaining)
+    {
+        if (remaining < 0)
+        {
+            remaining = 0;
+        }
+
+        PlayerPrefs.SetInt("RemainingTimeOfETCItem", remaining);
+        PlayerPrefs.Save();
+    }
+
+    public static void SetLastUsedETCItemWeight(int weight)
+    {
+        PlayerPrefs.SetInt("LastUsedETCItemWeight", weight);
+        PlayerPrefs.Save();
+    }
+
+    public static int GetLastUsedETCItemWeight()
+    {
+        return PlayerPrefs.GetInt("LastUsedETCItemWeight", -1);
+    }
 }

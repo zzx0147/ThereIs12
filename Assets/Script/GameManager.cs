@@ -24,16 +24,22 @@ public class GameManager : MonoBehaviour
     private int m_MaxSprinklerGrade;
     private int m_Money;
     private int m_FeverCount;
+    private int m_LastUsedETCItemID;
+    private int m_LastUsedETCItemWeight;
+
 
     private float[] m_PlantRespawnProbability;
-    private float m_MaxTime;
+    private float m_MaxTime = 0;
     private float m_RemainingTime = 0;
+    private float m_ETCItemRemainingTime = 0;
 
     private string[,] m_PlantCsv;
     private string[,] m_PlantProbabilityCsv;
 
     private bool m_isTimeLeft = false;
     private bool m_isFeverOn = false;
+    private bool m_isETCItemTimeLeft = false;
+
     #endregion
 
     #region ReferanceVariable
@@ -44,12 +50,13 @@ public class GameManager : MonoBehaviour
     private Sprite m_SproutSprite = null;
     private Sprite m_SproutSprite2 = null;
 
-    [SerializeField] private Sprite m_TimeItemBackSprite;
-    [SerializeField] private Sprite m_TimeItemNBackSprite;
+    [SerializeField] private Sprite m_TimeItemBackSprite = null;
+    [SerializeField] private Sprite m_TimeItemNBackSprite = null;
 
     [SerializeField] private Sprite[] m_LampSprites = null;
     [SerializeField] private Sprite[] m_SprinklerSprites = null;
     [SerializeField] private Sprite[] m_NutrientsSprites = null;
+    [SerializeField] private Sprite[] m_ETCIconSprites = null;
 
     [SerializeField] private PlantLibraryManager m_plantLibraryManager = null;//도감 매니저 레퍼런스
 
@@ -62,6 +69,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image m_SprinklerImage = null;//스프링클러 이미지
     [SerializeField] private Image m_NutrientsImage = null;//영양제 이미지
     [SerializeField] private Image[] m_TimeItemBackImages = null;
+    [SerializeField] private Image m_ETCIconImage = null;
 
     [SerializeField] private Plant[] m_Plants = null;//식물이 터치되었을 때 게임 매니저로 터치되었다는 걸 알려주는 클래스 식물 이미지와 동일한 오브젝트의 컴포넌트
 
@@ -206,6 +214,8 @@ public class GameManager : MonoBehaviour
         m_MaxNutrientsGrade = DataManager.GetMaxNutrientsGrade();//최대 영양제 등급 불러오기
         m_MaxTime = DataManager.GetMaxTimeOfLastUsedTimeItem();//마지막으로 사용한 시간 아이템의 최대 시간량
         m_PlantRespawnProbability = new float[51/*m_PlantSprites.Length*/];//식물별 등장 확률 배열
+        m_LastUsedETCItemID = DataManager.GetLastUsedETCItem();
+        m_LastUsedETCItemWeight = DataManager.GetLastUsedETCItemWeight();
         #endregion
     }
 
@@ -233,6 +243,29 @@ public class GameManager : MonoBehaviour
         m_TimerText.text = $"{(int)m_RemainingTime / 60:00}" + ":" + $"{(int)m_RemainingTime % 60:00}";//시간 표시
 
         m_NumberOfAvailablePlant = DataManager.GetNumberOfAvailablePlant();//사용 가능한 식물 칸의 갯수를 얻어옴(재화를 주고 해방함에 따라 갯수가 달라짐)
+
+        #endregion
+
+        #region ETCItemTime Compute
+        int etcid = DataManager.GetLastUsedETCItem();
+        ulong etcRefTime = DataManager.GetReferenceTimeOfETCItem();
+        int pastEtcRemainingTime = DataManager.GetRemainingTimeOfETCItem();
+        int etcRemainingTime = pastEtcRemainingTime - (int)(now - etcRefTime);
+        int etcWeight = DataManager.GetLastUsedETCItemWeight();
+
+        Debug.Log("RemainingTime: " + etcRemainingTime);
+        Debug.Log("PassedTime: " + (int)(now - etcRefTime));
+        if (etcRemainingTime < 0 || etcid < 0)
+        {
+            Debug.Log(etcRemainingTime);
+            Debug.Log(etcid);
+            m_isETCItemTimeLeft = false;
+        }
+        else
+        {
+            UseETCItem(etcid, etcRemainingTime, etcWeight);
+        }
+
 
         #endregion
 
@@ -294,6 +327,7 @@ public class GameManager : MonoBehaviour
                 {
                     m_Plants[i].Initialize(i, temp.SpeciesId, m_SproutSprite, m_SproutSprite2, m_PlantSprites[temp.SpeciesId], PlantState.SPROUT, InteractionMode.BUTTON);
                     m_Plants[i].StartGrowing(temp.MaxTime, (temp.RemainingTime - (int)(now - temp.ReferenceTime)), temp.SpeciesId, m_PlantSprites[temp.SpeciesId]);
+                    //여기서는 특수 아이템 여부를 신경쓰지 않음, 저장된 데이터를 가져와서 새싹을 다시 이어서 자라게 하는 것이기 때문(저장하기 전에 이미 특수 아이템을 고려한 시간이 저장됬을 것임)
                     //haveSprout = true;
                 }
             }
@@ -302,13 +336,29 @@ public class GameManager : MonoBehaviour
 
         if (lastSproutGrowingTime > 0)//끄기 전 마지막 새싹이 다 자랐을 경우
         {
-            RespawnPlantBetweenTurnOff((m_IsTimeLeft) ? (int)(now - lastSproutGrowingTime) : pastRemainingTime);
+            RespawnPlantBetweenTurnOff((m_IsTimeLeft) ? (int)(now - lastSproutGrowingTime) : pastRemainingTime
+                , (m_LastUsedETCItemID == 0 || m_LastUsedETCItemID == 1) ? (pastEtcRemainingTime) : (0));
         }
 
         if (!m_IsTimeLeft)
         {
-            RespawnGreenPlantBetweenTurnOff((int)(now - ((ulong)pastRemainingTime + refTime)));//기준 시간 + 시간 아이템 남은 시간 = 시간 아이템이 끝나는 시간
-                                                                                               //시간 아이템이 끝나는 시간과 현재 시간 사이의 차 만큼 녹초를 생성
+            ulong endTimeOfTimeItem = (ulong)pastRemainingTime + refTime;
+            if (m_LastUsedETCItemID == 2 || m_LastUsedETCItemID == 3)
+            {
+                if (m_isETCItemTimeLeft)
+                {
+                    return;
+                }
+
+                if ((ulong)pastEtcRemainingTime + etcRefTime > endTimeOfTimeItem)
+                {
+                    endTimeOfTimeItem = (ulong)pastEtcRemainingTime + etcRefTime;
+                }
+
+            }
+
+            RespawnGreenPlantBetweenTurnOff((int)(now - endTimeOfTimeItem));//기준 시간 + 시간 아이템 남은 시간 = 시간 아이템이 끝나는 시간
+            //시간 아이템이 끝나는 시간(혹은 녹초 생성을 지연시키는 아이템의 종료 시간)과 현재 시간 사이의 차 만큼 녹초를 생성
         }
         //else if (!haveSprout)
         //{
@@ -330,20 +380,51 @@ public class GameManager : MonoBehaviour
             {
                 m_TimerText.text = "00:00";
                 m_IsTimeLeft = false;
-                StartSpawnGreenPlant();
+
+                if (!((m_LastUsedETCItemID == 2 || m_LastUsedETCItemID == 3) && m_isETCItemTimeLeft))//시간이 남지 않았거나, 사용한 일회용 아이템이 2,3번이 아닐 경우 녹초 생성 시작
+                {
+                    StartSpawnGreenPlant();
+                }
+            }
+        }
+
+        if (m_isETCItemTimeLeft)
+        {
+            m_ETCItemRemainingTime -= Time.unscaledDeltaTime;
+            //Debug.Log(m_ETCItemRemainingTime);
+            if (m_ETCItemRemainingTime < 0.0f)
+            {
+                m_isETCItemTimeLeft = false;
+                m_ETCIconImage.gameObject.SetActive(false);
+                if((m_LastUsedETCItemID == 2 || m_LastUsedETCItemID == 3) && !m_IsTimeLeft)
+                {
+                    StartSpawnGreenPlant();//일회용 아이템이 시간이 다 지났을 경우, 2,3번 아이템을 사용한 것이 아니거나 시간 아이템이 전부 소모된 상태라면 녹초 스폰
+                }
             }
         }
     }
 
-    private void RespawnPlantBetweenTurnOff(int time)
+    private void RespawnPlantBetweenTurnOff(int time, int etcTime)
     {
+        if(time <= 0.1f)
+        {
+            return;
+        }
+
         while (true)
         {
             int randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMin[m_MaxLampGrade] + m_PlantRespawnTimeWeight[m_MaxLampGrade]);
             if ((time - randTime) >= 0)//주어진 시간(게임이 꺼진 동안 지난 시간이면서 남아있던 시간아이템 시간)이 여유가 있으면
-            {
+            {//여기서 특수 아이템의 시간이 남았는지 체크한다
                 SpawnRandomAdultPlant();//성체 식물을 하나 스폰
+                if(etcTime > 0)
+                {
+                    Debug.Log("ETC Item Used On resapwnPlantBetweenTrunOff");
+                    randTime -= m_LastUsedETCItemWeight;
+                }
+
                 time -= randTime;
+                etcTime -= randTime;
             }
             else//아니라면
             {
@@ -490,9 +571,20 @@ public class GameManager : MonoBehaviour
         BuyTimeItem(time, num, price);
     }
 
-    public void UseETCItem(int id,int time)
+    public void UseETCItem(int id, int time, int weight)
     {
+        Debug.Log("Item:" + id + "time:" + time + "weight: " + weight);
+        m_ETCIconImage.sprite = m_ETCIconSprites[id];
+        m_ETCIconImage.gameObject.SetActive(true);
 
+        m_ETCItemRemainingTime = time;
+        m_isETCItemTimeLeft = true;
+        m_LastUsedETCItemID = id;
+        m_LastUsedETCItemWeight = weight;
+        DataManager.SetLastUsedETCItem(id);
+        DataManager.SetRemainingTimeOfETCItem(time);
+        DataManager.RecordReferenceTimeOfETCItem();
+        DataManager.SetLastUsedETCItemWeight(weight);
     }
 
     public void GainPlant(int speciesId)
@@ -536,6 +628,11 @@ public class GameManager : MonoBehaviour
     {
 
         int randTime = Random.Range(m_PlantRespawnTimeMin[m_MaxLampGrade], m_PlantRespawnTimeMin[m_MaxLampGrade] + m_PlantRespawnTimeWeight[m_MaxLampGrade]);
+        if (m_isETCItemTimeLeft && (m_LastUsedETCItemID == 0 || m_LastUsedETCItemID == 1))
+        {
+            Debug.Log("PlantSpawnTerm Reduce: " + m_LastUsedETCItemWeight);
+            randTime += m_LastUsedETCItemWeight;
+        }
         //Debug.Log("randTime: " + randTime);
         int selecObj = SelectOnePlantObjRandomly();
 

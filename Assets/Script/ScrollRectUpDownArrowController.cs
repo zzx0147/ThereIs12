@@ -6,12 +6,12 @@ using UnityEngine.UI;
 [RequireComponent(typeof(ScrollRect))]
 public class ScrollRectUpDownArrowController : MonoBehaviour
 {
-    [SerializeField] private Image m_UpArrow;
-    [SerializeField] private Image m_DownArrow;
+    [SerializeField] private Image m_UpArrow = null;
+    [SerializeField] private Image m_DownArrow = null;
 
     public void OnValueChange(Vector2 vec)
     {
-        Debug.Log(vec);
+        //Debug.Log(vec);
         if (vec.y >= 0.99f)
         {
             m_UpArrow.enabled = false;

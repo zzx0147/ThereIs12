@@ -152,7 +152,7 @@ public class StoreManager : MonoBehaviour
             }
             else//기타 아이템(1회성 아이템인 경우)
             {
-                m_GameManager.UseETCItem(m_RecentSelectedItemId,100);
+                m_GameManager.UseETCItem(m_RecentSelectedItemId,int.Parse(m_ItemCsv[m_RecentSelectedItemId + 16,12]) * 3600, int.Parse(m_ItemCsv[m_RecentSelectedItemId + 16, 11]));
             }
         }
         else

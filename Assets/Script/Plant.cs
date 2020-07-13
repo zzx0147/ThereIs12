@@ -189,7 +189,11 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
                 {
                     m_InteractionMode = InteractionMode.NONE;
                 }
-                else if(state == PlantState.ADULT)
+                else if(state == PlantState.ADULT && m_plantSpeciesId != 1)
+                {
+                    m_InteractionMode = InteractionMode.DRAG;
+                }
+                else if(state == PlantState.ADULT && m_plantSpeciesId == 1)
                 {
                     m_InteractionMode = InteractionMode.BUTTON;
                 }

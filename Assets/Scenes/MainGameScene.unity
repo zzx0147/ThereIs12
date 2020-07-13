@@ -2358,7 +2358,7 @@ MonoBehaviour:
   m_FeverCountMax: 50
   m_PlantRespawnTimeMin: 460000003c00000032000000280000001e000000
   m_PlantRespawnTimeWeight: 1400000013000000120000001100000010000000
-  m_GreenPlantRespawnTimeMin: 0100000001000000010000000100000001000000
+  m_GreenPlantRespawnTimeMin: 0100000001000000010000000100000008070000
   m_GreenPlantRespawnTimeWeight: 0100000001000000010000000100000001000000
   m_TimeItemBackSprite: {fileID: 21300000, guid: 4f394c642df4a1f499aa32f1c222765e,
     type: 3}
@@ -2382,6 +2382,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e1b4ec7f99760e24f995038dbc07ed4a, type: 3}
   - {fileID: 21300000, guid: 0c0ed51e68c6f044194969747345d559, type: 3}
   - {fileID: 21300000, guid: 5ff9f4c731de0884f9b8da19c6aaffe4, type: 3}
+  m_ETCIconSprites:
+  - {fileID: 21300000, guid: 794c441d3505951499f5748e933d21de, type: 3}
+  - {fileID: 21300000, guid: 17b7801724ce5904e9f4cd05eb956879, type: 3}
+  - {fileID: 21300000, guid: e0747c22886fa3e47a81bffb40d70b51, type: 3}
+  - {fileID: 21300000, guid: f4ddb9297ae132447a7a8b7d4047c6bc, type: 3}
   m_plantLibraryManager: {fileID: 1790531292}
   m_MainPanel: {fileID: 589765617}
   m_Content: {fileID: 236134312}
@@ -2396,6 +2401,7 @@ MonoBehaviour:
   - {fileID: 1613748711}
   - {fileID: 1613748708}
   - {fileID: 1613748705}
+  m_ETCIconImage: {fileID: 1613748718}
   m_Plants:
   - {fileID: 1261217045}
   - {fileID: 1964485566}
@@ -6290,6 +6296,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TimeItemCell2
       objectReference: {fileID: 0}
+    - target: {fileID: 17478287891578047, guid: 8dc653543465bed4fa55da4db24a0743,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 84057256479210226, guid: 8dc653543465bed4fa55da4db24a0743,
         type: 3}
       propertyPath: m_Enabled
@@ -6314,6 +6325,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 158911284923466734, guid: 8dc653543465bed4fa55da4db24a0743,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -200.79688
       objectReference: {fileID: 0}
     - target: {fileID: 189312518084855789, guid: 8dc653543465bed4fa55da4db24a0743,
         type: 3}
@@ -6886,11 +6902,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0.90625
-      objectReference: {fileID: 0}
-    - target: {fileID: 3515737890168327555, guid: 8dc653543465bed4fa55da4db24a0743,
-        type: 3}
-      propertyPath: m_Color.a
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3515737890168327557, guid: 8dc653543465bed4fa55da4db24a0743,
         type: 3}
@@ -8026,6 +8037,18 @@ MonoBehaviour:
 --- !u!114 &1613748717 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7246190277432626421, guid: 8dc653543465bed4fa55da4db24a0743,
+    type: 3}
+  m_PrefabInstance: {fileID: 1613748702}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1613748718 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7648366175218413402, guid: 8dc653543465bed4fa55da4db24a0743,
     type: 3}
   m_PrefabInstance: {fileID: 1613748702}
   m_PrefabAsset: {fileID: 0}
