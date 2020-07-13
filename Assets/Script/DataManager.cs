@@ -354,4 +354,27 @@ public class DataManager//데이터의 세이브와 로드를 담당
     {
         return (PlayerPrefs.GetInt("First",1) == 1)?(true):(false);
     }
+
+    public static float GetSFXVolume()
+    {
+        return PlayerPrefs.GetFloat("SFX",0.5f);
+    }
+
+    public static void SetSFXVolume(float value)
+    {
+        PlayerPrefs.SetFloat("SFX", value);
+        PlayerPrefs.Save();
+    }
+
+    public static float GetBGMVolume()
+    {
+        return PlayerPrefs.GetFloat("BGM", 0.5f);
+    }
+
+    public static void SetBGMVolume(float value)
+    {
+        PlayerPrefs.SetFloat("BGM", value);
+        PlayerPrefs.Save();
+    }
+
 }

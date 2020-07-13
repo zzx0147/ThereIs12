@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     private Coroutine m_ChangeGamePanelCoroutine = null;
     private Coroutine m_FeverTimeCoroutine = null;
     private Coroutine m_SpawnGreenPlantCoroutine = null;
+    private Coroutine m_CutSceneRemoveCoroutine = null;
     private Sprite[] m_PlantSprites = new Sprite[51];//각 식물의 스프라이트 배열
     private Sprite m_SproutSprite = null;
     private Sprite m_SproutSprite2 = null;
@@ -189,6 +190,7 @@ public class GameManager : MonoBehaviour
         //30프레임 제한 해제 60프레임 설정
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
+        Application.runInBackground = true;
         //
 
         #region CsvLoading
@@ -961,6 +963,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ShowCutSceneCoroutine(int num)
     {
+        m_CutScenePanel.GetComponent<Button>().interactable = false;
         Debug.Log("ShowCutScene");
         m_CutScenePanel.SetActive(true);
         m_CutScenePanel.GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
@@ -990,7 +993,10 @@ public class GameManager : MonoBehaviour
 
     public void RemoveCutScene()
     {
-        StartCoroutine(RemoveCutSceneCoroutine());
+        if(m_CutSceneRemoveCoroutine == null)
+        {
+            m_CutSceneRemoveCoroutine = StartCoroutine(RemoveCutSceneCoroutine());
+        }
     }
 
     private IEnumerator RemoveCutSceneCoroutine()
@@ -1015,6 +1021,6 @@ public class GameManager : MonoBehaviour
             }
             yield return null;
         }
-
+        m_CutSceneRemoveCoroutine = null;
     }
 }
