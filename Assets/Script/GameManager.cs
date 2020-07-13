@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
     private int m_LastUsedETCItemID;
     private int m_LastUsedETCItemWeight;
 
-
     private float[] m_PlantRespawnProbability;
     private float m_MaxTime = 0;
     private float m_RemainingTime = 0;
@@ -58,6 +57,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Sprite[] m_SprinklerSprites = null;
     [SerializeField] private Sprite[] m_NutrientsSprites = null;
     [SerializeField] private Sprite[] m_ETCIconSprites = null;
+    [SerializeField] private Sprite[] m_CutSceneSprites = null;
 
     [SerializeField] private PlantLibraryManager m_plantLibraryManager = null;//도감 매니저 레퍼런스
 
@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image m_NutrientsImage = null;//영양제 이미지
     [SerializeField] private Image[] m_TimeItemBackImages = null;
     [SerializeField] private Image m_ETCIconImage = null;
+    [SerializeField] private Image m_CutSceneImage = null;
 
     [SerializeField] private Plant[] m_Plants = null;//식물이 터치되었을 때 게임 매니저로 터치되었다는 걸 알려주는 클래스 식물 이미지와 동일한 오브젝트의 컴포넌트
 
@@ -90,7 +91,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject m_MirrorBallLightEffect = null;
     [SerializeField] private GameObject m_SprinklerEffect = null;
     [SerializeField] private GameObject[] m_NutrientsEffect = null;
-
+    [SerializeField] private GameObject m_CutScenePanel = null;
+    [SerializeField] private GameObject m_TutoPanel = null;
 
     #endregion
 
@@ -222,6 +224,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        m_TutoPanel.SetActive(DataManager.GetIsFirst());//최초 접속시 튜토리얼 패널 오픈
+        DataManager.SetIsFirst(false);
+
+
         #region Time Compute
         ulong refTime = DataManager.GetReferenceTimeOfTimeItem();//RemainingTimeOfTimeItem을 저장한 시점, 시간 아이템을 구매한 시점을 말함
         ulong now = DataManager.GetNow() + (ulong)m_TimePassCheat;//현재 시간
@@ -397,7 +403,7 @@ public class GameManager : MonoBehaviour
             {
                 m_isETCItemTimeLeft = false;
                 m_ETCIconImage.gameObject.SetActive(false);
-                if((m_LastUsedETCItemID == 2 || m_LastUsedETCItemID == 3) && !m_IsTimeLeft)
+                if ((m_LastUsedETCItemID == 2 || m_LastUsedETCItemID == 3) && !m_IsTimeLeft)
                 {
                     StartSpawnGreenPlant();//일회용 아이템이 시간이 다 지났을 경우, 2,3번 아이템을 사용한 것이 아니거나 시간 아이템이 전부 소모된 상태라면 녹초 스폰
                 }
@@ -407,7 +413,7 @@ public class GameManager : MonoBehaviour
 
     private void RespawnPlantBetweenTurnOff(int time, int etcTime)
     {
-        if(time <= 0.1f)
+        if (time <= 0.1f)
         {
             return;
         }
@@ -418,7 +424,7 @@ public class GameManager : MonoBehaviour
             if ((time - randTime) >= 0)//주어진 시간(게임이 꺼진 동안 지난 시간이면서 남아있던 시간아이템 시간)이 여유가 있으면
             {//여기서 특수 아이템의 시간이 남았는지 체크한다
                 SpawnRandomAdultPlant();//성체 식물을 하나 스폰
-                if(etcTime > 0)
+                if (etcTime > 0)
                 {
                     Debug.Log("ETC Item Used On resapwnPlantBetweenTrunOff");
                     randTime -= m_LastUsedETCItemWeight;
@@ -509,6 +515,16 @@ public class GameManager : MonoBehaviour
         m_Money += price;
         m_MoneyText.text = m_Money.ToString();
         DataManager.SetMoney(m_Money);
+        if((!DataManager.GetMission(4)) && m_Money >= 50000)
+        {
+            ShowCutScene(4);
+        }
+
+        if ((!DataManager.GetMission(5)) && m_Money >= 100000)
+        {
+            ShowCutScene(5);
+        }
+
         return true;
     }
 
@@ -590,6 +606,21 @@ public class GameManager : MonoBehaviour
 
     public void GainPlant(int speciesId)
     {
+        if ((!DataManager.GetMission(0)) && speciesId == 0)
+        {
+            DataManager.SetDogPlantNum(DataManager.GetDogPlantNum()+1);
+            if(DataManager.GetDogPlantNum() >= 10)
+            {
+                ShowCutScene(0);
+            }
+        }
+
+        if((!DataManager.GetMission(1)) && speciesId == 5)
+        {
+            ShowCutScene(1);
+        }
+
+
         AddMoney(int.Parse(m_PlantCsv[speciesId + 1, 6]));
         m_plantLibraryManager.OnGainPlant(speciesId);
 
@@ -922,5 +953,70 @@ public class GameManager : MonoBehaviour
     {
         m_FeverCount = m_FeverCountMax - 1;
         m_FeverCountText.text = m_FeverCount + "/" + m_FeverCountMax;
+    }
+
+    public void ShowCutScene(int num)
+    {
+        DataManager.SetMission(num, true);
+        StartCoroutine(ShowCutSceneCoroutine(num));
+    }
+
+    private IEnumerator ShowCutSceneCoroutine(int num)
+    {
+        Debug.Log("ShowCutScene");
+        m_CutScenePanel.SetActive(true);
+        m_CutScenePanel.GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+        m_CutSceneImage.sprite = m_CutSceneSprites[num];
+        m_CutSceneImage.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+
+        yield return new WaitForSecondsRealtime(1.0f);
+
+        Debug.Log("StartFade");
+
+        float time = 0.0f;
+        while (true)
+        {
+            time += Time.unscaledDeltaTime;
+            m_CutSceneImage.color = new Color(1.0f, 1.0f, 1.0f, time);
+            m_CutScenePanel.GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, time);
+            if (time >= 1.0f)
+            {
+                m_CutSceneImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                m_CutScenePanel.GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+                m_CutScenePanel.GetComponent<Button>().interactable = true;
+                break;
+            }
+            yield return null;
+        }
+    }
+
+    public void RemoveCutScene()
+    {
+        StartCoroutine(RemoveCutSceneCoroutine());
+    }
+
+    private IEnumerator RemoveCutSceneCoroutine()
+    {
+        m_CutScenePanel.GetComponent<Button>().interactable = false;
+
+        yield return new WaitForSecondsRealtime(1.0f);
+
+        float time = 1.0f;
+        while (true)
+        {
+            time -= Time.unscaledDeltaTime;
+            m_CutSceneImage.color = new Color(1.0f, 1.0f, 1.0f, time);
+            m_CutScenePanel.GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, time);
+            if (time <= 0.0f)
+            {
+                m_CutSceneImage.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+                m_CutScenePanel.GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+                m_CutScenePanel.GetComponent<Button>().interactable = true;
+                m_CutScenePanel.SetActive(false);
+                break;
+            }
+            yield return null;
+        }
+
     }
 }

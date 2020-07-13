@@ -208,7 +208,7 @@ public class DataManager//데이터의 세이브와 로드를 담당
 
     public static bool GetHaveItem(ItemCategory category, int num)
     {
-        if(category == ItemCategory.ETC)
+        if (category == ItemCategory.ETC)
         {
             return false;
         }
@@ -231,7 +231,7 @@ public class DataManager//데이터의 세이브와 로드를 담당
 
     public static bool GetIsItemBuyable(ItemCategory category, int num)
     {
-        if(category == ItemCategory.ETC)
+        if (category == ItemCategory.ETC)
         {
             return true;
         }
@@ -254,7 +254,7 @@ public class DataManager//데이터의 세이브와 로드를 담당
 
     public static int GetLastUsedTimeItem()
     {
-        return PlayerPrefs.GetInt("LastUsedTimeItem",-1);
+        return PlayerPrefs.GetInt("LastUsedTimeItem", -1);
     }
 
     public static void SetLastUsedTimeItem(int num)
@@ -299,14 +299,59 @@ public class DataManager//데이터의 세이브와 로드를 담당
         PlayerPrefs.Save();
     }
 
+    public static int GetLastUsedETCItemWeight()
+    {
+        return PlayerPrefs.GetInt("LastUsedETCItemWeight", -1);
+    }
+
     public static void SetLastUsedETCItemWeight(int weight)
     {
         PlayerPrefs.SetInt("LastUsedETCItemWeight", weight);
         PlayerPrefs.Save();
     }
 
-    public static int GetLastUsedETCItemWeight()
+    public static bool GetMission(int num)
     {
-        return PlayerPrefs.GetInt("LastUsedETCItemWeight", -1);
+        int complete = PlayerPrefs.GetInt("Mission_" + num, 0);
+        return (complete == 1) ? (true) : (false);
+    }
+
+    public static void SetMission(int num, bool isComplete)
+    {
+        PlayerPrefs.SetInt("Mission_" + num, (isComplete) ? (1) : (0));
+        PlayerPrefs.Save();
+    }
+
+    public static int GetDogPlantNum()
+    {
+        return PlayerPrefs.GetInt("DogPlant", 0);
+    }
+
+    public static void SetDogPlantNum(int num)
+    {
+        PlayerPrefs.SetInt("DogPlant", num);
+        PlayerPrefs.Save();
+    }
+
+    public static int GetDiscoveredPlantNum()
+    {
+        return PlayerPrefs.GetInt("DiscoveredPlant",0);
+    }
+
+    public static void SetDiscoveredPlantNum(int num)
+    {
+        PlayerPrefs.SetInt("DiscoveredPlant", num);
+        PlayerPrefs.Save();
+    }
+
+    public static void SetIsFirst(bool isFirst)
+    {
+        PlayerPrefs.SetInt("First",(isFirst)?(1):(0));
+        PlayerPrefs.Save();
+    }
+
+    public static bool GetIsFirst()
+    {
+        return (PlayerPrefs.GetInt("First",1) == 1)?(true):(false);
     }
 }

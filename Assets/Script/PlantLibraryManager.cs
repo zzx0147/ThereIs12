@@ -22,6 +22,8 @@ public class PlantLibraryManager : MonoBehaviour
     [SerializeField] private GameObject m_UnkownPlantInfoPanel = null;
     [SerializeField] private Text m_UnkownPlantConditionText = null;
 
+    [SerializeField] private GameManager m_GameManager = null;
+
     private void Awake()
     {
         m_PlantCsv = CsvLoader.LoadCsvBy2DimensionArray("Csv/PlantMasterTable");
@@ -47,6 +49,19 @@ public class PlantLibraryManager : MonoBehaviour
         if (m_LibraryPlantCell[SpeciesId].m_State == LibraryState.UNKNOWN)
         {
             m_LibraryPlantCell[SpeciesId].m_State = LibraryState.DISCOVERED;
+            DataManager.SetDiscoveredPlantNum(DataManager.GetDiscoveredPlantNum() + 1);
+
+            if((!DataManager.GetMission(2))&&DataManager.GetDiscoveredPlantNum() >= 25)
+            {
+                m_GameManager.ShowCutScene(2);
+            }
+
+            if ((!DataManager.GetMission(3)) && DataManager.GetDiscoveredPlantNum() >= 51)
+            {
+                m_GameManager.ShowCutScene(3);
+            }
+
+
             switch (SpeciesId)
             {
                 case 10:
