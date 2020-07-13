@@ -2018,6 +2018,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FPSCounter
       objectReference: {fileID: 0}
+    - target: {fileID: 5210431066394672027, guid: 3ba977cca90fc3d43b8ddc5103f8a9d7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5859782157655392565, guid: 3ba977cca90fc3d43b8ddc5103f8a9d7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3396,7 +3401,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: a1ffb3af8600414488957fae47f1e712, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 36bd2c8822a56c94aa008b9a86f2f63a, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
