@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using FMODUnity;
 
 public class GameManager : MonoBehaviour
 {
@@ -819,7 +818,6 @@ public class GameManager : MonoBehaviour
         m_MirrorBallLightEffect.SetActive(false);
         m_SprinklerAnimator.Play("Idle", -1, 0.0f);
         m_NutrientsAnimator.Play("Idle", -1, 0.0f);
-        RuntimeManager.StudioSystem.setParameterByName("Main_BGM_Tempo", 0.0f);
 
         yield return new WaitForSecondsRealtime(1.0f);
         if (m_IsTimeLeft)

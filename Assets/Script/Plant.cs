@@ -45,6 +45,11 @@ class OnHarvestEvent : UnityEvent<int>
 [RequireComponent(typeof(Button))]
 public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
+    [SerializeField] AudioClip m_SproutTouchSFX = null;
+    [SerializeField] AudioClip m_PlantHarvestSFX = null;
+    [SerializeField] AudioClip m_GreenPlantHarvestSFX = null;
+    [SerializeField] AudioSource m_AudioSource = null;
+
     private Vector2 BeginDragPos;
     private bool m_DragEnabled = true;
     private bool m_isOnHarvesting = false;
@@ -359,6 +364,8 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
             case PlantState.SPROUT2:
                 if (Time.timeScale >= 1.0f)
                 {
+                    m_AudioSource.clip = m_SproutTouchSFX;
+                    m_AudioSource.Play();
                     m_RemaingTime2Grow -= 1.0f;
                 }
                 break;
@@ -424,6 +431,8 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     private IEnumerator PlantHarvestAnimationCoroutine()
     {
+        m_AudioSource.clip = m_PlantHarvestSFX;
+        m_AudioSource.Play();
         //Debug.Log("StartPlantHarvestAnimation");
         m_isOnHarvesting = true;
         int temp = m_plantSpeciesId;
@@ -510,6 +519,8 @@ public class Plant : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     private IEnumerator GreenPlantHarvestAnimationCoroutine()
     {
+        m_AudioSource.clip = m_GreenPlantHarvestSFX;
+        m_AudioSource.Play();
         float scaler = 1.0f;
         while ((scaler -= Time.unscaledDeltaTime) > 0.0f)
         {

@@ -8,6 +8,8 @@ public class TouchEffectController : MonoBehaviour
 {
     [SerializeField] private GameObject m_NormalTouchEffectPrefab = null;
     [SerializeField] private GameObject m_PlantTouchEffectPrefab = null;
+    [SerializeField] private AudioSource m_NormalTouchSFX = null;
+
     void Update()
     {
         RaycastWorldUI();
@@ -35,6 +37,7 @@ public class TouchEffectController : MonoBehaviour
                     }
                     else
                     {
+                        m_NormalTouchSFX.Play();
                         Instantiate(m_NormalTouchEffectPrefab, results[0].worldPosition + new Vector3(0, 0, 0.5f), Quaternion.Euler(0, 0, 0)).transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                     }
                     //string dbg = "Root Element: {0} \n GrandChild Element: {1}";
